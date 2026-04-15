@@ -19,6 +19,8 @@ interface ButtonReusableProps
     extends
         Omit<HTMLMotionProps<"button">, "children">,
         VariantProps<typeof buttonVariants> {
+    /** Lien de redirection (si présent, le bouton devient un lien). */
+    href?: string;
     /** Contenu textuel ou enfants du bouton. */
     children: React.ReactNode;
     /** Icône affichée avant le texte. */
@@ -55,7 +57,10 @@ interface ButtonReusableProps
  * @param props - Propriétés du composant.
  * @returns Élément JSX du bouton animé.
  */
-const ButtonReusable = React.forwardRef<HTMLButtonElement, ButtonReusableProps>(
+const ButtonReusable = React.forwardRef<
+    HTMLButtonElement | HTMLAnchorElement,
+    ButtonReusableProps
+>(
     (
         {
             className,
@@ -67,13 +72,17 @@ const ButtonReusable = React.forwardRef<HTMLButtonElement, ButtonReusableProps>(
             isLoading = false,
             loadingText,
             disabled,
+            href,
             ...props
         },
         ref,
     ) => {
+        const Comp = href ? (motion.a as any) : motion.button;
+
         return (
-            <motion.button
+            <Comp
                 ref={ref}
+                href={href}
                 initial="initial"
                 whileHover="hover"
                 whileTap="tap"
@@ -205,7 +214,7 @@ const ButtonReusable = React.forwardRef<HTMLButtonElement, ButtonReusableProps>(
                         }}
                     />
                 )}
-            </motion.button>
+            </Comp>
         );
     },
 );

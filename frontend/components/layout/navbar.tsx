@@ -18,6 +18,7 @@ import {
 } from "@tabler/icons-react";
 import WrapperSection from "@/components/wrapper-section";
 import { ButtonReusable } from "@/components/ui/button-reusable";
+import { NavLink } from "@/components/ui/nav-link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Logo from "@/components/common/logo";
 
@@ -100,45 +101,6 @@ const stickyBarVariants: Variants = {
 /* ------------------------------------------------------------------ */
 /*                   Sous-composant : NavLink                          */
 /* ------------------------------------------------------------------ */
-
-/**
- * Propriétés du composant NavLink.
- *
- * @property {string} href - URL de destination du lien.
- * @property {string} label - Libellé affiché.
- * @property {number} index - Position du lien (utilisé pour le décalage d'animation).
- * @property {() => void} [onClick] - Callback exécuté au clic.
- */
-interface NavLinkProps {
-    href: string;
-    label: string;
-    index: number;
-    onClick?: () => void;
-}
-
-/**
- * Lien de navigation individuel avec animation au survol.
- *
- * @param props - Propriétés du lien.
- * @returns Élément JSX du lien de navigation animé.
- */
-function NavLink({ href, label, index, onClick }: NavLinkProps) {
-    return (
-        <motion.a
-            href={href}
-            custom={index}
-            variants={fadeInUp}
-            initial="hidden"
-            animate="visible"
-            onClick={onClick}
-            className="group relative px-2 py-2.5 text-base font-semibold text-foreground/70 transition-all duration-300 hover:text-primary"
-        >
-            {label}
-            {/* Indicateur animé au survol */}
-            <span className="absolute inset-x-1 -bottom-px h-0.5 origin-left scale-x-0 rounded-full bg-primary transition-transform duration-300 ease-out group-hover:scale-x-100" />
-        </motion.a>
-    );
-}
 
 /* ------------------------------------------------------------------ */
 /*                     Composant principal                             */
@@ -379,9 +341,14 @@ export default function Navbar() {
                                 <NavLink
                                     key={link.href}
                                     href={link.href}
-                                    label={link.label}
                                     index={i}
-                                />
+                                    custom={i}
+                                    variants={fadeInUp}
+                                    initial="hidden"
+                                    animate="visible"
+                                >
+                                    {link.label}
+                                </NavLink>
                             ))}
                         </div>
                     </WrapperSection>
@@ -440,19 +407,18 @@ export default function Navbar() {
                                     {/* Navigation inline */}
                                     <nav className="flex items-center gap-2">
                                         {NAV_LINKS.map((link, i) => (
-                                            <motion.a
+                                            <NavLink
                                                 key={link.href}
                                                 href={link.href}
+                                                size="sm"
                                                 initial={{ opacity: 0, y: -5 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{
                                                     delay: 0.08 + i * 0.04,
                                                 }}
-                                                className="group relative px-2.5 py-1.5 text-sm font-semibold text-foreground/60 transition-all duration-300 hover:text-primary"
                                             >
                                                 {link.label}
-                                                <span className="absolute inset-x-1 -bottom-px h-0.5 origin-left scale-x-0 rounded-full bg-primary transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                                            </motion.a>
+                                            </NavLink>
                                         ))}
                                     </nav>
                                 </div>
@@ -531,14 +497,16 @@ export default function Navbar() {
                             {/* Liens de navigation mobile */}
                             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 pt-6">
                                 {NAV_LINKS.map((link) => (
-                                    <motion.a
+                                    <NavLink
                                         key={link.href}
                                         href={link.href}
+                                        size="lg"
                                         variants={mobileLinkVariants}
                                         initial="closed"
                                         animate="open"
                                         onClick={() => setIsMobileOpen(false)}
-                                        className="group flex items-center justify-between rounded-2xl px-5 py-4 text-lg font-semibold text-foreground/80 transition-all duration-300 hover:bg-primary/10 hover:text-primary active:scale-[0.98]"
+                                        className="justify-between rounded-2xl px-5 py-4 text-foreground/80 hover:bg-primary/10 active:scale-[0.98]"
+                                        showUnderline={false}
                                     >
                                         {link.label}
                                         <motion.span
@@ -548,7 +516,7 @@ export default function Navbar() {
                                         >
                                             →
                                         </motion.span>
-                                    </motion.a>
+                                    </NavLink>
                                 ))}
                             </nav>
 
