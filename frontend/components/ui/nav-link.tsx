@@ -19,6 +19,7 @@ const navLinkVariants = cva(
                 default: "text-base font-semibold px-2 py-2.5",
                 sm: "text-sm font-semibold",
                 xs: "text-xs font-medium uppercase tracking-wider",
+                lg: "text-lg font-bold",
             },
         },
         defaultVariants: {
