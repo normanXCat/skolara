@@ -31,9 +31,9 @@ import Logo from "@/components/common/logo";
  */
 const NAV_LINKS = [
     { label: "Accueil", href: "/" },
-    { label: "Actualités", href: "/actualites" },
+    { label: "Actualités et Blog", href: "/blog" },
     { label: "Calendrier Scolaire", href: "/calendrier" },
-    { label: "Préscolaire", href: "/prescolaire" },
+    { label: "Pré-Inscription", href: "/pre-registration" },
     { label: "Contact", href: "/contact" },
 ] as const;
 
