@@ -4,8 +4,8 @@ import { motion, useTransform, useScroll, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /**
- * Tracing Beam component from Aceternity UI, adapted for Skolara.
- * Follows the scroll with an animated path and glowing head.
+ * Original Tracing Beam from Aceternity, customized with Skolara Primary colors.
+ * Includes robust height tracking to ensure the effect works with dynamic content.
  */
 export const TracingBeam = ({
     children,
@@ -24,9 +24,27 @@ export const TracingBeam = ({
     const [svgHeight, setSvgHeight] = useState(0);
 
     useEffect(() => {
-        if (contentRef.current) {
-            setSvgHeight(contentRef.current.offsetHeight);
-        }
+        if (!contentRef.current) return;
+
+        const updateHeight = () => {
+            if (contentRef.current) {
+                setSvgHeight(contentRef.current.offsetHeight);
+            }
+        };
+
+        // Initial measurement
+        updateHeight();
+
+        // Re-measure when content changes (images loading, etc)
+        const resizeObserver = new ResizeObserver(updateHeight);
+        resizeObserver.observe(contentRef.current);
+
+        window.addEventListener("load", updateHeight);
+
+        return () => {
+            resizeObserver.disconnect();
+            window.removeEventListener("load", updateHeight);
+        };
     }, []);
 
     const y1 = useSpring(
@@ -64,7 +82,7 @@ export const TracingBeam = ({
                                 ? "none"
                                 : "rgba(0, 0, 0, 0.24) 0px 3px 8px",
                     }}
-                    className="ml-[27px] h-4 w-4 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm flex items-center justify-center bg-background"
+                    className="ml-[27px] h-4 w-4 rounded-full border border-netural-200 shadow-sm flex items-center justify-center bg-background"
                 >
                     <motion.div
                         transition={{
@@ -74,12 +92,12 @@ export const TracingBeam = ({
                         animate={{
                             backgroundColor:
                                 scrollYProgress.get() > 0
-                                    ? "rgb(var(--primary))"
-                                    : "white",
+                                    ? "white"
+                                    : "var(--primary)",
                             borderColor:
                                 scrollYProgress.get() > 0
                                     ? "white"
-                                    : "rgb(var(--primary))",
+                                    : "var(--primary)",
                         }}
                         className="h-2 w-2 rounded-full border border-neutral-300"
                     />
@@ -88,21 +106,20 @@ export const TracingBeam = ({
                     viewBox={`0 0 20 ${svgHeight}`}
                     width="20"
                     height={svgHeight}
-                    className=" ml-4 block"
+                    className="ml-4 block"
                     aria-hidden="true"
                 >
                     <motion.path
-                        d={`M 1 0 V ${svgHeight * 0.8} l 18 24 V ${svgHeight}`}
+                        d={`M 1 0V -36 l 18 24 V ${svgHeight * 0.8} l -18 24V ${svgHeight}`}
                         fill="none"
-                        stroke="currentColor"
-                        strokeOpacity="0.1"
+                        stroke="#9091A0"
+                        strokeOpacity="0.16"
                         transition={{
                             duration: 10,
                         }}
-                        className="text-neutral-400 dark:text-neutral-700"
                     ></motion.path>
                     <motion.path
-                        d={`M 1 0 V ${svgHeight * 0.8} l 18 24 V ${svgHeight}`}
+                        d={`M 1 0V -36 l 18 24 V ${svgHeight * 0.8} l -18 24V ${svgHeight}`}
                         fill="none"
                         stroke="url(#gradient)"
                         strokeWidth="1.25"
@@ -121,12 +138,16 @@ export const TracingBeam = ({
                             y2={y2}
                         >
                             <stop
-                                stopColor="rgb(var(--primary))"
+                                stopColor="var(--primary)"
                                 stopOpacity="0"
                             ></stop>
-                            <stop stopColor="rgb(var(--primary))"></stop>
-                            <stop stopColor="#38bdf8"></stop>
-                            <stop stopColor="#7dd3fc" stopOpacity="0"></stop>
+                            <stop stopColor="var(--primary)"></stop>
+                            <stop offset="0.325" stopColor="#38bdf8"></stop>
+                            <stop
+                                offset="1"
+                                stopColor="#7dd3fc"
+                                stopOpacity="0"
+                            ></stop>
                         </motion.linearGradient>
                     </defs>
                 </svg>
@@ -135,3 +156,5 @@ export const TracingBeam = ({
         </motion.div>
     );
 };
+
+export default TracingBeam;

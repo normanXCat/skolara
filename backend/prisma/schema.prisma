@@ -4,10 +4,34 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+/// Statut d'une pré-inscription
+enum Status {
+  PENDING
+  IN_REVIEW
+  ACCEPTED
+  REJECTED
+}
+
+/// Modèle représentant une demande de pré-inscription
+model PreRegistration {
+  id                Int      @id @default(autoincrement())
+  childFirstName    String
+  childLastName     String
+  childDateOfBirth  DateTime
+  desiredGrade      String
+  parentFullName    String
+  parentEmail       String
+  parentPhone       String
+  documentUrls      String[]
+  status            Status   @default(PENDING)
+  submittedAt       DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

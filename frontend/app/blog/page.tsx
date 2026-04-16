@@ -7,7 +7,6 @@ import { TracingBeam } from "@/components/ui/tracing-beam";
 import { Typography } from "@/components/ui/typography";
 import { ButtonBack } from "@/components/ui/button-back";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 
 const BLOG_POSTS = [
     {
