@@ -341,7 +341,6 @@ export default function Navbar() {
                                 <NavLink
                                     key={link.href}
                                     href={link.href}
-                                    index={i}
                                     custom={i}
                                     variants={fadeInUp}
                                     initial="hidden"
