@@ -91,9 +91,8 @@ const ButtonReusable = React.forwardRef<
                     buttonVariants({ variant, size }),
                     "relative overflow-hidden cursor-pointer rounded-full font-bold bg-transparent hover:bg-transparent transition-none", // Force transparence
                     "flex items-center justify-center gap-2.5 outline-none",
-                    // Padding adapté
-                    !size?.includes("icon") &&
-                        "px-7 py-2.5 md:px-8 md:py-3 h-auto",
+                    // Padding adapté & Hauteur consistante (h-14)
+                    !size?.includes("icon") && "px-7 md:px-8 h-12 py-0",
                     className,
                 )}
                 {...props}
