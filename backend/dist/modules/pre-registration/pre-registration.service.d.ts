@@ -15,9 +15,11 @@ export declare class PreRegistrationService {
     constructor(repository: PreRegistrationRepository);
     /**
      * Crée une nouvelle pré-inscription.
+     * Applique les règles d'unicité et génère le numéro de dossier.
      *
      * @param data - Données validées pour la création
      * @returns La pré-inscription créée
+     * @throws Erreur 409 si doublon détecté
      */
     create(data: CreatePreRegistrationInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
@@ -25,14 +27,32 @@ export declare class PreRegistrationService {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;
+    /**
+     * Génère un numéro de dossier unique formaté : PRE-YYYY-XXXX.
+     * @returns Le numéro de dossier généré
+     */
+    private generateFileNumber;
     /**
      * Récupère la liste paginée des pré-inscriptions avec un filtre optionnel.
      *
@@ -46,11 +66,24 @@ export declare class PreRegistrationService {
             childFirstName: string;
             childLastName: string;
             childDateOfBirth: Date;
+            gender: string;
             desiredGrade: string;
+            targetSchoolYear: string;
+            parentFirstName: string;
             parentFullName: string;
             parentEmail: string;
             parentPhone: string;
+            childEmail: string | null;
+            previousSchool: string | null;
+            parentAddress: string | null;
+            fileNumber: string;
+            receiptNumber: string | null;
+            receiptImageUrl: string | null;
             documentUrls: string[];
+            adminComment: string | null;
+            processedBy: number | null;
+            processedAt: Date | null;
+            studentId: number | null;
             submittedAt: Date;
             updatedAt: Date;
         }[];
@@ -75,11 +108,24 @@ export declare class PreRegistrationService {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;
@@ -98,11 +144,24 @@ export declare class PreRegistrationService {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;
@@ -120,11 +179,24 @@ export declare class PreRegistrationService {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;

@@ -16,10 +16,21 @@ export declare const createPreRegistrationSchema: z.ZodObject<{
     childFirstName: z.ZodString;
     childLastName: z.ZodString;
     childDateOfBirth: z.ZodCoercedDate<unknown>;
+    gender: z.ZodEnum<{
+        M: "M";
+        F: "F";
+    }>;
+    childEmail: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodLiteral<"">]>;
+    previousSchool: z.ZodOptional<z.ZodString>;
     desiredGrade: z.ZodString;
+    targetSchoolYear: z.ZodString;
+    parentFirstName: z.ZodString;
     parentFullName: z.ZodString;
     parentEmail: z.ZodString;
     parentPhone: z.ZodString;
+    parentAddress: z.ZodOptional<z.ZodString>;
+    receiptNumber: z.ZodOptional<z.ZodString>;
+    receiptImageUrl: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodLiteral<"">]>;
     documentUrls: z.ZodDefault<z.ZodOptional<z.ZodArray<z.ZodString>>>;
 }, z.core.$strip>;
 /**

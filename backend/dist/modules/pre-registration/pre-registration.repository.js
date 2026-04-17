@@ -10,11 +10,19 @@ class PreRegistrationRepository {
     /**
      * Crée une nouvelle pré-inscription en base de données.
      *
-     * @param data - Données validées pour la création
+     * @param data - Données pour la création (inclut fileNumber)
      * @returns La pré-inscription créée
      */
     async create(data) {
         return client_1.prisma.preRegistration.create({ data });
+    }
+    /**
+     * Recherche un premier enregistrement correspondant aux critères.
+     * @param where - Filtres Prisma
+     * @param orderBy - Tri optionnel
+     */
+    async findFirst(where, orderBy) {
+        return client_1.prisma.preRegistration.findFirst({ where, orderBy });
     }
     /**
      * Récupère une liste paginée de pré-inscriptions avec filtre optionnel par statut.

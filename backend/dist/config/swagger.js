@@ -8,9 +8,9 @@ exports.swaggerDocument = void 0;
 exports.swaggerDocument = {
     openapi: "3.0.3",
     info: {
-        title: "Skolara – API Pré-inscriptions",
+        title: "Skolara – API",
         version: "1.0.0",
-        description: "API REST pour la gestion des pré-inscriptions scolaires de Skolara.",
+        description: "API REST scolaires de Skolara.",
         contact: {
             name: "Norman",
         },
@@ -232,6 +232,77 @@ exports.swaggerDocument = {
                 },
             },
         },
+        "/upload/single": {
+            post: {
+                tags: ["Uploads"],
+                summary: "Uploader un fichier unique",
+                description: "Accepte JPG, PNG, WEBP ou PDF (max 5 Mo).",
+                requestBody: {
+                    content: {
+                        "multipart/form-data": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    file: {
+                                        type: "string",
+                                        format: "binary",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "201": {
+                        description: "Fichier uploadé",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/UploadResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/upload/multiple": {
+            post: {
+                tags: ["Uploads"],
+                summary: "Uploader plusieurs fichiers",
+                description: "Max 5 fichiers (max 5 Mo chacun).",
+                requestBody: {
+                    content: {
+                        "multipart/form-data": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    files: {
+                                        type: "array",
+                                        items: {
+                                            type: "string",
+                                            format: "binary",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "201": {
+                        description: "Fichiers uploadés",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/UploadMultipleResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
     components: {
         schemas: {
@@ -241,7 +312,10 @@ exports.swaggerDocument = {
                     "childFirstName",
                     "childLastName",
                     "childDateOfBirth",
+                    "gender",
                     "desiredGrade",
+                    "targetSchoolYear",
+                    "parentFirstName",
                     "parentFullName",
                     "parentEmail",
                     "parentPhone",
@@ -254,7 +328,23 @@ exports.swaggerDocument = {
                         format: "date-time",
                         example: "2018-05-15T00:00:00.000Z",
                     },
+                    gender: {
+                        type: "string",
+                        enum: ["M", "F"],
+                        example: "M",
+                    },
+                    childEmail: {
+                        type: "string",
+                        format: "email",
+                        example: "amine@example.com",
+                    },
+                    previousSchool: {
+                        type: "string",
+                        example: "École des Pins",
+                    },
                     desiredGrade: { type: "string", example: "CP" },
+                    targetSchoolYear: { type: "string", example: "2024-2025" },
+                    parentFirstName: { type: "string", example: "Karim" },
                     parentFullName: { type: "string", example: "Karim Benali" },
                     parentEmail: {
                         type: "string",
@@ -262,10 +352,88 @@ exports.swaggerDocument = {
                         example: "karim@example.com",
                     },
                     parentPhone: { type: "string", example: "+213555123456" },
+                    parentAddress: {
+                        type: "string",
+                        example: "123 Rue de la Liberté, Alger",
+                    },
+                    receiptNumber: { type: "string", example: "REC-987654" },
+                    receiptImageUrl: {
+                        type: "string",
+                        format: "uri",
+                        example: "https://storage.skolara.com/receipts/123.jpg",
+                    },
                     documentUrls: {
                         type: "array",
                         items: { type: "string", format: "uri" },
                         example: ["https://example.com/doc1.pdf"],
+                    },
+                },
+            },
+            PreRegistration: {
+                type: "object",
+                properties: {
+                    id: { type: "integer", example: 1 },
+                    fileNumber: { type: "string", example: "PRE-2024-0001" },
+                    childFirstName: { type: "string", example: "Amine" },
+                    childLastName: { type: "string", example: "Benali" },
+                    childDateOfBirth: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2018-05-15T00:00:00.000Z",
+                    },
+                    gender: {
+                        type: "string",
+                        enum: ["M", "F"],
+                        example: "M",
+                    },
+                    childEmail: {
+                        type: "string",
+                        format: "email",
+                        example: "amine@example.com",
+                    },
+                    previousSchool: {
+                        type: "string",
+                        example: "École des Pins",
+                    },
+                    desiredGrade: { type: "string", example: "CP" },
+                    targetSchoolYear: { type: "string", example: "2024-2025" },
+                    parentFirstName: { type: "string", example: "Karim" },
+                    parentFullName: { type: "string", example: "Karim Benali" },
+                    parentEmail: {
+                        type: "string",
+                        format: "email",
+                        example: "karim@example.com",
+                    },
+                    parentPhone: { type: "string", example: "+213555123456" },
+                    parentAddress: {
+                        type: "string",
+                        example: "123 Rue de la Liberté, Alger",
+                    },
+                    receiptNumber: { type: "string", example: "REC-987654" },
+                    receiptImageUrl: {
+                        type: "string",
+                        format: "uri",
+                        example: "https://storage.skolara.com/receipts/123.jpg",
+                    },
+                    documentUrls: {
+                        type: "array",
+                        items: { type: "string", format: "uri" },
+                        example: ["https://example.com/doc1.pdf"],
+                    },
+                    status: {
+                        type: "string",
+                        enum: ["PENDING", "IN_REVIEW", "ACCEPTED", "REJECTED"],
+                        example: "PENDING",
+                    },
+                    submittedAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-04-17T12:00:00Z",
+                    },
+                    updatedAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-04-17T12:00:00Z",
                     },
                 },
             },
@@ -284,7 +452,13 @@ exports.swaggerDocument = {
                 type: "object",
                 properties: {
                     success: { type: "boolean", example: true },
-                    data: { type: "object" },
+                    data: {
+                        oneOf: [
+                            { $ref: "#/components/schemas/PreRegistration" },
+                            { type: "object" },
+                            { type: "null" },
+                        ],
+                    },
                     message: { type: "string" },
                 },
             },
@@ -299,7 +473,10 @@ exports.swaggerDocument = {
                 type: "object",
                 properties: {
                     success: { type: "boolean", example: true },
-                    data: { type: "array", items: { type: "object" } },
+                    data: {
+                        type: "array",
+                        items: { $ref: "#/components/schemas/PreRegistration" },
+                    },
                     meta: {
                         type: "object",
                         properties: {
@@ -307,6 +484,41 @@ exports.swaggerDocument = {
                             page: { type: "integer" },
                             limit: { type: "integer" },
                             totalPages: { type: "integer" },
+                        },
+                    },
+                    message: { type: "string" },
+                },
+            },
+            UploadResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean", example: true },
+                    data: {
+                        type: "object",
+                        properties: {
+                            url: { type: "string", format: "uri" },
+                            filename: { type: "string" },
+                            mimetype: { type: "string" },
+                            size: { type: "integer" },
+                        },
+                    },
+                    message: { type: "string" },
+                },
+            },
+            UploadMultipleResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean", example: true },
+                    data: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                url: { type: "string", format: "uri" },
+                                filename: { type: "string" },
+                                mimetype: { type: "string" },
+                                size: { type: "integer" },
+                            },
                         },
                     },
                     message: { type: "string" },

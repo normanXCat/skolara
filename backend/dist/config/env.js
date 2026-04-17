@@ -15,11 +15,15 @@ const envSchema = zod_1.z.object({
     /** URL de connexion à la base de données PostgreSQL */
     DATABASE_URL: zod_1.z.string().min(1, "DATABASE_URL est requis"),
     /** Port d'écoute du serveur Express */
-    PORT: zod_1.z.coerce.number().int().positive().default(5000),
+    PORT: zod_1.z.coerce.number().int().positive().default(8000),
     /** Environnement d'exécution */
     NODE_ENV: zod_1.z
         .enum(["development", "production", "test"])
         .default("development"),
+    /** URL du frontend pour la configuration CORS */
+    FRONTEND_URL: zod_1.z.string().url().default("http://localhost:3000"),
+    /** URL de base de l'API (pour les liens publics) */
+    API_URL: zod_1.z.string().url().default("http://localhost:8000"),
 });
 /**
  * Variables d'environnement validées et typées.
