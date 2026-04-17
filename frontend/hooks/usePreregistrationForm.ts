@@ -29,7 +29,6 @@ const usePreregistrationForm = () => {
             childEmail: "",
             previousSchool: "",
             desiredGrade: "",
-            targetSchoolYear: "2024-2025",
             parentFirstName: "",
             parentFullName: "",
             parentEmail: "",
@@ -51,7 +50,6 @@ const usePreregistrationForm = () => {
             "childEmail",
             "previousSchool",
             "desiredGrade",
-            "targetSchoolYear",
         ],
         [
             "parentFirstName",

@@ -29,11 +29,13 @@ Un blog éditorial premium structuré autour d'un système de **Tracing Beam**.
 - **Lecture Guidée** : Un faisceau lumineux intelligent suit la progression du scroll de l'utilisateur.
 - **Esthétique Magazine** : Large usage du Glassmorphism, de coins ultra-arrondis et d'une hiérarchie typographique forte via le composant `Typography`.
 
-### 🔹 Formulaire de Pré-inscription Moderne
+### 🔹 Formulaire de Pré-inscription Intelligent
 
 Un système multi-étapes sophistiqué pour l'acquisition d'élèves.
 
-- **Validation Zod** : Gestion robuste des données et retours utilisateurs instantanés.
+- **Data-Driven** : Les niveaux scolaires (Grades) sont récupérés dynamiquement depuis l'API.
+- **UX Réactive** : Gestion des états de chargement (loaders) et désactivation intelligente des sélecteurs.
+- **Validation Zod** : Gestion robuste des données et retours utilisateurs instantanés avec focus automatique sur les erreurs.
 - **Transitions Fluides** : Passage d'étape animé avec Framer Motion.
 
 ### 🔹 Editorial School Presentation

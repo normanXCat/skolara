@@ -32,28 +32,7 @@ import { cn } from "@/lib/utils";
 import { Preregistration } from "@/schemas/pre-registration-schema";
 import { UseFormReturn, SubmitHandler } from "react-hook-form";
 
-const GRADE_OPTIONS = [
-    { value: "petite-section", label: "Petite Section (3-4 ans)" },
-    { value: "moyenne-section", label: "Moyenne Section (4-5 ans)" },
-    { value: "grande-section", label: "Grande Section (5-6 ans)" },
-    { value: "cp", label: "CP — Cours Préparatoire" },
-    { value: "ce1", label: "CE1 — Cours Élémentaire 1" },
-    { value: "ce2", label: "CE2 — Cours Élémentaire 2" },
-    { value: "cm1", label: "CM1 — Cours Moyen 1" },
-    { value: "cm2", label: "CM2 — Cours Moyen 2" },
-    { value: "6eme", label: "6ème" },
-    { value: "5eme", label: "5ème" },
-    { value: "4eme", label: "4ème" },
-    { value: "3eme", label: "3ème" },
-    { value: "2nde", label: "Seconde" },
-    { value: "1ere", label: "Première" },
-    { value: "terminale", label: "Terminale" },
-];
-
-const SCHOOL_YEAR_OPTIONS = [
-    { value: "2024-2025", label: "2024-2025" },
-    { value: "2025-2026", label: "2025-2026" },
-];
+// Les options sont désormais récupérées de la base de données via l'API.
 
 const STEPS_META = [
     {
@@ -253,7 +232,34 @@ export default function PreregistrationForm() {
     const [submissionResult, setSubmissionResult] = React.useState<any>(null);
     const [receiptLoading, setReceiptLoading] = React.useState(false);
     const [hasReachedReview, setHasReachedReview] = React.useState(false);
+    const [grades, setGrades] = React.useState<
+        { value: string; label: string }[]
+    >([]);
+    const [gradesLoading, setGradesLoading] = React.useState(true);
     const uploadIdRef = React.useRef(0);
+
+    // Récupérer les grades depuis la base de données
+    React.useEffect(() => {
+        const fetchGrades = async () => {
+            setGradesLoading(true);
+            try {
+                // Petit délai pour voir le loading
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                const response = await api.get("/grades");
+                if (response.success && Array.isArray(response.data)) {
+                    setGrades(response.data);
+                }
+            } catch (error) {
+                console.error(
+                    "Erreur lors de la récupération des grades:",
+                    error,
+                );
+            } finally {
+                setGradesLoading(false);
+            }
+        };
+        fetchGrades();
+    }, []);
 
     const handleEdit = (step: number, field?: keyof Preregistration) => {
         setDirection(step > currentStep ? 1 : -1);
@@ -562,23 +568,22 @@ export default function PreregistrationForm() {
                                     />
                                 </div>
 
-                                <InputReusable
-                                    label="École précédente (optionnel)"
-                                    id="previousSchool"
-                                    placeholder="Nom de l'établissement"
-                                    icon={IconBuildings}
-                                    register={register("previousSchool")}
-                                    error={errors.previousSchool?.message}
-                                    disabled={loading}
-                                />
-
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <InputReusable
+                                        label="École précédente (optionnel)"
+                                        id="previousSchool"
+                                        placeholder="Nom de l'établissement"
+                                        icon={IconBuildings}
+                                        register={register("previousSchool")}
+                                        error={errors.previousSchool?.message}
+                                        disabled={loading}
+                                    />
                                     <SelectReusable
                                         label="Niveau souhaité"
                                         id="desiredGrade"
                                         placeholder="Niveau"
                                         icon={IconSchool}
-                                        options={GRADE_OPTIONS}
+                                        options={grades}
                                         value={watchedValues.desiredGrade ?? ""}
                                         onValueChange={(val) =>
                                             setValue("desiredGrade", val, {
@@ -587,27 +592,9 @@ export default function PreregistrationForm() {
                                         }
                                         error={errors.desiredGrade?.message}
                                         disabled={loading}
+                                        isLoading={gradesLoading}
                                         name="desiredGrade"
                                         ref={register("desiredGrade").ref}
-                                    />
-                                    <SelectReusable
-                                        label="Année scolaire cible"
-                                        id="targetSchoolYear"
-                                        placeholder="Année"
-                                        icon={IconCalendar}
-                                        options={SCHOOL_YEAR_OPTIONS}
-                                        value={
-                                            watchedValues.targetSchoolYear ?? ""
-                                        }
-                                        onValueChange={(val) =>
-                                            setValue("targetSchoolYear", val, {
-                                                shouldValidate: true,
-                                            })
-                                        }
-                                        error={errors.targetSchoolYear?.message}
-                                        disabled={loading}
-                                        name="targetSchoolYear"
-                                        ref={register("targetSchoolYear").ref}
                                     />
                                 </div>
                             </motion.div>
@@ -794,24 +781,11 @@ export default function PreregistrationForm() {
                                                     }
                                                 />
                                                 <SummaryRow
-                                                    label="Année scolaire"
-                                                    value={
-                                                        watchedValues.targetSchoolYear
-                                                    }
-                                                    index={4}
-                                                    onEdit={() =>
-                                                        handleEdit(
-                                                            0,
-                                                            "targetSchoolYear",
-                                                        )
-                                                    }
-                                                />
-                                                <SummaryRow
                                                     label="École précédente"
                                                     value={
                                                         watchedValues.previousSchool
                                                     }
-                                                    index={5}
+                                                    index={4}
                                                     onEdit={() =>
                                                         handleEdit(
                                                             0,

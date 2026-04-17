@@ -40,8 +40,6 @@ export const PreregistrationSchema = z.object({
 
     desiredGrade: z.string().min(1, "Le niveau souhaité est requis").max(50),
 
-    targetSchoolYear: z.string().min(1, "L'année scolaire cible est requise"),
-
     // ── Étape 2 : Informations du parent / tuteur ──
     parentFirstName: z.string().min(1, "Le prénom du parent est requis"),
 
@@ -93,7 +91,6 @@ export const PreregistrationStep1Schema = PreregistrationSchema.pick({
     childEmail: true,
     previousSchool: true,
     desiredGrade: true,
-    targetSchoolYear: true,
 });
 
 /** Sous-schéma pour l'étape 2 */
