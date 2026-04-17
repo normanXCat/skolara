@@ -16,6 +16,8 @@ const envSchema = z.object({
     NODE_ENV: z
         .enum(["development", "production", "test"])
         .default("development"),
+    /** URL du frontend pour la configuration CORS */
+    FRONTEND_URL: z.string().url().default("http://localhost:3000"),
 });
 
 /**

@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { ToastContainer } from "@/components/ui/toast";
 
 export default function RootLayout({
     children,
@@ -31,7 +32,10 @@ export default function RootLayout({
             suppressHydrationWarning
         >
             <body className="min-h-full flex flex-col">
-                <ThemeProvider>{children}</ThemeProvider>
+                <ThemeProvider>
+                    {children}
+                    <ToastContainer />
+                </ThemeProvider>
             </body>
         </html>
     );

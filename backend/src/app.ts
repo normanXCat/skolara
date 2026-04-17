@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerDocument } from "./config/swagger";
 import { errorHandler } from "./middlewares/errorHandler";
 import preRegistrationRoutes from "./modules/pre-registration/pre-registration.routes";
+import { env } from "./config/env";
 
 /**
  * Application Express principale.
@@ -14,7 +15,12 @@ const app = express();
 
 /* ─── Middlewares globaux ─── */
 app.use(helmet());
-app.use(cors());
+app.use(
+    cors({
+        origin: env.FRONTEND_URL,
+        credentials: true,
+    }),
+);
 app.use(express.json());
 
 /* ─── Documentation Swagger ─── */

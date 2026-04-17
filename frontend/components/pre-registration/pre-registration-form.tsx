@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { type Variants, motion, AnimatePresence } from "framer-motion";
 import {
     IconUser,
     IconCalendar,
@@ -19,6 +19,8 @@ import SelectReusable from "@/components/ui/select-reusable";
 import { ButtonReusable } from "@/components/ui/button-reusable";
 import { Typography } from "@/components/ui/typography";
 import usePreregistrationForm from "@/hooks/usePreregistrationForm";
+import api from "@/lib/api-client";
+import { toast } from "@/lib/toast-store";
 
 const GRADE_OPTIONS = [
     { value: "petite-section", label: "Petite Section (3-4 ans)" },
@@ -56,7 +58,7 @@ const STEPS_META = [
     },
 ];
 
-const slideVariants: any = {
+const slideVariants: Variants = {
     enter: (direction: number) => ({
         x: direction > 0 ? 80 : -80,
         opacity: 0,
@@ -76,7 +78,7 @@ const slideVariants: any = {
     }),
 };
 
-const itemFade: any = {
+const itemFade: Variants = {
     hidden: { opacity: 0, y: 16 },
     visible: (i: number) => ({
         opacity: 1,
@@ -174,6 +176,7 @@ export default function PreregistrationForm() {
         handleSubmit,
         watch,
         setValue,
+        setError,
         formState: { errors },
     } = form;
 
@@ -192,10 +195,20 @@ export default function PreregistrationForm() {
 
     const onSubmit = async (data: any) => {
         setLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Preregistration data:", data);
+        const response = await api.post("/pre-registrations", data);
         setLoading(false);
-        setIsSubmitted(true);
+
+        if (response.success) {
+            toast.success(response.message);
+            setIsSubmitted(true);
+        } else {
+            if (response.details) {
+                api.handleFormErrors(response.details, setError);
+                toast.error("Veuillez corriger les erreurs du formulaire.");
+            } else {
+                toast.error(response.error);
+            }
+        }
     };
 
     if (isSubmitted) {
