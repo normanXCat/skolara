@@ -56,7 +56,7 @@ function FloatingElement({
 
 export default function PreregistrationPage() {
     return (
-        <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
+        <div className="relative bg-background text-foreground overflow-hidden">
             <PageBackground />
 
             {/* Ambient Background Elements */}
@@ -69,29 +69,33 @@ export default function PreregistrationPage() {
                 delay={2}
             />
 
-            <div className="mx-auto max-w-7xl px-6 py-12 lg:py-16">
-                <ButtonBack className="z-10" />
-                <div className="flex flex-col lg:flex-row items-center">
-                    {/* Left Section: Video */}
-                    <div className="w-full lg:w-[45%]">
-                        <div className="hidden lg:block">
-                            <RegistrationPlayer />
+            <div className="w-full flex flex-col items-center px-6 py-12 lg:py-16">
+                <div className="mx-auto w-full max-w-7xl">
+                    <div className="flex flex-col lg:flex-row items-center">
+                        {/* Left Section: Video */}
+                        <div className="w-full lg:w-[45%]">
+                            <div className="flex justify-center mb-4">
+                                <ButtonBack className="z-10" />
+                            </div>
+                            <div className="hidden lg:block">
+                                <RegistrationPlayer />
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Right Section: Form Card */}
-                    <div className="w-full lg:w-[55%] relative">
-                        {/* Decorative Rings around the card */}
-                        <div className="absolute -inset-4 rounded-[40px] border border-primary/10 -z-10 animate-pulse" />
+                        {/* Right Section: Form Card */}
+                        <div className="w-full lg:w-[55%] relative">
+                            {/* Decorative Rings around the card */}
+                            <div className="absolute -inset-4 rounded-[40px] border border-primary/10 -z-10 animate-pulse" />
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
-                            className="relative overflow-hidden rounded-[40px] border border-border/40 bg-card/60 backdrop-blur-2xl shadow-2xl shadow-primary/5"
-                        >
-                            <PreRegistrationForm />
-                        </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2, duration: 0.5 }}
+                                className="relative overflow-hidden rounded-[40px] border border-border/40 bg-card/60 backdrop-blur-2xl shadow-2xl shadow-primary/5"
+                            >
+                                <PreRegistrationForm />
+                            </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>

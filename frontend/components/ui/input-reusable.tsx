@@ -19,6 +19,7 @@ export interface InputReusableProps {
     forgot?: boolean;
     className?: string;
     showPasswordToggle?: boolean;
+    disabled?: boolean;
 }
 
 /**
@@ -41,6 +42,7 @@ export default function InputReusable({
     forgot = false,
     className,
     showPasswordToggle = true,
+    disabled = false,
 }: InputReusableProps) {
     const Icon = IconProp ?? IconUser;
     const [showPassword, setShowPassword] = useState(false);
@@ -58,6 +60,7 @@ export default function InputReusable({
                         "transition-colors duration-300",
                         isFocused ? "text-primary" : "text-foreground/70",
                         error && "text-destructive",
+                        disabled && "opacity-50 cursor-not-allowed",
                     )}
                 >
                     {label}
@@ -83,12 +86,14 @@ export default function InputReusable({
                         isFocused &&
                             "bg-background border-primary/30 ring-4 ring-primary/5",
                         error && "border-destructive/50 bg-destructive/5",
+                        disabled &&
+                            "opacity-50 grayscale-[0.5] cursor-not-allowed",
                     )}
                 />
 
                 {/* Focus "Laser Border" Effect */}
                 <AnimatePresence>
-                    {isFocused && !error && (
+                    {isFocused && !error && !disabled && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -111,7 +116,12 @@ export default function InputReusable({
                 </AnimatePresence>
 
                 {/* Left Icon */}
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within:text-primary transition-colors">
+                <div
+                    className={cn(
+                        "absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within:text-primary transition-colors",
+                        disabled && "opacity-50",
+                    )}
+                >
                     <Icon size={iconSize} stroke={1.5} />
                 </div>
 
@@ -131,8 +141,18 @@ export default function InputReusable({
                         }
                         placeholder={placeholder}
                         {...register}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
+                        disabled={disabled}
+                        onFocus={(e) => {
+                            setIsFocused(true);
+                            if (register?.onFocus) register.onFocus(e);
+                        }}
+                        onBlur={(e) => {
+                            setIsFocused(false);
+                            if (register?.onBlur) register.onBlur(e);
+                        }}
+                        onChange={(e) => {
+                            if (register?.onChange) register.onChange(e);
+                        }}
                         className={cn(
                             "pl-12 pr-12 !h-14 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full !py-0",
                             "text-base placeholder:text-muted-foreground/40 font-medium",

@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { IconLoader2, IconSearch, IconChevronDown } from "@tabler/icons-react";
+import { IconLoader2, IconSearch } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -29,69 +29,75 @@ export interface SelectReusableProps {
     icon?: React.ElementType;
     iconSize?: number;
     className?: string;
-    /** Callback quand le texte de recherche change */
     onSearchChange?: (search: string) => void;
     searchTerm?: string;
-    /** Pagination UI */
     onLoadMore?: () => void;
     hasMore?: boolean;
     isLoadingMore?: boolean;
+    disabled?: boolean;
+    name?: string;
 }
 
 /**
  * Composant Select réutilisable avec un design Premium (UI/UX Pro Max).
- * Inclut la gestion des icônes, des erreurs, et optionnellement la recherche et pagination.
  */
-export default function SelectReusable({
-    label,
-    id,
-    placeholder,
-    error,
-    options,
-    value,
-    onValueChange,
-    icon: IconProp,
-    iconSize = 20,
-    className,
-    onSearchChange,
-    searchTerm,
-    onLoadMore,
-    hasMore,
-    isLoadingMore,
-}: SelectReusableProps) {
-    const Icon = IconProp;
+export const SelectReusable = React.forwardRef<
+    HTMLButtonElement,
+    SelectReusableProps
+>(function SelectReusable(props, ref) {
+    const {
+        label,
+        id,
+        placeholder,
+        error,
+        options,
+        value,
+        onValueChange,
+        icon: IconProp,
+        iconSize = 20,
+        className,
+        onSearchChange,
+        searchTerm,
+        onLoadMore,
+        hasMore,
+        isLoadingMore,
+        disabled = false,
+        name,
+        ...rest
+    } = props;
+
     const [isOpen, setIsOpen] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     return (
         <div className={cn("flex flex-col gap-2 w-full", className)}>
-            {/* Label */}
             <Label
                 htmlFor={id}
                 className={cn(
                     "px-1 transition-colors duration-300",
-                    isOpen ? "text-primary" : "text-foreground/70",
+                    isOpen || isFocused ? "text-primary" : "text-foreground/70",
                     error && "text-destructive",
+                    disabled && "opacity-50 cursor-not-allowed",
                 )}
             >
                 {label}
             </Label>
 
-            {/* Select Container */}
             <div className="relative group">
-                {/* Background & Glass effect */}
                 <div
                     className={cn(
                         "absolute inset-0 rounded-full transition-all duration-300 -z-10",
                         "bg-muted/30 border border-border/40 backdrop-blur-sm",
-                        isOpen &&
+                        (isOpen || isFocused) &&
                             "bg-background border-primary/30 ring-4 ring-primary/5",
                         error && "border-destructive/50 bg-destructive/5",
+                        disabled &&
+                            "opacity-50 grayscale-[0.5] cursor-not-allowed",
                     )}
                 />
 
-                {/* Focus Border Effect (Simpler for Select) */}
                 <AnimatePresence>
-                    {isOpen && !error && (
+                    {(isOpen || isFocused) && !error && !disabled && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -112,10 +118,14 @@ export default function SelectReusable({
                     )}
                 </AnimatePresence>
 
-                {/* Left Icon (Absolute inside Trigger) */}
-                {Icon && (
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within:text-primary z-10 pointer-events-none transition-colors">
-                        <Icon size={iconSize} stroke={1.5} />
+                {IconProp && (
+                    <div
+                        className={cn(
+                            "absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 z-10 pointer-events-none transition-colors",
+                            isOpen || isFocused ? "text-primary" : "",
+                        )}
+                    >
+                        <IconProp size={iconSize} stroke={1.5} />
                     </div>
                 )}
 
@@ -123,6 +133,7 @@ export default function SelectReusable({
                     value={value}
                     onValueChange={onValueChange}
                     onOpenChange={setIsOpen}
+                    disabled={disabled}
                 >
                     <motion.div
                         animate={error ? { x: [-2, 2, -2, 2, 0] } : {}}
@@ -130,12 +141,17 @@ export default function SelectReusable({
                     >
                         <SelectTrigger
                             id={id}
+                            name={name || id}
+                            ref={ref}
+                            onFocus={() => setIsFocused(true)}
+                            onBlur={() => setIsFocused(false)}
                             className={cn(
                                 "!h-14 w-full bg-transparent border-none focus:ring-0 focus:ring-offset-0 rounded-full !py-0",
                                 "text-base font-medium transition-all shadow-none outline-none",
-                                Icon ? "pl-12 pr-12" : "px-12",
+                                IconProp ? "pl-12 pr-12" : "px-12",
                                 error && "text-destructive",
                             )}
+                            {...rest}
                         >
                             <SelectValue placeholder={placeholder} />
                         </SelectTrigger>
@@ -159,17 +175,16 @@ export default function SelectReusable({
                         )}
 
                         <div className="max-h-60 overflow-y-auto custom-scrollbar">
-                            {options.length > 0 ? (
-                                options.map((option) => (
-                                    <SelectItem
-                                        key={option.value}
-                                        value={option.value.toString()}
-                                        className="rounded-xl py-3 px-4 focus:bg-primary/10 focus:text-primary transition-colors cursor-pointer"
-                                    >
-                                        {option.label}
-                                    </SelectItem>
-                                ))
-                            ) : (
+                            {options.map((option) => (
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value.toString()}
+                                    className="rounded-xl py-3 px-4 focus:bg-primary/10 focus:text-primary transition-colors cursor-pointer"
+                                >
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                            {options.length === 0 && (
                                 <div className="py-8 text-center text-sm text-muted-foreground italic">
                                     Aucun résultat trouvé
                                 </div>
@@ -204,7 +219,6 @@ export default function SelectReusable({
                 </Select>
             </div>
 
-            {/* Error Message */}
             <AnimatePresence>
                 {error && (
                     <motion.p
@@ -219,4 +233,8 @@ export default function SelectReusable({
             </AnimatePresence>
         </div>
     );
-}
+});
+
+SelectReusable.displayName = "SelectReusable";
+
+export default SelectReusable;

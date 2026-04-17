@@ -1,5 +1,5 @@
-import type { Status } from "../../generated/prisma";
-import type { CreatePreRegistrationInput, UpdatePreRegistrationInput } from "./pre-registration.schema";
+import type { Status, Prisma } from "../../generated/prisma";
+import type { UpdatePreRegistrationInput } from "./pre-registration.schema";
 /**
  * Repository pour les opérations de base de données sur les pré-inscriptions.
  * Couche d'accès aux données pure (Prisma), sans logique métier.
@@ -8,23 +8,68 @@ export declare class PreRegistrationRepository {
     /**
      * Crée une nouvelle pré-inscription en base de données.
      *
-     * @param data - Données validées pour la création
+     * @param data - Données pour la création (inclut fileNumber)
      * @returns La pré-inscription créée
      */
-    create(data: CreatePreRegistrationInput): Promise<{
+    create(data: Prisma.PreRegistrationCreateInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;
+    /**
+     * Recherche un premier enregistrement correspondant aux critères.
+     * @param where - Filtres Prisma
+     * @param orderBy - Tri optionnel
+     */
+    findFirst(where: Prisma.PreRegistrationWhereInput, orderBy?: Prisma.PreRegistrationOrderByWithRelationInput): Promise<{
+        status: import("../../generated/prisma").$Enums.Status;
+        id: number;
+        childFirstName: string;
+        childLastName: string;
+        childDateOfBirth: Date;
+        gender: string;
+        desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
+        parentFullName: string;
+        parentEmail: string;
+        parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
+        documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
+        submittedAt: Date;
+        updatedAt: Date;
+    } | null>;
     /**
      * Récupère une liste paginée de pré-inscriptions avec filtre optionnel par statut.
      *
@@ -40,11 +85,24 @@ export declare class PreRegistrationRepository {
             childFirstName: string;
             childLastName: string;
             childDateOfBirth: Date;
+            gender: string;
             desiredGrade: string;
+            targetSchoolYear: string;
+            parentFirstName: string;
             parentFullName: string;
             parentEmail: string;
             parentPhone: string;
+            childEmail: string | null;
+            previousSchool: string | null;
+            parentAddress: string | null;
+            fileNumber: string;
+            receiptNumber: string | null;
+            receiptImageUrl: string | null;
             documentUrls: string[];
+            adminComment: string | null;
+            processedBy: number | null;
+            processedAt: Date | null;
+            studentId: number | null;
             submittedAt: Date;
             updatedAt: Date;
         }[];
@@ -62,11 +120,24 @@ export declare class PreRegistrationRepository {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     } | null>;
@@ -83,11 +154,24 @@ export declare class PreRegistrationRepository {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;
@@ -103,11 +187,24 @@ export declare class PreRegistrationRepository {
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
+        gender: string;
         desiredGrade: string;
+        targetSchoolYear: string;
+        parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        childEmail: string | null;
+        previousSchool: string | null;
+        parentAddress: string | null;
+        fileNumber: string;
+        receiptNumber: string | null;
+        receiptImageUrl: string | null;
         documentUrls: string[];
+        adminComment: string | null;
+        processedBy: number | null;
+        processedAt: Date | null;
+        studentId: number | null;
         submittedAt: Date;
         updatedAt: Date;
     }>;

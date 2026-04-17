@@ -22,14 +22,40 @@ exports.createPreRegistrationSchema = zod_1.z.object({
     childLastName: zod_1.z.string().min(1, "Le nom de l'enfant est requis"),
     /** Date de naissance de l'enfant (format ISO 8601) */
     childDateOfBirth: zod_1.z.coerce.date(),
+    /** Genre de l'enfant */
+    gender: zod_1.z.enum(["M", "F"], {
+        message: "Le genre doit être 'Masculin' ou 'Féminin'",
+    }),
+    /** Email de l'enfant (optionnel) */
+    childEmail: zod_1.z
+        .string()
+        .email("Email de l'enfant invalide")
+        .optional()
+        .or(zod_1.z.literal("")),
+    /** École précédente (optionnel) */
+    previousSchool: zod_1.z.string().optional(),
     /** Niveau scolaire souhaité */
     desiredGrade: zod_1.z.string().min(1, "Le niveau souhaité est requis"),
+    /** Année scolaire cible */
+    targetSchoolYear: zod_1.z.string().min(1, "L'année scolaire cible est requise"),
+    /** Prénom du parent */
+    parentFirstName: zod_1.z.string().min(1, "Le prénom du parent est requis"),
     /** Nom complet du parent */
     parentFullName: zod_1.z.string().min(1, "Le nom du parent est requis"),
     /** Adresse email du parent */
-    parentEmail: zod_1.z.string().email("Email invalide"),
+    parentEmail: zod_1.z.string().email("Email parents invalide"),
     /** Numéro de téléphone du parent */
     parentPhone: zod_1.z.string().min(1, "Le téléphone du parent est requis"),
+    /** Adresse du parent (optionnel) */
+    parentAddress: zod_1.z.string().optional(),
+    /** Numéro de bordereau/reçu (optionnel) */
+    receiptNumber: zod_1.z.string().optional(),
+    /** URL de l'image du reçu (optionnel) */
+    receiptImageUrl: zod_1.z
+        .string()
+        .url("URL de l'image invalide")
+        .optional()
+        .or(zod_1.z.literal("")),
     /** URLs des documents joints (optionnel) */
     documentUrls: zod_1.z.array(zod_1.z.string().url()).optional().default([]),
 });

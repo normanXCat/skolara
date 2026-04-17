@@ -21,14 +21,42 @@ export const createPreRegistrationSchema = z.object({
     childLastName: z.string().min(1, "Le nom de l'enfant est requis"),
     /** Date de naissance de l'enfant (format ISO 8601) */
     childDateOfBirth: z.coerce.date(),
+    /** Genre de l'enfant */
+    gender: z.enum(["M", "F"] as const, {
+        message: "Le genre doit être 'Masculin' ou 'Féminin'",
+    }),
+    /** Email de l'enfant (optionnel) */
+    childEmail: z
+        .string()
+        .email("Email de l'enfant invalide")
+        .optional()
+        .or(z.literal("")),
+    /** École précédente (optionnel) */
+    previousSchool: z.string().optional(),
     /** Niveau scolaire souhaité */
     desiredGrade: z.string().min(1, "Le niveau souhaité est requis"),
+    /** Année scolaire cible */
+    targetSchoolYear: z.string().min(1, "L'année scolaire cible est requise"),
+
+    /** Prénom du parent */
+    parentFirstName: z.string().min(1, "Le prénom du parent est requis"),
     /** Nom complet du parent */
     parentFullName: z.string().min(1, "Le nom du parent est requis"),
     /** Adresse email du parent */
-    parentEmail: z.string().email("Email invalide"),
+    parentEmail: z.string().email("Email parents invalide"),
     /** Numéro de téléphone du parent */
     parentPhone: z.string().min(1, "Le téléphone du parent est requis"),
+    /** Adresse du parent (optionnel) */
+    parentAddress: z.string().optional(),
+
+    /** Numéro de bordereau/reçu (optionnel) */
+    receiptNumber: z.string().optional(),
+    /** URL de l'image du reçu (optionnel) */
+    receiptImageUrl: z
+        .string()
+        .url("URL de l'image invalide")
+        .optional()
+        .or(z.literal("")),
     /** URLs des documents joints (optionnel) */
     documentUrls: z.array(z.string().url()).optional().default([]),
 });

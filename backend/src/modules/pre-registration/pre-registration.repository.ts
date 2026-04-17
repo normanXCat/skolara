@@ -1,9 +1,6 @@
 import { prisma } from "../../prisma/client";
-import type { Status } from "../../generated/prisma";
-import type {
-    CreatePreRegistrationInput,
-    UpdatePreRegistrationInput,
-} from "./pre-registration.schema";
+import type { Status, Prisma } from "../../generated/prisma";
+import type { UpdatePreRegistrationInput } from "./pre-registration.schema";
 
 /**
  * Repository pour les opérations de base de données sur les pré-inscriptions.
@@ -13,11 +10,23 @@ export class PreRegistrationRepository {
     /**
      * Crée une nouvelle pré-inscription en base de données.
      *
-     * @param data - Données validées pour la création
+     * @param data - Données pour la création (inclut fileNumber)
      * @returns La pré-inscription créée
      */
-    async create(data: CreatePreRegistrationInput) {
+    async create(data: Prisma.PreRegistrationCreateInput) {
         return prisma.preRegistration.create({ data });
+    }
+
+    /**
+     * Recherche un premier enregistrement correspondant aux critères.
+     * @param where - Filtres Prisma
+     * @param orderBy - Tri optionnel
+     */
+    async findFirst(
+        where: Prisma.PreRegistrationWhereInput,
+        orderBy?: Prisma.PreRegistrationOrderByWithRelationInput,
+    ) {
+        return prisma.preRegistration.findFirst({ where, orderBy });
     }
 
     /**

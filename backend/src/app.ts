@@ -3,8 +3,10 @@ import cors from "cors";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 import { swaggerDocument } from "./config/swagger";
+import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
 import preRegistrationRoutes from "./modules/pre-registration/pre-registration.routes";
+import uploadRoutes from "./modules/upload/upload.routes";
 import { env } from "./config/env";
 
 /**
@@ -14,7 +16,11 @@ import { env } from "./config/env";
 const app = express();
 
 /* ─── Middlewares globaux ─── */
-app.use(helmet());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+    }),
+);
 app.use(
     cors({
         origin: env.FRONTEND_URL,
@@ -23,11 +29,15 @@ app.use(
 );
 app.use(express.json());
 
+/* ─── Fichiers statiques (Uploads) ─── */
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 /* ─── Documentation Swagger ─── */
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /* ─── Routes API ─── */
 app.use("/api/pre-registrations", preRegistrationRoutes);
+app.use("/api/upload", uploadRoutes);
 
 /* ─── Route de santé ─── */
 app.get("/api/health", (_req, res) => {

@@ -11,13 +11,15 @@ const envSchema = z.object({
     /** URL de connexion à la base de données PostgreSQL */
     DATABASE_URL: z.string().min(1, "DATABASE_URL est requis"),
     /** Port d'écoute du serveur Express */
-    PORT: z.coerce.number().int().positive().default(5000),
+    PORT: z.coerce.number().int().positive().default(8000),
     /** Environnement d'exécution */
     NODE_ENV: z
         .enum(["development", "production", "test"])
         .default("development"),
     /** URL du frontend pour la configuration CORS */
     FRONTEND_URL: z.string().url().default("http://localhost:3000"),
+    /** URL de base de l'API (pour les liens publics) */
+    API_URL: z.string().url().default("http://localhost:8000"),
 });
 
 /**

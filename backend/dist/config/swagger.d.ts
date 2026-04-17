@@ -216,6 +216,77 @@ export declare const swaggerDocument: {
                 };
             };
         };
+        "/upload/single": {
+            post: {
+                tags: string[];
+                summary: string;
+                description: string;
+                requestBody: {
+                    content: {
+                        "multipart/form-data": {
+                            schema: {
+                                type: string;
+                                properties: {
+                                    file: {
+                                        type: string;
+                                        format: string;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "201": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/upload/multiple": {
+            post: {
+                tags: string[];
+                summary: string;
+                description: string;
+                requestBody: {
+                    content: {
+                        "multipart/form-data": {
+                            schema: {
+                                type: string;
+                                properties: {
+                                    files: {
+                                        type: string;
+                                        items: {
+                                            type: string;
+                                            format: string;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "201": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
     };
     components: {
         schemas: {
@@ -236,7 +307,29 @@ export declare const swaggerDocument: {
                         format: string;
                         example: string;
                     };
+                    gender: {
+                        type: string;
+                        enum: string[];
+                        example: string;
+                    };
+                    childEmail: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    previousSchool: {
+                        type: string;
+                        example: string;
+                    };
                     desiredGrade: {
+                        type: string;
+                        example: string;
+                    };
+                    targetSchoolYear: {
+                        type: string;
+                        example: string;
+                    };
+                    parentFirstName: {
                         type: string;
                         example: string;
                     };
@@ -253,6 +346,19 @@ export declare const swaggerDocument: {
                         type: string;
                         example: string;
                     };
+                    parentAddress: {
+                        type: string;
+                        example: string;
+                    };
+                    receiptNumber: {
+                        type: string;
+                        example: string;
+                    };
+                    receiptImageUrl: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
                     documentUrls: {
                         type: string;
                         items: {
@@ -260,6 +366,107 @@ export declare const swaggerDocument: {
                             format: string;
                         };
                         example: string[];
+                    };
+                };
+            };
+            PreRegistration: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                        example: number;
+                    };
+                    fileNumber: {
+                        type: string;
+                        example: string;
+                    };
+                    childFirstName: {
+                        type: string;
+                        example: string;
+                    };
+                    childLastName: {
+                        type: string;
+                        example: string;
+                    };
+                    childDateOfBirth: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    gender: {
+                        type: string;
+                        enum: string[];
+                        example: string;
+                    };
+                    childEmail: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    previousSchool: {
+                        type: string;
+                        example: string;
+                    };
+                    desiredGrade: {
+                        type: string;
+                        example: string;
+                    };
+                    targetSchoolYear: {
+                        type: string;
+                        example: string;
+                    };
+                    parentFirstName: {
+                        type: string;
+                        example: string;
+                    };
+                    parentFullName: {
+                        type: string;
+                        example: string;
+                    };
+                    parentEmail: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    parentPhone: {
+                        type: string;
+                        example: string;
+                    };
+                    parentAddress: {
+                        type: string;
+                        example: string;
+                    };
+                    receiptNumber: {
+                        type: string;
+                        example: string;
+                    };
+                    receiptImageUrl: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    documentUrls: {
+                        type: string;
+                        items: {
+                            type: string;
+                            format: string;
+                        };
+                        example: string[];
+                    };
+                    status: {
+                        type: string;
+                        enum: string[];
+                        example: string;
+                    };
+                    submittedAt: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    updatedAt: {
+                        type: string;
+                        format: string;
+                        example: string;
                     };
                 };
             };
@@ -282,7 +489,13 @@ export declare const swaggerDocument: {
                         example: boolean;
                     };
                     data: {
-                        type: string;
+                        oneOf: ({
+                            $ref: string;
+                            type?: undefined;
+                        } | {
+                            type: string;
+                            $ref?: undefined;
+                        })[];
                     };
                     message: {
                         type: string;
@@ -311,7 +524,7 @@ export declare const swaggerDocument: {
                     data: {
                         type: string;
                         items: {
-                            type: string;
+                            $ref: string;
                         };
                     };
                     meta: {
@@ -328,6 +541,69 @@ export declare const swaggerDocument: {
                             };
                             totalPages: {
                                 type: string;
+                            };
+                        };
+                    };
+                    message: {
+                        type: string;
+                    };
+                };
+            };
+            UploadResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                        example: boolean;
+                    };
+                    data: {
+                        type: string;
+                        properties: {
+                            url: {
+                                type: string;
+                                format: string;
+                            };
+                            filename: {
+                                type: string;
+                            };
+                            mimetype: {
+                                type: string;
+                            };
+                            size: {
+                                type: string;
+                            };
+                        };
+                    };
+                    message: {
+                        type: string;
+                    };
+                };
+            };
+            UploadMultipleResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                        example: boolean;
+                    };
+                    data: {
+                        type: string;
+                        items: {
+                            type: string;
+                            properties: {
+                                url: {
+                                    type: string;
+                                    format: string;
+                                };
+                                filename: {
+                                    type: string;
+                                };
+                                mimetype: {
+                                    type: string;
+                                };
+                                size: {
+                                    type: string;
+                                };
                             };
                         };
                     };
