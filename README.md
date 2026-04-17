@@ -9,6 +9,7 @@
 - **Hero Section Dynamique** : Navigation intelligente, Spotlight effects et mise en page éditoriale.
 - **Présentation de l'Établissement** : Design minimalist avec "Peek Carousel" et galerie de panneaux flottants.
 - **Dashboard de Performance** : Section "Chiffres Clés" avec compteurs animés et design de type tableau de bord directionnel.
+- **Gestion des Pré-inscriptions** : Formulaire multi-étapes intelligent avec validation temps réel et suivi de dossier.
 - **Design System Cohérent** : Utilisation intensive du Glassmorphism, de typographies modernes et de micro-interactions fluides.
 
 ### 🛠️ Architecture Technique
@@ -16,7 +17,7 @@
 - **Frontend** : Next.js 15, React 19, TypeScript.
 - **Styling** : Tailwind CSS avec un système de design personnalisé.
 - **Animations** : Framer Motion pour des transitions et des effets de scroll "Agency-grade".
-- **Backend** : Prisma, PostgreSQL (à venir).
+- **Backend** : Node.js, Express, Prisma, PostgreSQL.
 - **Runtime** : Bun pour une exécution ultra-rapide.
 
 ## 🚀 Structure du Projet

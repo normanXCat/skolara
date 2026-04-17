@@ -68,6 +68,7 @@ Une fois le serveur lancé, accédez à la documentation interactive Swagger :
 | `GET`    | `/api/pre-registrations/:id` | Détail par id                | Admin  |
 | `PATCH`  | `/api/pre-registrations/:id` | Mettre à jour le statut      | Admin  |
 | `DELETE` | `/api/pre-registrations/:id` | Supprimer                    | Admin  |
+| `GET`    | `/api/grades`                | Lister les niveaux scolaires | Public |
 | `GET`    | `/api/health`                | Vérification de santé        | Public |
 
 ### Paramètres de query (GET liste)
@@ -156,6 +157,11 @@ src/
 │   ├── pre-registration.controller.ts  ← Handlers Express
 │   ├── pre-registration.routes.ts      ← Définition des routes
 │   └── pre-registration.test.ts        ← Tests unit + intégration
+├── modules/grade/
+│   ├── grade.repository.ts             ← Queries Prisma pour les niveaux
+│   ├── grade.service.ts                ← Logique métier
+│   ├── grade.controller.ts             ← Handler Express
+│   └── grade.routes.ts                 ← Définition des routes
 ├── middlewares/
 │   ├── validate.ts                     ← Middleware Zod générique
 │   └── errorHandler.ts                ← Handler global d'erreurs
@@ -165,14 +171,15 @@ src/
 
 ## 📋 Scripts npm
 
-| Script                    | Description                   |
-| ------------------------- | ----------------------------- |
-| `npm run dev`             | Démarre en mode développement |
-| `npm run build`           | Compile TypeScript            |
-| `npm start`               | Démarre la version compilée   |
-| `npm test`                | Lance les tests Jest          |
-| `npm run test:watch`      | Tests en mode watch           |
-| `npm run test:coverage`   | Tests avec couverture         |
-| `npm run prisma:generate` | Génère le client Prisma       |
-| `npm run prisma:migrate`  | Applique les migrations       |
-| `npm run prisma:studio`   | Ouvre Prisma Studio           |
+| Script                    | Description                     |
+| ------------------------- | ------------------------------- |
+| `npm run dev`             | Démarre en mode développement   |
+| `npm run build`           | Compile TypeScript              |
+| `npm start`               | Démarre la version compilée     |
+| `npm test`                | Lance les tests Jest            |
+| `npm run test:watch`      | Tests en mode watch             |
+| `npm run test:coverage`   | Tests avec couverture           |
+| `npm run prisma:generate` | Génère le client Prisma         |
+| `npm run prisma:migrate`  | Applique les migrations         |
+| `npm run prisma:studio`   | Ouvre Prisma Studio             |
+| `npm run seed`            | Initialise les données (Grades) |
