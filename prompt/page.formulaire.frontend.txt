@@ -1,0 +1,20 @@
+Crée une page formulaire [NOM_PAGE] avec :
+
+**Stack** : React + TypeScript + react-hook-form + zod + framer-motion + shadcn/ui
+**Composants** : InputReusable, SelectReusable, ButtonReusable
+**Design** : utilise le skill ui/ux pro-max
+
+**Schema Zod** (`src/schemas/[nom]-schema.ts`) :
+[COLLER TON SCHEMA ICI]
+
+**Hook** (`src/hooks/use[NomHook].ts`) :
+- Pattern identique à useRegisterClientForm (loading, setLoading, form avec zodResolver + mode:"onTouched")
+
+**Composant** (`src/components/[nom-composant].tsx`) :
+- En-tête animé (motion) : badge + titre + sous-titre + ligne décorative
+- Champs groupés par sections : [LISTER TES SECTIONS ET CHAMPS]
+- onSubmit → console.log(data) pour l'instant
+- Design pro-max : animations staggered par champ, fieldset disabled pendant submit, micro-interactions sur les champs, hiérarchie visuelle claire entre sections
+- Bouton submit : disabled si !isValid || isSubmitting, icône + loader
+
+**Fichiers à générer** : schema / hook / composant (séparés)

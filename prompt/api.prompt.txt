@@ -1,0 +1,41 @@
+
+"Agis comme un expert Senior Frontend Engineer. Je travaille sur une application Next.js/TypeScript utilisant react-hook-form, Zod et Shadcn UI.
+
+Génère une fonction utilitaire apiClient robuste pour effectuer des requêtes (GET, POST, PATCH, PUT, DELETE).
+
+1. Contraintes Techniques Obligatoires :
+
+Sécurité : Ajoute credentials: 'include' par défaut pour supporter les cookies HttpOnly.
+
+Typage de la Réponse : L'API renvoie deux types d'objets selon le succès. Utilise une Discriminated Union en TypeScript :
+
+Succès : { success: true, data: T, message: string }
+
+Erreur de validation : { success: false, error: string, details: Array<{ path: string[], message: string }> }
+
+Formatage des Erreurs : Crée une méthode helper (ou intègre la logique) qui transforme le tableau details en un format compatible avec la fonction setError de react-hook-form. Le path (ex: ['childFirstName']) doit être converti pour cibler le bon champ du formulaire.
+
+2. Fonctionnalités attendues :
+
+Gestion des headers (Content-Type: application/json).
+
+Interception des erreurs HTTP globales (500, 401, 403).
+
+Utilisation de Generics pour définir le type de data attendu au moment de l'appel.
+
+3. Exemple d'Implémentation souhaité :
+Montre-moi comment utiliser cet apiClient dans un Client Component avec :
+
+Un schéma de validation Zod.
+
+Un formulaire react-hook-form.
+
+La capture de l'erreur details pour afficher les messages d'erreur (message) directement sous les inputs correspondants (path) en cas d'échec de la requête POST."
+
+Appelle api.get<PaginatedResponse>('/items', { page: 1, limit: 20 }).
+
+Gère l'affichage des données.
+
+Montre aussi un exemple de POST où les erreurs de validation du backend (le tableau details) sont automatiquement injectées dans les champs du formulaire via react-hook-form."
+
+URLSearchParams : En demandant la conversion automatique des params en query string, tu évites de concaténer manuellement des chaînes de caractères (ce qui est source d'erreurs avec les ? et &).
