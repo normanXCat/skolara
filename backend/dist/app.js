@@ -11,6 +11,7 @@ const swagger_1 = require("./config/swagger");
 const path_1 = __importDefault(require("path"));
 const errorHandler_1 = require("./middlewares/errorHandler");
 const pre_registration_routes_1 = __importDefault(require("./modules/pre-registration/pre-registration.routes"));
+const grade_routes_1 = __importDefault(require("./modules/grade/grade.routes"));
 const upload_routes_1 = __importDefault(require("./modules/upload/upload.routes"));
 const env_1 = require("./config/env");
 /**
@@ -33,6 +34,7 @@ app.use("/uploads", express_1.default.static(path_1.default.join(process.cwd(), 
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerDocument));
 /* ─── Routes API ─── */
 app.use("/api/pre-registrations", pre_registration_routes_1.default);
+app.use("/api/grades", grade_routes_1.default);
 app.use("/api/upload", upload_routes_1.default);
 /* ─── Route de santé ─── */
 app.get("/api/health", (_req, res) => {

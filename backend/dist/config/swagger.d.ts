@@ -26,6 +26,36 @@ export declare const swaggerDocument: {
         description: string;
     }[];
     paths: {
+        "/grades": {
+            get: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                            example: boolean;
+                                        };
+                                        data: {
+                                            type: string;
+                                            items: {
+                                                $ref: string;
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
         "/pre-registrations": {
             post: {
                 tags: string[];
@@ -325,10 +355,6 @@ export declare const swaggerDocument: {
                         type: string;
                         example: string;
                     };
-                    targetSchoolYear: {
-                        type: string;
-                        example: string;
-                    };
                     parentFirstName: {
                         type: string;
                         example: string;
@@ -408,10 +434,6 @@ export declare const swaggerDocument: {
                         example: string;
                     };
                     desiredGrade: {
-                        type: string;
-                        example: string;
-                    };
-                    targetSchoolYear: {
                         type: string;
                         example: string;
                     };
@@ -609,6 +631,23 @@ export declare const swaggerDocument: {
                     };
                     message: {
                         type: string;
+                    };
+                };
+            };
+            Grade: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                        example: number;
+                    };
+                    value: {
+                        type: string;
+                        example: string;
+                    };
+                    label: {
+                        type: string;
+                        example: string;
                     };
                 };
             };
