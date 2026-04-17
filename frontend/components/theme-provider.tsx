@@ -11,6 +11,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 // Suppress the React 19 warning about the script tag in next-themes
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     const orig = console.error;
+
     console.error = (...args: unknown[]) => {
         if (
             typeof args[0] === "string" &&
@@ -18,7 +19,11 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
         ) {
             return;
         }
-        orig.apply(console, args);
+
+        // Call original if it's a callable function. Use call to preserve context.
+        if (typeof orig === "function") {
+            (orig as (...a: any[]) => void).call(console, ...args as any[]);
+        }
     };
 }
 

@@ -48,10 +48,13 @@ class ApiClient {
             });
         }
 
-        const headers = {
-            "Content-Type": "application/json",
-            ...customConfig.headers,
-        };
+        const isFormData = customConfig.body instanceof FormData;
+
+        const headers = new Headers(customConfig.headers);
+
+        if (!isFormData) {
+            headers.set("Content-Type", "application/json");
+        }
 
         const config: RequestInit = {
             ...customConfig,
@@ -108,20 +111,42 @@ class ApiClient {
 
     /**
      * Helper pour injecter les erreurs backend dans react-hook-form
+     * Gère aussi le saut vers l'étape de la première erreur pour les formulaires par étapes
      */
     handleFormErrors<TFieldValues extends FieldValues>(
         details: ApiValidationError[],
         setError: UseFormSetError<TFieldValues>,
+        options?: {
+            steps?: string[][];
+            onStepError?: (stepIndex: number) => void;
+        },
     ) {
+        // 1. Injecter les erreurs dans react-hook-form
         details.forEach((err) => {
-            // Le path backend est un tableau (ex: ['childFirstName'])
-            // On le joint ou on prend le premier élément pour correspondre au champ du formulaire
             const fieldName = err.path.join(".") as Path<TFieldValues>;
             setError(fieldName, {
                 type: "server",
                 message: err.message,
             });
         });
+
+        // 2. Si c'est un formulaire par étapes, on cherche la première erreur
+        if (options?.steps && options?.onStepError && details.length > 0) {
+            const firstErrorField = details[0].path.join(".");
+
+            // On trouve l'index de l'étape qui contient ce champ
+            const errorStepIndex = options.steps.findIndex((stepFields) =>
+                stepFields.some(
+                    (field) =>
+                        field === firstErrorField ||
+                        firstErrorField.startsWith(`${field}.`),
+                ),
+            );
+
+            if (errorStepIndex !== -1) {
+                options.onStepError(errorStepIndex);
+            }
+        }
     }
 
     // Méthodes HTTP
@@ -134,6 +159,27 @@ class ApiClient {
             method: "POST",
             body: JSON.stringify(data),
         });
+    }
+
+    upload<T>(endpoint: string, file: File | FileList) {
+        const formData = new FormData();
+
+        if (file instanceof FileList) {
+            Array.from(file).forEach((f) => formData.append("files", f));
+        } else {
+            formData.append("file", file);
+        }
+
+        // Pour l'upload, on ne doit pas fixer de Content-Type manuel
+        // Le navigateur le fera automatiquement avec le boundary.
+        return this.request<T>(endpoint, {
+            method: "POST",
+            body: formData,
+            headers: {
+                // On écrase le header par défaut en l'enlevant si possible,
+                // ou on laisse le navigateur gérer.
+            },
+        } as any);
     }
 
     put<T>(endpoint: string, data?: any) {

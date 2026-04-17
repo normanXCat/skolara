@@ -5,8 +5,9 @@ import {
     PreregistrationSchema,
     type Preregistration,
 } from "@/schemas/pre-registration-schema";
+import { UseFormReturn } from "react-hook-form";
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 /**
  * Hook personnalisé pour gérer le formulaire de pré-inscription Skolara.
@@ -16,26 +17,51 @@ const usePreregistrationForm = () => {
     const [currentStep, setCurrentStep] = useState(0);
 
     const form = useForm<Preregistration>({
-        mode: "onTouched",
+        mode: "onChange",
+        reValidateMode: "onChange",
         shouldFocusError: true,
         resolver: zodResolver(PreregistrationSchema) as any,
         defaultValues: {
             childFirstName: "",
             childLastName: "",
             childDateOfBirth: "",
+            gender: undefined as any,
+            childEmail: "",
+            previousSchool: "",
             desiredGrade: "",
+            targetSchoolYear: "2024-2025",
+            parentFirstName: "",
             parentFullName: "",
             parentEmail: "",
             parentPhone: "",
+            parentAddress: "",
+            receiptNumber: "",
+            receiptImageUrl: "",
             documentUrls: [],
-            status: "pending",
+            status: "PENDING",
         },
     });
 
     const stepFields: (keyof Preregistration)[][] = [
-        ["childFirstName", "childLastName", "childDateOfBirth", "desiredGrade"],
-        ["parentFullName", "parentEmail", "parentPhone"],
-        [], // Empty fields for summary step
+        [
+            "childFirstName",
+            "childLastName",
+            "childDateOfBirth",
+            "gender",
+            "childEmail",
+            "previousSchool",
+            "desiredGrade",
+            "targetSchoolYear",
+        ],
+        [
+            "parentFirstName",
+            "parentFullName",
+            "parentEmail",
+            "parentPhone",
+            "parentAddress",
+        ],
+        ["receiptNumber", "receiptImageUrl", "documentUrls"],
+        [], // Étape 4 : Confirmation/Sommaire
     ];
 
     const nextStep = useCallback(async () => {
@@ -54,6 +80,8 @@ const usePreregistrationForm = () => {
     return {
         form,
         currentStep,
+        setCurrentStep,
+        stepFields,
         totalSteps: TOTAL_STEPS,
         isFirstStep: currentStep === 0,
         isLastStep: currentStep === TOTAL_STEPS - 1,
