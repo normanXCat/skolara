@@ -40,7 +40,7 @@ app.use("/api/pre-registrations", preRegistrationRoutes);
 app.use("/api/upload", uploadRoutes);
 
 /* ─── Route de santé ─── */
-app.get("/api/health", (_req, res) => {
+app.get("/api/health", (_req: express.Request, res: express.Response) => {
     res.json({ success: true, message: "API Skolara opérationnelle" });
 });
 
