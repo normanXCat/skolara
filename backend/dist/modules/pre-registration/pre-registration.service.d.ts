@@ -29,7 +29,6 @@ export declare class PreRegistrationService {
         childDateOfBirth: Date;
         gender: string;
         desiredGrade: string;
-        targetSchoolYear: string;
         parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
@@ -68,7 +67,6 @@ export declare class PreRegistrationService {
             childDateOfBirth: Date;
             gender: string;
             desiredGrade: string;
-            targetSchoolYear: string;
             parentFirstName: string;
             parentFullName: string;
             parentEmail: string;
@@ -110,7 +108,6 @@ export declare class PreRegistrationService {
         childDateOfBirth: Date;
         gender: string;
         desiredGrade: string;
-        targetSchoolYear: string;
         parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
@@ -146,7 +143,6 @@ export declare class PreRegistrationService {
         childDateOfBirth: Date;
         gender: string;
         desiredGrade: string;
-        targetSchoolYear: string;
         parentFirstName: string;
         parentFullName: string;
         parentEmail: string;
@@ -181,7 +177,6 @@ export declare class PreRegistrationService {
         childDateOfBirth: Date;
         gender: string;
         desiredGrade: string;
-        targetSchoolYear: string;
         parentFirstName: string;
         parentFullName: string;
         parentEmail: string;

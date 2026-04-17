@@ -6,6 +6,7 @@ import { swaggerDocument } from "./config/swagger";
 import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
 import preRegistrationRoutes from "./modules/pre-registration/pre-registration.routes";
+import gradeRoutes from "./modules/grade/grade.routes";
 import uploadRoutes from "./modules/upload/upload.routes";
 import { env } from "./config/env";
 
@@ -37,6 +38,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /* ─── Routes API ─── */
 app.use("/api/pre-registrations", preRegistrationRoutes);
+app.use("/api/grades", gradeRoutes);
 app.use("/api/upload", uploadRoutes);
 
 /* ─── Route de santé ─── */

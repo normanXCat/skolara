@@ -28,8 +28,43 @@ export const swaggerDocument = {
             name: "PreRegistrations",
             description: "Opérations CRUD sur les pré-inscriptions",
         },
+        {
+            name: "Grades",
+            description: "Récupération des niveaux scolaires (grades)",
+        },
     ],
     paths: {
+        "/grades": {
+            get: {
+                tags: ["Grades"],
+                summary:
+                    "Lister tous les niveaux scolaires disponibles (public)",
+                responses: {
+                    "200": {
+                        description: "Liste des grades",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true,
+                                        },
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/Grade",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/pre-registrations": {
             post: {
                 tags: ["PreRegistrations"],
@@ -314,7 +349,6 @@ export const swaggerDocument = {
                     "childDateOfBirth",
                     "gender",
                     "desiredGrade",
-                    "targetSchoolYear",
                     "parentFirstName",
                     "parentFullName",
                     "parentEmail",
@@ -343,7 +377,6 @@ export const swaggerDocument = {
                         example: "École des Pins",
                     },
                     desiredGrade: { type: "string", example: "CP" },
-                    targetSchoolYear: { type: "string", example: "2024-2025" },
                     parentFirstName: { type: "string", example: "Karim" },
                     parentFullName: { type: "string", example: "Karim Benali" },
                     parentEmail: {
@@ -396,7 +429,6 @@ export const swaggerDocument = {
                         example: "École des Pins",
                     },
                     desiredGrade: { type: "string", example: "CP" },
-                    targetSchoolYear: { type: "string", example: "2024-2025" },
                     parentFirstName: { type: "string", example: "Karim" },
                     parentFullName: { type: "string", example: "Karim Benali" },
                     parentEmail: {
@@ -522,6 +554,17 @@ export const swaggerDocument = {
                         },
                     },
                     message: { type: "string" },
+                },
+            },
+            Grade: {
+                type: "object",
+                properties: {
+                    id: { type: "integer", example: 1 },
+                    value: { type: "string", example: "CP" },
+                    label: {
+                        type: "string",
+                        example: "Cours Préparatoire (CP)",
+                    },
                 },
             },
         },

@@ -36,8 +36,6 @@ exports.createPreRegistrationSchema = zod_1.z.object({
     previousSchool: zod_1.z.string().optional(),
     /** Niveau scolaire souhaité */
     desiredGrade: zod_1.z.string().min(1, "Le niveau souhaité est requis"),
-    /** Année scolaire cible */
-    targetSchoolYear: zod_1.z.string().min(1, "L'année scolaire cible est requise"),
     /** Prénom du parent */
     parentFirstName: zod_1.z.string().min(1, "Le prénom du parent est requis"),
     /** Nom complet du parent */

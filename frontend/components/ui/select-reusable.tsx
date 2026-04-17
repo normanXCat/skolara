@@ -34,6 +34,7 @@ export interface SelectReusableProps {
     onLoadMore?: () => void;
     hasMore?: boolean;
     isLoadingMore?: boolean;
+    isLoading?: boolean;
     disabled?: boolean;
     name?: string;
 }
@@ -61,6 +62,7 @@ export const SelectReusable = React.forwardRef<
         onLoadMore,
         hasMore,
         isLoadingMore,
+        isLoading,
         disabled = false,
         name,
         ...rest
@@ -118,7 +120,7 @@ export const SelectReusable = React.forwardRef<
                     )}
                 </AnimatePresence>
 
-                {IconProp && (
+                {!isLoading && IconProp && (
                     <div
                         className={cn(
                             "absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 z-10 pointer-events-none transition-colors",
@@ -133,7 +135,7 @@ export const SelectReusable = React.forwardRef<
                     value={value}
                     onValueChange={onValueChange}
                     onOpenChange={setIsOpen}
-                    disabled={disabled}
+                    disabled={disabled || isLoading}
                 >
                     <motion.div
                         animate={error ? { x: [-2, 2, -2, 2, 0] } : {}}
@@ -148,12 +150,26 @@ export const SelectReusable = React.forwardRef<
                             className={cn(
                                 "!h-14 w-full bg-transparent border-none focus:ring-0 focus:ring-offset-0 rounded-full !py-0",
                                 "text-base font-medium transition-all shadow-none outline-none",
-                                IconProp ? "pl-12 pr-12" : "px-12",
+                                IconProp || isLoading ? "pl-12 pr-12" : "px-12",
                                 error && "text-destructive",
                             )}
                             {...rest}
                         >
-                            <SelectValue placeholder={placeholder} />
+                            <div className="flex items-center gap-3">
+                                {isLoading && (
+                                    <IconLoader2
+                                        size={iconSize}
+                                        className="animate-spin text-primary shrink-0"
+                                    />
+                                )}
+                                <SelectValue
+                                    placeholder={
+                                        isLoading
+                                            ? "Chargement..."
+                                            : placeholder
+                                    }
+                                />
+                            </div>
                         </SelectTrigger>
                     </motion.div>
 

@@ -36,7 +36,6 @@ export class PreRegistrationService {
             parentEmail: data.parentEmail,
             childFirstName: data.childFirstName,
             childLastName: data.childLastName,
-            targetSchoolYear: data.targetSchoolYear,
         });
 
         if (existingRecord) {

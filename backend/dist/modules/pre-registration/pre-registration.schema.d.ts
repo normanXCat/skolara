@@ -23,7 +23,6 @@ export declare const createPreRegistrationSchema: z.ZodObject<{
     childEmail: z.ZodUnion<[z.ZodOptional<z.ZodString>, z.ZodLiteral<"">]>;
     previousSchool: z.ZodOptional<z.ZodString>;
     desiredGrade: z.ZodString;
-    targetSchoolYear: z.ZodString;
     parentFirstName: z.ZodString;
     parentFullName: z.ZodString;
     parentEmail: z.ZodString;
