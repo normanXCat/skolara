@@ -8,5 +8,9 @@ export declare const env: {
     NODE_ENV: "development" | "production" | "test";
     FRONTEND_URL: string;
     API_URL: string;
+    JWT_SECRET: string;
+    JWT_REFRESH_SECRET: string;
+    JWT_EXPIRES_IN: string;
+    REFRESH_TOKEN_EXPIRES_DAYS: number;
 };
 //# sourceMappingURL=env.d.ts.map

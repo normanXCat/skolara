@@ -26,6 +26,128 @@ export declare const swaggerDocument: {
         description: string;
     }[];
     paths: {
+        "/auth/login": {
+            post: {
+                tags: string[];
+                summary: string;
+                description: string;
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: string;
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                    "401": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/auth/refresh": {
+            post: {
+                tags: string[];
+                summary: string;
+                description: string;
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                            example: boolean;
+                                        };
+                                        data: {
+                                            type: string;
+                                            properties: {
+                                                accessToken: {
+                                                    type: string;
+                                                };
+                                            };
+                                        };
+                                        message: {
+                                            type: string;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    "401": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/auth/logout": {
+            post: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/auth/me": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                            example: boolean;
+                                        };
+                                        data: {
+                                            $ref: string;
+                                        };
+                                        message: {
+                                            type: string;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
         "/grades": {
             get: {
                 tags: string[];
@@ -650,6 +772,81 @@ export declare const swaggerDocument: {
                         example: string;
                     };
                 };
+            };
+            LoginInput: {
+                type: string;
+                required: string[];
+                properties: {
+                    email: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                    password: {
+                        type: string;
+                        format: string;
+                        example: string;
+                    };
+                };
+            };
+            AuthResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                        example: boolean;
+                    };
+                    data: {
+                        type: string;
+                        properties: {
+                            accessToken: {
+                                type: string;
+                            };
+                            user: {
+                                $ref: string;
+                            };
+                        };
+                    };
+                    message: {
+                        type: string;
+                    };
+                };
+            };
+            User: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                    };
+                    firstName: {
+                        type: string;
+                    };
+                    name: {
+                        type: string;
+                    };
+                    email: {
+                        type: string;
+                        format: string;
+                    };
+                    role: {
+                        type: string;
+                        enum: string[];
+                    };
+                    active: {
+                        type: string;
+                    };
+                    createdAt: {
+                        type: string;
+                        format: string;
+                    };
+                };
+            };
+        };
+        securitySchemes: {
+            bearerAuth: {
+                type: string;
+                scheme: string;
+                bearerFormat: string;
             };
         };
     };

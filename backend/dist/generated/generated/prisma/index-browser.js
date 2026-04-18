@@ -120,6 +120,27 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  name: 'name',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  role: 'role',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  revoked: 'revoked'
+};
+
 exports.Prisma.PreRegistrationScalarFieldEnum = {
   id: 'id',
   childFirstName: 'childFirstName',
@@ -167,6 +188,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  ADMIN: 'ADMIN',
+  ENSEIGNANT: 'ENSEIGNANT',
+  ELEVE: 'ELEVE',
+  PARENT: 'PARENT'
+};
+
 exports.Status = exports.$Enums.Status = {
   PENDING: 'PENDING',
   IN_REVIEW: 'IN_REVIEW',
@@ -175,6 +203,8 @@ exports.Status = exports.$Enums.Status = {
 };
 
 exports.Prisma.ModelName = {
+  User: 'User',
+  RefreshToken: 'RefreshToken',
   PreRegistration: 'PreRegistration',
   Grade: 'Grade'
 };
