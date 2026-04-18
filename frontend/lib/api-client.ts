@@ -47,9 +47,7 @@ class ApiClient {
                 }
             });
         }
-
         const isFormData = customConfig.body instanceof FormData;
-
         const headers = new Headers(customConfig.headers);
 
         if (!isFormData) {
@@ -59,16 +57,37 @@ class ApiClient {
         const config: RequestInit = {
             ...customConfig,
             headers,
-            credentials: "include", // Support des cookies HttpOnly par défaut
+            credentials: "include", // Support des cookies HttpOnly par défaut (Refresh Token)
         };
 
         try {
-            const response = await fetch(url.toString(), config);
+            let response = await fetch(url.toString(), config);
 
-            // Interception des erreurs HTTP globales
-            if (response.status === 401) {
-                // Optionnel : Rediriger vers login ou rafraîchir le token
-                console.warn("Session expirée (401)");
+            // Interception du 401 pour tentative de refresh
+            if (
+                response.status === 401 &&
+                !endpoint.includes("/auth/refresh") &&
+                !endpoint.includes("/auth/login")
+            ) {
+                const refreshRes = await this.post<{ accessToken: string }>(
+                    "/auth/refresh",
+                );
+
+                if (refreshRes.success) {
+                    // Le nouveau token est automatiquement mis à jour via le cookie
+                    response = await fetch(url.toString(), {
+                        ...config,
+                        headers,
+                    });
+                } else {
+                    // Échec du refresh -> Déconnexion
+                    if (
+                        typeof window !== "undefined" &&
+                        !window.location.pathname.includes("/login")
+                    ) {
+                        window.location.href = "/login";
+                    }
+                }
             }
 
             if (response.status === 403) {

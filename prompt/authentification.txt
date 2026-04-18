@@ -1,0 +1,159 @@
+# 🔐 STORY — Authentification Skolara (Cookie HttpOnly + Refresh Token)
+
+## Contexte projet
+Tu travailles sur **Skolara**, une plateforme de gestion scolaire.
+Stack : **Next.js 14 (App Router) · TypeScript · Prisma · PostgreSQL · shadcn/ui · Tailwind CSS · Zod**
+
+Avant de coder quoi que ce soit :
+1. **Lis et analyse toute la structure du projet** (dossiers, fichiers existants, conventions de nommage, patterns déjà utilisés)
+2. **Consulte `architecture/MLD_Skolara`** pour comprendre le modèle de données exact
+3. **Respecte à 100% les conventions déjà en place** : structure des réponses API, organisation des dossiers, patterns de formulaires, gestion d'erreurs — ton code doit être indiscernable du code existant
+
+---
+
+## 🎯 Objectif
+Implémenter un système d'authentification complet, sécurisé et production-ready.
+
+---
+
+## 📦 Base de données — Prisma
+
+Crée/complète le model `User` dans le schéma Prisma **en cohérence stricte avec le MLD Skolara** :
+
+```prisma
+model User {
+  id              Int       @id @default(autoincrement())
+  nom             String
+  prenom          String
+  email           String    @unique
+  mot_de_passe_hash String
+  role            Role      @default(ELEVE)
+  actif           Boolean   @default(true)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  refreshTokens   RefreshToken[]
+}
+
+model RefreshToken {
+  id          Int      @id @default(autoincrement())
+  token       String   @unique
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  revoked     Boolean  @default(false)
+}
+
+enum Role {
+  ADMIN
+  ENSEIGNANT
+  ELEVE
+  PARENT
+}
+```
+
+Génère la migration Prisma + seed minimal avec un compte admin de test.
+
+---
+
+## 🔑 Système d'authentification
+
+### Stratégie
+- **Access Token** : JWT signé, durée 15 minutes, stocké en mémoire côté client (pas localStorage)
+- **Refresh Token** : UUID v4, durée 7 jours, stocké en **cookie HttpOnly + Secure + SameSite=Strict**
+- **Bcrypt** : hash avec **12 rounds minimum**
+- **Rotation des refresh tokens** : à chaque refresh, l'ancien token est révoqué et un nouveau est émis
+
+### Routes API à créer
+
+Respecte **exactement** la structure et le format de réponse des routes API déjà existantes dans le projet.
+
+POST /api/auth/login
+POST /api/auth/logout
+POST /api/auth/refresh
+GET  /api/auth/me
+
+Pour chaque route :
+- Validation avec **Zod** (schémas dans un fichier séparé `lib/validations/auth.ts`)
+- Gestion d'erreurs typée et centralisée (cohérente avec le reste du projet)
+- Format de réponse uniforme `{ success, data?, error?, message? }`
+- Codes HTTP appropriés (400, 401, 403, 409, 500)
+
+### Schémas Zod
+```typescript
+// Valide selon les règles du CDC :
+// - Email valide
+// - Mot de passe : min 8 chars, 1 majuscule, 1 chiffre
+```
+
+### Middleware de protection des routes
+Crée `middleware.ts` à la racine :
+- Protège toutes les routes `/dashboard/**` et `/admin/**`
+- Redirige vers `/login` si non authentifié
+- Redirige vers le bon dashboard selon le rôle après login
+
+---
+
+## 🎨 Page de Login — UI/UX ProMax
+
+**Lis et applique scrupuleusement le skill UI/UX ProMax** disponible dans le projet avant de designer la page.
+
+### Exigences design
+- Design **premium, moderne, soigné** — digne d'une institution scolaire sérieuse
+- **Animations fluides** : entrée de la page, transitions des champs, feedback visuel des états
+- **Fully responsive** : mobile-first, parfait sur 320px → 2560px
+- Cohérent avec la charte visuelle déjà établie sur la page d'accueil (couleurs, typographie, composants)
+
+### Structure de la page `/login`
+- Logo + nom de l'école en header
+- Card de login centrée avec ombre douce
+- Champs : Email + Mot de passe (avec toggle visibilité)
+- Bouton submit avec état loading animé
+- Message d'erreur inline élégant (pas de toast brutal)
+- Lien "Mot de passe oublié ?" (placeholder pour plus tard)
+- Accessibilité WCAG 2.1 AA : labels, aria, navigation clavier, contraste 4.5:1
+
+### États UX à gérer
+- `idle` → `loading` → `success` (redirect animé) / `error` (shake + message)
+- Disable du formulaire pendant la soumission
+- Focus automatique sur le champ email à l'arrivée sur la page
+
+---
+
+## 🧪 Tests backend
+
+Crée des tests pour les routes API (utilise le framework de test déjà en place dans le projet) :
+
+- ✅ Login avec credentials valides → retourne access token + cookie refresh
+- ❌ Login avec mauvais mot de passe → 401
+- ❌ Login avec email inexistant → 401 (même message que mauvais mdp, pas d'énumération)
+- ✅ Refresh avec token valide → nouveau access token + rotation du cookie
+- ❌ Refresh avec token expiré/révoqué → 401
+- ✅ Logout → révoque le refresh token + clear cookie
+- ✅ `/me` avec access token valide → retourne les infos user (sans mot de passe)
+- ❌ `/me` sans token → 401
+
+---
+
+## 📝 README
+
+Mets à jour (ou crée) `docs/auth.md` avec :
+- Explication de la stratégie auth choisie
+- Variables d'environnement nécessaires (`JWT_SECRET`, `JWT_REFRESH_SECRET`, `NODE_ENV`, etc.)
+- Flux complet login → refresh → logout (avec diagramme ASCII)
+- Instructions pour lancer les tests auth
+
+---
+
+## ✅ Checklist de validation
+
+Avant de terminer, vérifie chaque point :
+- [ ] Le model Prisma est cohérent avec le MLD Skolara
+- [ ] Les conventions de code du projet existant sont respectées à 100%
+- [ ] Les réponses API ont le même format que les routes existantes
+- [ ] Le refresh token est bien en cookie HttpOnly (jamais exposé en JSON)
+- [ ] Le mot de passe n'apparaît jamais dans une réponse API
+- [ ] La page login est responsive sur mobile
+- [ ] Les animations sont fluides (no jank)
+- [ ] Les tests passent tous
+- [ ] Le README est complet
