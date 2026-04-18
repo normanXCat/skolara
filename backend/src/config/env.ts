@@ -20,6 +20,18 @@ const envSchema = z.object({
     FRONTEND_URL: z.string().url().default("http://localhost:3000"),
     /** URL de base de l'API (pour les liens publics) */
     API_URL: z.string().url().default("http://localhost:8000"),
+    /** Clé secrète pour signer les Access Tokens JWT */
+    JWT_SECRET: z
+        .string()
+        .min(32, "JWT_SECRET doit contenir au moins 32 caractères"),
+    /** Clé secrète pour signer les Refresh Tokens */
+    JWT_REFRESH_SECRET: z
+        .string()
+        .min(32, "JWT_REFRESH_SECRET doit contenir au moins 32 caractères"),
+    /** Durée de vie de l'Access Token (ex: '15m', '1h') */
+    JWT_EXPIRES_IN: z.string().default("15m"),
+    /** Durée de vie du Refresh Token en jours */
+    REFRESH_TOKEN_EXPIRES_DAYS: z.coerce.number().int().positive().default(7),
 });
 
 /**

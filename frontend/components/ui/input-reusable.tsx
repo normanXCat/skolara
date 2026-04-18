@@ -20,6 +20,7 @@ export interface InputReusableProps {
     className?: string;
     showPasswordToggle?: boolean;
     disabled?: boolean;
+    autoFocus?: boolean;
 }
 
 /**
@@ -43,12 +44,13 @@ export default function InputReusable({
     className,
     showPasswordToggle = true,
     disabled = false,
+    autoFocus = false,
 }: InputReusableProps) {
-    const Icon = IconProp ?? IconUser;
     const [showPassword, setShowPassword] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
     const isPassword = type === "password";
+    const Icon = IconProp ?? IconUser;
 
     return (
         <div className={cn("flex flex-col gap-2 w-full", className)}>
@@ -67,9 +69,9 @@ export default function InputReusable({
                 </Label>
                 {isPassword && forgot && (
                     <motion.a
-                        whileHover={{ scale: 1.05, x: -2 }}
                         href="#"
-                        className="text-xs font-semibold text-primary/80 hover:text-primary transition-colors"
+                        whileHover={{ scale: 1.05, x: -2 }}
+                        className="text-sm font-semibold text-primary/80 hover:text-primary hover:underline transition-all"
                     >
                         Mot de passe oublié ?
                     </motion.a>
@@ -142,6 +144,7 @@ export default function InputReusable({
                         placeholder={placeholder}
                         {...register}
                         disabled={disabled}
+                        autoFocus={autoFocus}
                         onFocus={(e) => {
                             setIsFocused(true);
                             if (register?.onFocus) register.onFocus(e);
@@ -149,9 +152,6 @@ export default function InputReusable({
                         onBlur={(e) => {
                             setIsFocused(false);
                             if (register?.onBlur) register.onBlur(e);
-                        }}
-                        onChange={(e) => {
-                            if (register?.onChange) register.onChange(e);
                         }}
                         className={cn(
                             "pl-12 pr-12 !h-14 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full !py-0",

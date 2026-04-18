@@ -18,12 +18,16 @@ export const swaggerDocument = {
             description: "Serveur de développement",
             variables: {
                 port: {
-                    default: "5000",
+                    default: "8000",
                 },
             },
         },
     ],
     tags: [
+        {
+            name: "Auth",
+            description: "Authentification et gestion de session",
+        },
         {
             name: "PreRegistrations",
             description: "Opérations CRUD sur les pré-inscriptions",
@@ -34,6 +38,122 @@ export const swaggerDocument = {
         },
     ],
     paths: {
+        "/auth/login": {
+            post: {
+                tags: ["Auth"],
+                summary: "S'authentifier (Public)",
+                description:
+                    "Vérifie les identifiants et retourne un Access Token (JWT) et un Refresh Token (Cookie HttpOnly).",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/LoginInput",
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Authentification réussie",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/AuthResponse",
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Identifiants invalides",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/ErrorResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/auth/refresh": {
+            post: {
+                tags: ["Auth"],
+                summary: "Rafraîchir le token (Public/Cookie)",
+                description:
+                    "Utilise le refreshToken stocké dans le cookie HttpOnly pour générer un nouvel access token.",
+                responses: {
+                    "200": {
+                        description: "Token rafraîchi",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true,
+                                        },
+                                        data: {
+                                            type: "object",
+                                            properties: {
+                                                accessToken: { type: "string" },
+                                            },
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Token invalide ou expiré",
+                    },
+                },
+            },
+        },
+        "/auth/logout": {
+            post: {
+                tags: ["Auth"],
+                summary: "Se déconnecter (Public/Cookie)",
+                responses: {
+                    "200": {
+                        description: "Déconnexion réussie",
+                    },
+                },
+            },
+        },
+        "/auth/me": {
+            get: {
+                tags: ["Auth"],
+                summary: "Profil de l'utilisateur (Protégé)",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Profil récupéré",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: {
+                                            type: "boolean",
+                                            example: true,
+                                        },
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/grades": {
             get: {
                 tags: ["Grades"],
@@ -566,6 +686,58 @@ export const swaggerDocument = {
                         example: "Cours Préparatoire (CP)",
                     },
                 },
+            },
+            LoginInput: {
+                type: "object",
+                required: ["email", "password"],
+                properties: {
+                    email: {
+                        type: "string",
+                        format: "email",
+                        example: "admin@skolara.com",
+                    },
+                    password: {
+                        type: "string",
+                        format: "password",
+                        example: "Azerty123",
+                    },
+                },
+            },
+            AuthResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean", example: true },
+                    data: {
+                        type: "object",
+                        properties: {
+                            accessToken: { type: "string" },
+                            user: { $ref: "#/components/schemas/User" },
+                        },
+                    },
+                    message: { type: "string" },
+                },
+            },
+            User: {
+                type: "object",
+                properties: {
+                    id: { type: "integer" },
+                    firstName: { type: "string" },
+                    name: { type: "string" },
+                    email: { type: "string", format: "email" },
+                    role: {
+                        type: "string",
+                        enum: ["ADMIN", "ENSEIGNANT", "ELEVE", "PARENT"],
+                    },
+                    active: { type: "boolean" },
+                    createdAt: { type: "string", format: "date-time" },
+                },
+            },
+        },
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT",
             },
         },
     },

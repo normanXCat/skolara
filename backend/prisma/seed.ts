@@ -1,11 +1,13 @@
 import { PrismaClient } from "../src/generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { env } from "../src/config/env";
+import bcrypt from "bcrypt";
 
 async function main() {
     const adapter = new PrismaPg({ connectionString: env.DATABASE_URL });
     const prisma = new PrismaClient({ adapter });
 
+    // ── Seed des Grades ──
     const grades = [
         { value: "petite-section", label: "Petite Section (3-4 ans)" },
         { value: "moyenne-section", label: "Moyenne Section (4-5 ans)" },
@@ -24,7 +26,7 @@ async function main() {
         { value: "terminale", label: "Terminale" },
     ];
 
-    console.log("Seeding grades...");
+    console.log("🌱 Seeding grades...");
 
     for (const grade of grades) {
         await prisma.grade.upsert({
@@ -34,7 +36,34 @@ async function main() {
         });
     }
 
-    console.log("Seeding finished.");
+    // ── Seed de l'utilisateur Admin ──
+    console.log("🌱 Seeding admin user...");
+
+    const adminEmail = "admin@skolara.com";
+    const adminPassword = "Admin123!";
+    const passwordHash = await bcrypt.hash(adminPassword, 12);
+
+    await prisma.user.upsert({
+        where: { email: adminEmail },
+        update: {
+            firstName: "Admin",
+            name: "Skolara",
+            passwordHash,
+            role: "ADMIN",
+            active: true,
+        },
+        create: {
+            firstName: "Admin",
+            name: "Skolara",
+            email: adminEmail,
+            passwordHash,
+            role: "ADMIN",
+            active: true,
+        },
+    });
+
+    console.log(`✅ Admin créé : ${adminEmail} / ${adminPassword}`);
+    console.log("✅ Seeding finished.");
 }
 
 main().catch((e) => {

@@ -23,6 +23,7 @@ export declare class PreRegistrationRepository {
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
@@ -35,7 +36,6 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
-        updatedAt: Date;
     }>;
     /**
      * Recherche un premier enregistrement correspondant aux critères.
@@ -54,6 +54,7 @@ export declare class PreRegistrationRepository {
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
@@ -66,7 +67,6 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
-        updatedAt: Date;
     } | null>;
     /**
      * Récupère une liste paginée de pré-inscriptions avec filtre optionnel par statut.
@@ -89,6 +89,7 @@ export declare class PreRegistrationRepository {
             parentFullName: string;
             parentEmail: string;
             parentPhone: string;
+            updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
             parentAddress: string | null;
@@ -101,7 +102,6 @@ export declare class PreRegistrationRepository {
             processedAt: Date | null;
             studentId: number | null;
             submittedAt: Date;
-            updatedAt: Date;
         }[];
         total: number;
     }>;
@@ -123,6 +123,7 @@ export declare class PreRegistrationRepository {
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
@@ -135,7 +136,6 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
-        updatedAt: Date;
     } | null>;
     /**
      * Met à jour une pré-inscription existante.
@@ -156,6 +156,7 @@ export declare class PreRegistrationRepository {
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
@@ -168,7 +169,6 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
-        updatedAt: Date;
     }>;
     /**
      * Supprime une pré-inscription par son identifiant.
@@ -188,6 +188,7 @@ export declare class PreRegistrationRepository {
         parentFullName: string;
         parentEmail: string;
         parentPhone: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
@@ -200,7 +201,6 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
-        updatedAt: Date;
     }>;
 }
 //# sourceMappingURL=pre-registration.repository.d.ts.map

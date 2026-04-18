@@ -12,12 +12,52 @@ datasource db {
   provider = "postgresql"
 }
 
+/// Rôle utilisateur dans le système Skolara
+enum Role {
+  ADMIN
+  ENSEIGNANT
+  ELEVE
+  PARENT
+}
+
 /// Statut d'une pré-inscription
 enum Status {
   PENDING
   IN_REVIEW
   ACCEPTED
   REJECTED
+}
+
+/// Modèle utilisateur principal
+model User {
+  id                     Int               @id @default(autoincrement())
+  firstName              String
+  name                   String
+  email                  String            @unique
+  passwordHash           String
+  role                   Role              @default(ELEVE)
+  active                 Boolean           @default(true)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  refreshTokens          RefreshToken[]
+  processedRegistrations PreRegistration[]
+
+  @@map("users")
+}
+
+/// Tokens de rafraîchissement pour la rotation sécurisée
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revoked   Boolean  @default(false)
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
 }
 
 /// Modèle représentant une demande de pré-inscription
@@ -42,11 +82,12 @@ model PreRegistration {
   receiptImageUrl String?
   documentUrls    String[]
 
-  status       Status    @default(PENDING)
-  adminComment String?
-  processedBy  Int? // FK → User
-  processedAt  DateTime?
-  studentId    Int? // FK → Student (après acceptation)
+  status          Status    @default(PENDING)
+  adminComment    String?
+  processedBy     Int?
+  processedByUser User?     @relation(fields: [processedBy], references: [id])
+  processedAt     DateTime?
+  studentId       Int? // FK → Student (après acceptation)
 
   submittedAt DateTime @default(now())
   updatedAt   DateTime @updatedAt
