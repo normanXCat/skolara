@@ -69,13 +69,16 @@ export default function PreregistrationPage() {
                 delay={2}
             />
 
-            <div className="w-full flex flex-col items-center px-6 py-12 lg:py-16">
+            <div className="w-full flex flex-col items-center sm:px-6 py-12 lg:py-16">
                 <div className="mx-auto w-full max-w-7xl">
                     <div className="flex flex-col lg:flex-row items-center">
                         {/* Left Section: Video */}
                         <div className="w-full lg:w-[45%]">
                             <div className="flex justify-center mb-4">
-                                <ButtonBack className="z-10" />
+                                <ButtonBack
+                                    text="Annuler l'inscription"
+                                    className="z-10"
+                                />
                             </div>
                             <div className="hidden lg:block">
                                 <RegistrationPlayer />
@@ -91,7 +94,7 @@ export default function PreregistrationPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2, duration: 0.5 }}
-                                className="relative overflow-hidden rounded-[40px] border border-border/40 bg-card/60 backdrop-blur-2xl shadow-2xl shadow-primary/5"
+                                className="relative overflow-hidden sm:rounded-[40px] sm:border sm:border-border/40 sm:bg-card/60 sm:backdrop-blur-2xl sm:shadow-2xl sm:shadow-primary/5"
                             >
                                 <PreRegistrationForm />
                             </motion.div>

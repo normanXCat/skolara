@@ -19,6 +19,7 @@ import {
     IconBuildings,
     IconPencil,
     IconLoader2,
+    IconArrowNarrowLeft,
 } from "@tabler/icons-react";
 import InputReusable from "@/components/ui/input-reusable";
 import { SelectReusable } from "@/components/ui/select-reusable";
@@ -422,37 +423,90 @@ export default function PreregistrationForm() {
     const watchedValues = watch();
     const currentMeta = STEPS_META[currentStep];
 
+    // Vérifier si l'étape actuelle est valide
+    const isStepValid = React.useMemo(() => {
+        const fields = stepFields[currentStep];
+        if (!fields || fields.length === 0) return true;
+
+        const requiredFields: (keyof Preregistration)[] = [
+            "childFirstName",
+            "childLastName",
+            "childDateOfBirth",
+            "gender",
+            "desiredGrade",
+            "parentFirstName",
+            "parentFullName",
+            "parentEmail",
+            "parentPhone",
+        ];
+
+        return fields.every((field) => {
+            const hasError = !!errors[field];
+            const value = watchedValues[field];
+            const isRequired = requiredFields.includes(field);
+
+            if (hasError) return false;
+            if (
+                isRequired &&
+                (value === undefined || value === null || value === "")
+            )
+                return false;
+
+            return true;
+        });
+    }, [currentStep, errors, watchedValues, stepFields]);
+
     return (
         <div className="w-full max-w-2xl mx-auto">
-            <div className="p-8 lg:p-12 pb-0">
-                <StepIndicator
-                    currentStep={currentStep}
-                    totalSteps={totalSteps}
-                    errors={errors}
-                    stepFields={stepFields}
-                />
+            <div className="sm:p-8 lg:p-12 pb-0">
+                <div className="sm:block hidden">
+                    <StepIndicator
+                        currentStep={currentStep}
+                        totalSteps={totalSteps}
+                        errors={errors}
+                        stepFields={stepFields}
+                    />
+                </div>
 
                 <motion.div
                     key={`title-${currentStep}`}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="text-center mb-8 space-y-2"
+                    className="relative text-center mb-8 space-y-2 px-10 sm:px-0"
                 >
                     <div className="flex items-center justify-center gap-2 mb-3">
                         <div className="flex items-center justify-center size-9 rounded-full bg-primary/10 text-primary">
                             <currentMeta.icon size={20} stroke={1.5} />
                         </div>
                     </div>
-                    <Typography variant="h3" className="text-foreground">
+                    <Typography
+                        variant="h3"
+                        className="text-foreground text-xl sm:text-2xl"
+                    >
                         {currentMeta.title}
                     </Typography>
                     <Typography
                         variant="caption"
-                        className="text-muted-foreground"
+                        className="text-muted-foreground line-clamp-2"
                     >
                         {currentMeta.description}
                     </Typography>
+
+                    {/* Mobile Back Button (Inline below title) */}
+                    {!isFirstStep && (
+                        <div className="sm:hidden flex justify-center mt-5 mb-2">
+                            <ButtonReusable
+                                type="button"
+                                variant="outline"
+                                onClick={handlePrev}
+                                className="!w-14 !h-10 !p-0 !min-w-0 z-10"
+                                aria-label="Étape précédente"
+                            >
+                                <IconArrowNarrowLeft size={20} stroke={2.5} />
+                            </ButtonReusable>
+                        </div>
+                    )}
                 </motion.div>
             </div>
 
@@ -470,7 +524,7 @@ export default function PreregistrationForm() {
                                 initial="enter"
                                 animate="center"
                                 exit="exit"
-                                className="space-y-5 px-8 lg:px-12 pb-2"
+                                className="space-y-5 px-2 sm:px-8 lg:px-12 pb-2"
                             >
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     <InputReusable
@@ -493,11 +547,58 @@ export default function PreregistrationForm() {
                                     />
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-foreground/70 px-1">
+                                <div className="space-y-3">
+                                    <label className="text-sm font-semibold text-foreground/80 px-1 flex items-center gap-2">
+                                        <IconUser
+                                            size={16}
+                                            className="text-primary/70"
+                                        />
                                         Genre *
                                     </label>
-                                    <div className="flex gap-4">
+                                    <div className="relative p-1.5 flex gap-2 bg-muted/40 backdrop-blur-sm border border-border/40 rounded-3xl h-[76px] shadow-inner">
+                                        {/* Highlight animated pill */}
+                                        <div className="absolute inset-1.5 flex z-0 pointer-events-none w-[calc(100%-12px)]">
+                                            <AnimatePresence>
+                                                {watchedValues.gender && (
+                                                    <motion.div
+                                                        layoutId="genderHighlight"
+                                                        className={cn(
+                                                            "h-full w-1/2 rounded-[1.25rem] shadow-xl border border-white/10",
+                                                            watchedValues.gender ===
+                                                                "M"
+                                                                ? "bg-gradient-to-br from-blue-500/10 to-blue-600/20 border-blue-200/20"
+                                                                : "bg-gradient-to-br from-pink-500/10 to-pink-600/20 border-pink-200/20",
+                                                        )}
+                                                        initial={{
+                                                            opacity: 0,
+                                                            scale: 0.95,
+                                                        }}
+                                                        animate={{
+                                                            opacity: 1,
+                                                            scale: 1,
+                                                            x:
+                                                                watchedValues.gender ===
+                                                                "M"
+                                                                    ? "0%"
+                                                                    : "100%",
+                                                        }}
+                                                        exit={{
+                                                            opacity: 0,
+                                                            scale: 0.95,
+                                                        }}
+                                                        transition={{
+                                                            type: "spring",
+                                                            stiffness: 400,
+                                                            damping: 30,
+                                                            opacity: {
+                                                                duration: 0.2,
+                                                            },
+                                                        }}
+                                                    />
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -506,18 +607,42 @@ export default function PreregistrationForm() {
                                                 })
                                             }
                                             className={cn(
-                                                "flex-1 flex items-center justify-center gap-2 h-14 rounded-full border-2 transition-all",
+                                                "relative z-10 flex-1 flex flex-col items-center justify-center transition-all duration-500 rounded-2xl",
                                                 watchedValues.gender === "M"
-                                                    ? "border-primary bg-primary/10 text-primary"
-                                                    : "border-border/40 hover:border-primary/20 text-muted-foreground",
+                                                    ? "text-blue-600 dark:text-blue-400"
+                                                    : "text-muted-foreground/50 hover:text-foreground/70 hover:bg-white/5",
                                             )}
                                             disabled={loading}
                                         >
-                                            <IconGenderMale size={20} />
-                                            <span className="font-bold">
+                                            <motion.div
+                                                animate={{
+                                                    scale:
+                                                        watchedValues.gender ===
+                                                        "M"
+                                                            ? 1.1
+                                                            : 1,
+                                                    y:
+                                                        watchedValues.gender ===
+                                                        "M"
+                                                            ? -2
+                                                            : 0,
+                                                }}
+                                            >
+                                                <IconGenderMale
+                                                    size={
+                                                        watchedValues.gender ===
+                                                        "M"
+                                                            ? 24
+                                                            : 20
+                                                    }
+                                                    stroke={2.5}
+                                                />
+                                            </motion.div>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.15em] mt-1.5">
                                                 Masculin
                                             </span>
                                         </button>
+
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -526,23 +651,51 @@ export default function PreregistrationForm() {
                                                 })
                                             }
                                             className={cn(
-                                                "flex-1 flex items-center justify-center gap-2 h-14 rounded-full border-2 transition-all",
+                                                "relative z-10 flex-1 flex flex-col items-center justify-center transition-all duration-500 rounded-2xl",
                                                 watchedValues.gender === "F"
-                                                    ? "border-primary bg-primary/10 text-primary"
-                                                    : "border-border/40 hover:border-primary/20 text-muted-foreground",
+                                                    ? "text-pink-600 dark:text-pink-400"
+                                                    : "text-muted-foreground/50 hover:text-foreground/70 hover:bg-white/5",
                                             )}
                                             disabled={loading}
                                         >
-                                            <IconGenderFemale size={20} />
-                                            <span className="font-bold">
+                                            <motion.div
+                                                animate={{
+                                                    scale:
+                                                        watchedValues.gender ===
+                                                        "F"
+                                                            ? 1.1
+                                                            : 1,
+                                                    y:
+                                                        watchedValues.gender ===
+                                                        "F"
+                                                            ? -2
+                                                            : 0,
+                                                }}
+                                            >
+                                                <IconGenderFemale
+                                                    size={
+                                                        watchedValues.gender ===
+                                                        "F"
+                                                            ? 24
+                                                            : 20
+                                                    }
+                                                    stroke={2.5}
+                                                />
+                                            </motion.div>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.15em] mt-1.5">
                                                 Féminin
                                             </span>
                                         </button>
                                     </div>
                                     {errors.gender && (
-                                        <p className="text-xs font-bold text-destructive px-1">
+                                        <motion.p
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="text-[11px] font-bold text-destructive px-2 mt-1 flex items-center gap-1"
+                                        >
+                                            <span className="size-1 bg-destructive rounded-full animate-pulse" />
                                             {errors.gender.message as string}
-                                        </p>
+                                        </motion.p>
                                     )}
                                 </div>
 
@@ -896,15 +1049,18 @@ export default function PreregistrationForm() {
                     </AnimatePresence>
                 </motion.div>
 
-                <div className="flex items-center justify-between mt-6 gap-4 px-8 lg:px-12 pb-8 lg:pb-12">
+                <div className="flex items-center justify-center flex-col sm:flex-row sm:justify-between mt-6 gap-4 px-8 lg:px-12 pb-8 lg:pb-12">
                     {!isFirstStep && (
                         <ButtonReusable
                             type="button"
                             variant="outline"
                             size="lg"
+                            className="z-10 hidden sm:flex"
                             onClick={handlePrev}
                             disabled={loading || receiptLoading}
-                            leftIcon={<IconArrowLeft className="size-5" />}
+                            leftIcon={
+                                <IconArrowNarrowLeft className="size-5" />
+                            }
                         >
                             Précédent
                         </ButtonReusable>
@@ -914,8 +1070,9 @@ export default function PreregistrationForm() {
                             type="submit"
                             variant="default"
                             size="lg"
+                            className="z-10"
                             isLoading={loading}
-                            disabled={receiptLoading}
+                            disabled={receiptLoading || !isStepValid}
                             loadingText="Envoi..."
                             leftIcon={<IconSparkles className="size-5" />}
                         >
@@ -926,9 +1083,9 @@ export default function PreregistrationForm() {
                             type="button"
                             variant="default"
                             size="lg"
-                            className="ml-auto"
+                            className="z-10"
                             onClick={handleNext}
-                            disabled={receiptLoading || loading}
+                            disabled={receiptLoading || loading || !isStepValid}
                             rightIcon={
                                 loading ? (
                                     <IconLoader2 className="animate-spin size-5" />
