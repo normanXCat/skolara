@@ -129,7 +129,6 @@ exports.Prisma.PreRegistrationScalarFieldEnum = {
   childEmail: 'childEmail',
   previousSchool: 'previousSchool',
   desiredGrade: 'desiredGrade',
-  targetSchoolYear: 'targetSchoolYear',
   parentFirstName: 'parentFirstName',
   parentFullName: 'parentFullName',
   parentEmail: 'parentEmail',
@@ -146,6 +145,12 @@ exports.Prisma.PreRegistrationScalarFieldEnum = {
   studentId: 'studentId',
   submittedAt: 'submittedAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GradeScalarFieldEnum = {
+  id: 'id',
+  value: 'value',
+  label: 'label'
 };
 
 exports.Prisma.SortOrder = {
@@ -170,7 +175,8 @@ exports.Status = exports.$Enums.Status = {
 };
 
 exports.Prisma.ModelName = {
-  PreRegistration: 'PreRegistration'
+  PreRegistration: 'PreRegistration',
+  Grade: 'Grade'
 };
 
 /**
