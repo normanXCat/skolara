@@ -17,7 +17,7 @@
         "seed": "npx ts-node --transpile-only prisma/seed.ts"
     },
     "prisma": {
-        "seed": "npx ts-node --transpile-only prisma/seed.ts"
+        "seed": "npx ts-node prisma/seed.ts"
     },
     "keywords": [
         "skolara",
