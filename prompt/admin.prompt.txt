@@ -1,0 +1,198 @@
+# 🏛️ STORY — Module Admin : Dashboard + Gestion des Élèves + Pré-inscriptions
+
+## Contexte projet
+Tu travailles sur **Skolara**, une plateforme de gestion scolaire.
+Stack : **Next.js 14 (App Router) · TypeScript · Prisma · PostgreSQL · shadcn/ui · Tailwind CSS · Zod · Recharts**
+
+Avant de coder quoi que ce soit :
+1. **Lis et analyse toute la structure du projet** : dossiers, fichiers existants, conventions de nommage, patterns déjà utilisés (API routes, hooks, composants, formulaires)
+2. **Consulte `architecture/MLD_Skolara`** — les modèles `ELEVE`, `UTILISATEUR`, `CLASSE`, `NOTE`, `ABSENCE`, `PAIEMENT`, `PREINSCRIPTION` sont au cœur de cette story
+3. **Respecte à 100% les conventions déjà en place** : structure des réponses API, gestion d'erreurs, validation Zod, organisation des dossiers — ton code doit être indiscernable du code existant
+4. **Lis et applique le skill UI/UX ProMax** avant de designer la moindre page ou composant
+
+---
+
+## 🎯 Périmètre de la story
+
+3 sous-modules liés :
+- **A. Tableau de bord admin** (stats + graphiques + alertes)
+- **B. Gestion des élèves** (CRUD complet + filtres + export CSV)
+- **C. Traitement des pré-inscriptions** (connecté au formulaire déjà implémenté)
+
+Toutes les routes sont **protégées** — accès réservé au rôle `ADMIN` uniquement.
+Réutilise le middleware d'authentification déjà en place.
+
+---
+
+## 📁 Structure des routes
+
+/admin                              → redirect vers /admin/dashboard
+/admin/dashboard                    → Tableau de bord
+/admin/students                     → Liste des élèves
+/admin/students/new                 → Formulaire création
+/admin/students/[id]                → Fiche détail élève
+/admin/students/[id]/edit           → Formulaire édition
+/admin/pre-registrations            → Liste des dossiers
+/admin/pre-registrations/[id]       → Détail + traitement d'un dossier
+
+## 📦 A. Dashboard — `/admin/dashboard`
+
+### Routes API
+
+GET /api/admin/stats
+
+Retourne en une seule requête optimisée (pas de N+1) :
+
+```typescript
+{
+  totalStudents: number,          // élèves actifs
+  totalTeachers: number,
+  totalClasses: number,
+  todayAttendanceRate: number,    // % présents ce jour
+  pendingPayments: number,
+  latePayments: number,
+  pendingPreRegistrations: number,
+  enrollmentEvolution: {          // 6 derniers mois
+    month: string,
+    total: number
+  }[]
+}
+```
+
+### UI — Dashboard
+
+**KPI Cards** (4 cards en grille) :
+- 👩‍🎓 Total active students
+- 👨‍🏫 Total teachers
+- ⏳ Pending payments (badge rouge si > 0)
+- 📋 Pre-registrations to process (badge orange si > 0)
+
+**Graphique** : courbe d'évolution des effectifs sur 6 mois (Recharts `LineChart` ou `AreaChart`) — smooth, avec tooltip custom et gradient de couleur cohérent avec la charte
+
+**Section "Latest pre-registrations"** : tableau des 5 dernières entrées avec statut coloré + bouton "See all"
+
+**Section "Payment alerts"** : liste des 5 élèves avec paiement en retard + montant dû
+
+**Design exigences** :
+- Skeleton loading pendant le fetch (pas de spinner brut)
+- Chaque card avec micro-animation d'entrée (stagger)
+- Graphique responsive
+- Refresh automatique toutes les 5 minutes (SWR ou React Query selon ce qui est déjà utilisé dans le projet)
+
+---
+
+## 📦 B. Student management — `/admin/students`
+
+### Routes API
+
+Respecte **exactement** le format de réponse des routes existantes.
+GET    /api/admin/students              → liste paginée + filtres
+POST   /api/admin/students              → créer un élève
+GET    /api/admin/students/[id]         → détail élève
+PUT    /api/admin/students/[id]         → modifier
+PATCH  /api/admin/students/[id]/status  → archiver / réactiver
+GET    /api/admin/students/export       → export CSV
+
+#### `GET /api/admin/students` — Query params supportés
+?page=1
+?limit=20
+?search=dupont          → recherche nom, prénom, id
+?classId=3              → filtre par classe_id
+?level=6eme             → filtre par niveau
+?status=active|archived
+?schoolYear=2025-2026
+
+Réponse :
+```typescript
+{
+  success: true,
+  data: {
+    students: Student[],
+    pagination: {
+      page: number,
+      limit: number,
+      total: number,
+      totalPages: number
+    }
+  }
+}
+```
+
+#### `POST /api/admin/students` — Zod Schema
+Crée simultanément :
+1. Un `User` (email auto-généré, mot de passe temporaire hashé bcrypt)
+2. Un `Student` lié au User
+3. Optionnellement : affectation à une `Class`
+
+#### Export CSV — `GET /api/admin/students/export`
+Headers : `Content-Disposition: attachment; filename="students-YYYY-MM-DD.csv"`
+Colonnes : ID, Last Name, First Name, Birth Date, Class, Level, Status, School Year, Parent Email
+
+### Zod Validation Schemas
+Crée dans `lib/validations/students.ts` :
+- `createStudentSchema` — tous les champs avec messages d'erreur en français
+- `updateStudentSchema` — partial du précédent
+- `studentFiltersSchema` — validation des query params
+
+### UI — Student list
+
+**Action bar** :
+- Input recherche avec debounce 300ms
+- Select filtre par classe
+- Select filtre par statut
+- Bouton "New student" (primary)
+- Bouton "Export CSV" avec état loading
+
+**Tableau** (shadcn/ui `DataTable` avec TanStack Table) :
+- Colonnes : Avatar initiales + Full name / Class / Level / Status / School Year / Actions
+- Statut avec badge coloré (`active` = vert, `archived` = gris)
+- Colonne Actions : view, edit, archive (avec confirmation dialog)
+- Tri côté serveur sur colonnes Name et Class
+- Pagination avec navigation et sélecteur de nb de lignes (10/20/50)
+- Row click → navigate vers `/admin/students/[id]`
+- Empty state : illustration + message contextuel selon les filtres actifs
+
+### UI — Student detail `/admin/students/[id]`
+Tabs (shadcn/ui `Tabs`) :
+- **Information** : données personnelles + classe affectée + dates
+- **Grades** : tableau notes par matière (lecture seule ici)
+- **Absences** : liste chronologique (lecture seule)
+- **Payments** : résumé statut + historique (lecture seule)
+
+Header de la fiche :
+- Avatar avec initiales colorées
+- Full name + class + status badge
+- Boutons : Edit / Archive / Back to list
+
+### UI — Create/Edit form
+
+Un seul composant `StudentForm` réutilisé pour création et édition.
+
+Champs :
+- **Student info** : Last name, First name, Birth date, Address, Status, School year
+- **Class** : Select avec toutes les classes disponibles (optionnel)
+- **Parent info** : section conditionnelle à la création — Parent name, Phone, Email
+
+Comportement :
+- Validation Zod avec messages d'erreur inline en français
+- Chaque champ avec label, placeholder et helper text si nécessaire
+- Submit avec état loading (disable + spinner)
+- Après succès : redirect vers la fiche + toast de confirmation
+- Après erreur API : message d'erreur contextuel inline (pas de toast pour les erreurs)
+
+---
+
+## 📦 C. Pre-registration processing — `/admin/pre-registrations`
+
+> ⚠️ Le formulaire de pré-inscription côté public est déjà implémenté. Analyse son implémentation existante avant de coder (structure des données, champs, statuts utilisés) pour garantir une cohérence parfaite.
+
+### Routes API
+
+GET   /api/admin/pre-registrations              → liste avec filtres
+GET   /api/admin/pre-registrations/[id]         → détail complet
+PATCH /api/admin/pre-registrations/[id]/status  → changer statut
+POST  /api/admin/pre-registrations/[id]/convert → convertir en élève réel
+
+
+
+
