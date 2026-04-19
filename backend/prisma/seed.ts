@@ -1,6 +1,5 @@
-import { PrismaClient } from "../src/generated/prisma/index.js";
 import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
+import { PrismaClient } from "../src/generated/prisma/index.js";
 import bcrypt from "bcrypt";
 
 async function main() {
@@ -9,9 +8,9 @@ async function main() {
     const DATABASE_URL = process.env.DATABASE_URL;
     if (!DATABASE_URL) throw new Error("DATABASE_URL manquant");
 
-    const pool = new pg.Pool({ connectionString: DATABASE_URL });
-    const adapter = new PrismaPg(pool);
-    const prisma = new PrismaClient({ adapter });
+    const prisma = new PrismaClient({
+        adapter: new PrismaPg({ connectionString: DATABASE_URL }),
+    });
 
     try {
         const grades = [
@@ -59,7 +58,6 @@ async function main() {
         throw error;
     } finally {
         await prisma.$disconnect();
-        await pool.end();
     }
 }
 
