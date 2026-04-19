@@ -1,10 +1,7 @@
-import { PrismaClient } from "../src/generated/prisma";
+import { PrismaClient } from "../src/generated/prisma/index.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 async function main() {
     console.log("🚀 Starting seed script...");
@@ -58,7 +55,7 @@ async function main() {
         console.log(`✅ Admin créé : ${adminEmail} / ${adminPassword}`);
         console.log("✅ Seeding finished successfully.");
     } catch (error) {
-        console.error("❌ Fatal error during seeding:", error);
+        console.error("❌ Fatal error:", error);
         throw error;
     } finally {
         await prisma.$disconnect();
