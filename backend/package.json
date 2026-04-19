@@ -5,9 +5,9 @@
     "main": "dist/server.js",
     "scripts": {
         "dev": "nodemon --exec ts-node src/server.ts",
-        "build": "npx prisma generate && tsc -p tsconfig.build.json && cp -r src/generated dist/generated",
-        "start": "npx prisma migrate deploy && npx prisma db seed && node dist/server.js",
-        "postinstall": "npx prisma generate",
+    "build": "npx prisma generate && tsc -p tsconfig.build.json && cp -r src/generated dist/generated",
+    "start": "npx prisma migrate deploy && npx prisma db seed && node dist/server.js",
+    "postinstall": "npx prisma generate",
         "test": "jest --forceExit --detectOpenHandles",
         "test:watch": "jest --watch --forceExit --detectOpenHandles",
         "test:coverage": "jest --coverage --forceExit --detectOpenHandles",
