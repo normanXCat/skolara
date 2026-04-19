@@ -7,3 +7,4 @@ $ nodemon --exec ts-node src/server.ts
 ◇ injected env (9) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
 🚀 Serveur Skolara démarré sur http://localhost:8000
 📚 Swagger UI : http://localhost:8000/api-docs
+error: script "dev" was terminated by signal SIGKILL (Forced quit)

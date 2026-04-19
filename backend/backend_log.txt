@@ -7,3 +7,4 @@ $ nodemon --exec ts-node src/server.ts
 ◇ injected env (9) from .env // tip: ⌘ suppress logs { quiet: true }
 ❌ Le port 8000 est déjà utilisé. Veuillez libérer le port ou changer PORT dans le fichier .env
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
+error: script "dev" was terminated by signal SIGKILL (Forced quit)
