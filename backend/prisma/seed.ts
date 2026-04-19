@@ -3,6 +3,9 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { env } from "../src/config/env";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 async function main() {
     console.log("🚀 Starting seed script...");
