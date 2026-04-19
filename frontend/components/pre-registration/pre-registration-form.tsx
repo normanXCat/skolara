@@ -375,6 +375,42 @@ export default function PreregistrationForm() {
         }
     };
 
+    const watchedValues = watch();
+    const currentMeta = STEPS_META[currentStep];
+
+    // Vérifier si l'étape actuelle est valide
+    const isStepValid = React.useMemo(() => {
+        const fields = stepFields[currentStep];
+        if (!fields || fields.length === 0) return true;
+
+        const requiredFields: (keyof Preregistration)[] = [
+            "childFirstName",
+            "childLastName",
+            "childDateOfBirth",
+            "gender",
+            "desiredGrade",
+            "parentFirstName",
+            "parentFullName",
+            "parentEmail",
+            "parentPhone",
+        ];
+
+        return fields.every((field) => {
+            const hasError = !!errors[field];
+            const value = watchedValues[field];
+            const isRequired = requiredFields.includes(field);
+
+            if (hasError) return false;
+            if (
+                isRequired &&
+                (value === undefined || value === null || value === "")
+            )
+                return false;
+
+            return true;
+        });
+    }, [currentStep, errors, watchedValues, stepFields]);
+
     if (isSubmitted) {
         return (
             <motion.div
@@ -419,42 +455,6 @@ export default function PreregistrationForm() {
             </motion.div>
         );
     }
-
-    const watchedValues = watch();
-    const currentMeta = STEPS_META[currentStep];
-
-    // Vérifier si l'étape actuelle est valide
-    const isStepValid = React.useMemo(() => {
-        const fields = stepFields[currentStep];
-        if (!fields || fields.length === 0) return true;
-
-        const requiredFields: (keyof Preregistration)[] = [
-            "childFirstName",
-            "childLastName",
-            "childDateOfBirth",
-            "gender",
-            "desiredGrade",
-            "parentFirstName",
-            "parentFullName",
-            "parentEmail",
-            "parentPhone",
-        ];
-
-        return fields.every((field) => {
-            const hasError = !!errors[field];
-            const value = watchedValues[field];
-            const isRequired = requiredFields.includes(field);
-
-            if (hasError) return false;
-            if (
-                isRequired &&
-                (value === undefined || value === null || value === "")
-            )
-                return false;
-
-            return true;
-        });
-    }, [currentStep, errors, watchedValues, stepFields]);
 
     return (
         <div className="w-full max-w-2xl mx-auto">
