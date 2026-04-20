@@ -232,7 +232,7 @@ export default function Navbar() {
                                 damping: 10,
                             }}
                         >
-                            <Logo size={48} />
+                            <Logo size={48} asLink />
                         </motion.div>
 
                         {/* Actions Desktop */}
@@ -373,7 +373,7 @@ export default function Navbar() {
                                             damping: 10,
                                         }}
                                     >
-                                        <Logo size={32} />
+                                        <Logo size={32} asLink />
                                     </motion.div>
 
                                     {/* Séparateur vertical */}
@@ -458,7 +458,7 @@ export default function Navbar() {
                             {/* En-tête du panneau mobile */}
                             <div className="flex h-16 items-center justify-between border-b border-border/30 px-5">
                                 <div className="flex items-center gap-4">
-                                    <Logo size={36} />
+                                    <Logo size={36} asLink />
                                     <ThemeToggle />
                                 </div>
                                 <button

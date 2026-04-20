@@ -32,6 +32,9 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
  * Client API robuste pour Next.js / TypeScript
  */
 class ApiClient {
+    private isRefreshing = false;
+    private refreshQueue: Array<(success: boolean) => void> = [];
+
     private async request<T>(
         endpoint: string,
         options: RequestOptions = {},
@@ -69,24 +72,56 @@ class ApiClient {
                 !endpoint.includes("/auth/refresh") &&
                 !endpoint.includes("/auth/login")
             ) {
-                const refreshRes = await this.post<{ accessToken: string }>(
-                    "/auth/refresh",
-                );
-
-                if (refreshRes.success) {
-                    // Le nouveau token est automatiquement mis à jour via le cookie
-                    response = await fetch(url.toString(), {
-                        ...config,
-                        headers,
+                // Si un refresh est déjà en cours, on met la requête en attente
+                if (this.isRefreshing) {
+                    return new Promise((resolve) => {
+                        this.refreshQueue.push((success) => {
+                            if (success) {
+                                resolve(this.request<T>(endpoint, options));
+                            } else {
+                                resolve({
+                                    success: false,
+                                    error: "Session expirée",
+                                });
+                            }
+                        });
                     });
-                } else {
-                    // Échec du refresh -> Déconnexion
-                    if (
-                        typeof window !== "undefined" &&
-                        !window.location.pathname.includes("/login")
-                    ) {
-                        window.location.href = "/login";
+                }
+
+                this.isRefreshing = true;
+
+                try {
+                    const refreshRes = await this.post<{ accessToken: string }>(
+                        "/auth/refresh",
+                    );
+
+                    if (refreshRes.success) {
+                        this.isRefreshing = false;
+                        // On libère la file d'attente avec succès
+                        this.processQueue(true);
+                        // Rejouer la requête initiale
+                        return this.request<T>(endpoint, options);
+                    } else {
+                        this.isRefreshing = false;
+                        // On libère la file d'attente avec échec
+                        this.processQueue(false);
+
+                        // Échec du refresh -> Déconnexion
+                        if (
+                            typeof window !== "undefined" &&
+                            !window.location.pathname.includes("/login")
+                        ) {
+                            window.location.href = "/login";
+                        }
+                        return {
+                            success: false,
+                            error: "Session expirée",
+                        };
                     }
+                } catch (err) {
+                    this.isRefreshing = false;
+                    this.processQueue(false);
+                    throw err;
                 }
             }
 
@@ -126,6 +161,11 @@ class ApiClient {
                         : "Erreur de connexion au serveur",
             };
         }
+    }
+
+    private processQueue(success: boolean) {
+        this.refreshQueue.forEach((callback) => callback(success));
+        this.refreshQueue = [];
     }
 
     /**
@@ -169,18 +209,23 @@ class ApiClient {
     }
 
     // Méthodes HTTP
-    get<T>(endpoint: string, params?: RequestOptions["params"]) {
-        return this.request<T>(endpoint, { method: "GET", params });
+    get<T>(endpoint: string, options: RequestOptions = {}) {
+        return this.request<T>(endpoint, { ...options, method: "GET" });
     }
 
-    post<T>(endpoint: string, data?: any) {
+    post<T>(endpoint: string, data?: any, options: RequestOptions = {}) {
         return this.request<T>(endpoint, {
+            ...options,
             method: "POST",
-            body: JSON.stringify(data),
+            body: data instanceof FormData ? data : JSON.stringify(data),
         });
     }
 
-    upload<T>(endpoint: string, file: File | FileList) {
+    upload<T>(
+        endpoint: string,
+        file: File | FileList,
+        options: RequestOptions = {},
+    ) {
         const formData = new FormData();
 
         if (file instanceof FileList) {
@@ -189,34 +234,35 @@ class ApiClient {
             formData.append("file", file);
         }
 
-        // Pour l'upload, on ne doit pas fixer de Content-Type manuel
-        // Le navigateur le fera automatiquement avec le boundary.
         return this.request<T>(endpoint, {
+            ...options,
             method: "POST",
             body: formData,
-            headers: {
-                // On écrase le header par défaut en l'enlevant si possible,
-                // ou on laisse le navigateur gérer.
-            },
         } as any);
     }
 
-    put<T>(endpoint: string, data?: any) {
+    put<T>(endpoint: string, data?: any, options: RequestOptions = {}) {
         return this.request<T>(endpoint, {
+            ...options,
             method: "PUT",
             body: JSON.stringify(data),
         });
     }
 
-    patch<T>(endpoint: string, data?: any) {
+    patch<T>(endpoint: string, data?: any, options: RequestOptions = {}) {
         return this.request<T>(endpoint, {
+            ...options,
             method: "PATCH",
             body: JSON.stringify(data),
         });
     }
 
-    delete<T>(endpoint: string) {
-        return this.request<T>(endpoint, { method: "DELETE" });
+    delete<T>(endpoint: string, options: RequestOptions = {}) {
+        return this.request<T>(endpoint, { ...options, method: "DELETE" });
+    }
+
+    getBaseUrl() {
+        return BASE_URL;
     }
 }
 

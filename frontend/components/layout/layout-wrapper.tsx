@@ -11,7 +11,9 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
     // Routes où le Navbar et le Footer ne doivent pas être affichés
     const hideLayout =
-        pathname === ROUTES.LOGIN || pathname === ROUTES.PRE_REGISTRATION;
+        pathname === ROUTES.LOGIN ||
+        pathname === ROUTES.PRE_REGISTRATION ||
+        pathname.startsWith("/admin");
 
     return (
         <>

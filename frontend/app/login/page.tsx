@@ -101,7 +101,7 @@ export default function LoginPage() {
 
                         {/* Logo & Back button */}
                         <div className="flex justify-between items-center">
-                            <Logo />
+                            <Logo asLink />
                             <ButtonBack text="" />
                         </div>
 
