@@ -15,9 +15,10 @@ import {
     IconPhone,
     IconMapPin,
     IconArrowUp,
-    IconHeart,
 } from "@tabler/icons-react";
 import { NavLink } from "@/components/ui/nav-link";
+import { ROUTES } from "@/config/routes";
+import { NAVIGATION_LINKS } from "@/config/navigation";
 
 // ──────────────────────────────────────────────
 // DATA
@@ -26,24 +27,20 @@ import { NavLink } from "@/components/ui/nav-link";
 const footerLinks = {
     navigation: {
         title: "Navigation",
-        links: [
-            { label: "Accueil", href: "/" },
-            { label: "Actualités", href: "/actualites" },
-            { label: "Calendrier Scolaire", href: "/calendrier" },
-            { label: "Préscolaire", href: "/prescolaire" },
-            { label: "Contact", href: "/contact" },
-        ],
+        links: NAVIGATION_LINKS,
     },
+
     ressources: {
         title: "Ressources",
         links: [
-            { label: "Inscription", href: "/inscription" },
+            { label: "Inscription", href: ROUTES.PRE_REGISTRATION },
             { label: "Programme Scolaire", href: "/programme" },
             { label: "Vie Scolaire", href: "/vie-scolaire" },
             { label: "FAQ", href: "/faq" },
             { label: "Plan du Site", href: "/sitemap" },
         ],
     },
+
     legal: {
         title: "Légal",
         links: [

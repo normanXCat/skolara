@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { type VariantProps } from "class-variance-authority";
 import { IconLoader2 } from "@tabler/icons-react";
+import Link from "next/link";
 
 /**
  * Propriétés du composant ButtonReusable.
@@ -77,7 +78,16 @@ const ButtonReusable = React.forwardRef<
         },
         ref,
     ) => {
-        const Comp = href ? (motion.a as any) : motion.button;
+        const isExternal =
+            href?.startsWith("http") ||
+            href?.startsWith("mailto:") ||
+            href?.startsWith("tel:");
+        // Avoid passing non-anchor props to inner component
+        const Comp = href
+            ? isExternal
+                ? (motion.a as any)
+                : motion(Link as any)
+            : motion.button;
 
         return (
             <Comp

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { LayoutWrapper } from "@/components/layout/layout-wrapper";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -17,9 +19,6 @@ export const metadata: Metadata = {
     description: "Découvrez Skolara, votre plateforme scolaire et préscolaire.",
 };
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { ToastContainer } from "@/components/ui/toast";
-
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -33,8 +32,7 @@ export default function RootLayout({
         >
             <body className="min-h-full flex flex-col">
                 <ThemeProvider>
-                    {children}
-                    <ToastContainer />
+                    <LayoutWrapper>{children}</LayoutWrapper>
                 </ThemeProvider>
             </body>
         </html>

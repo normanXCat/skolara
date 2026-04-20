@@ -1,9 +1,7 @@
 "use client";
 
-import React from "react";
-import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+
 import { Typography } from "@/components/ui/typography";
 import { ButtonBack } from "@/components/ui/button-back";
 import { motion } from "framer-motion";
@@ -85,11 +83,10 @@ function BlogBackground() {
 
 export default function BlogPage() {
     return (
-        <div className="relative flex flex-col min-h-screen bg-background text-foreground selection:bg-primary/30">
-            <Navbar />
+        <div className="relative bg-background text-foreground selection:bg-primary/30 min-h-[50vh]">
             <BlogBackground />
 
-            <main className="flex-1 w-full max-w-7xl mx-auto px-6 pt-12 pb-24 lg:pt-20">
+            <div className="w-full max-w-7xl mx-auto px-6 pt-12 pb-24 lg:pt-20">
                 <div className="mb-10 flex items-center justify-between">
                     <ButtonBack />
                 </div>
@@ -189,9 +186,7 @@ export default function BlogPage() {
                         ))}
                     </div>
                 </TracingBeam>
-            </main>
-
-            <Footer />
+            </div>
         </div>
     );
 }

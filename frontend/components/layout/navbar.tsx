@@ -10,33 +10,17 @@ import {
     useMotionTemplate,
     type Variants,
 } from "framer-motion";
-import {
-    IconSearch,
-    IconX,
-    IconLogin2,
-    IconUserPlus,
-} from "@tabler/icons-react";
+import { IconSearch, IconX, IconLogin2 } from "@tabler/icons-react";
 import WrapperSection from "@/components/wrapper-section";
 import { ButtonReusable } from "@/components/ui/button-reusable";
 import { NavLink } from "@/components/ui/nav-link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Logo from "@/components/common/logo";
-
-/* ------------------------------------------------------------------ */
-/*                          Constantes                                 */
-/* ------------------------------------------------------------------ */
-
-/**
- * Liens de navigation principaux affichés dans la barre inférieure.
- */
-const NAV_LINKS = [
-    { label: "Accueil", href: "/" },
-    { label: "Actualités et Blog", href: "/blog" },
-    { label: "Calendrier Scolaire", href: "/calendrier" },
-    { label: "Pré-Inscription", href: "/pre-registration" },
-    { label: "Contact", href: "/contact" },
-] as const;
-
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ROUTES } from "@/config/routes";
+import { NAVIGATION_LINKS } from "@/config/navigation";
 /* ------------------------------------------------------------------ */
 /*                    Variantes d'animation                            */
 /* ------------------------------------------------------------------ */
@@ -279,20 +263,12 @@ export default function Navbar() {
 
                             {/* Connexion */}
                             <ButtonReusable
-                                variant="ghost"
+                                href={ROUTES.LOGIN}
+                                variant="default"
                                 size="lg"
                                 leftIcon={<IconLogin2 className="size-5" />}
                             >
                                 Se connecter
-                            </ButtonReusable>
-
-                            {/* Inscription */}
-                            <ButtonReusable
-                                variant="default"
-                                size="lg"
-                                leftIcon={<IconUserPlus className="size-5" />}
-                            >
-                                S&apos;inscrire
                             </ButtonReusable>
                         </motion.div>
 
@@ -337,7 +313,7 @@ export default function Navbar() {
                 <div ref={bottomNavRef} className="border-t border-border/40">
                     <WrapperSection className="!px-5 md:!px-[5%] 2xl:!px-[10%]">
                         <div className="hidden items-center justify-center gap-2 py-2 md:flex">
-                            {NAV_LINKS.map((link, i) => (
+                            {NAVIGATION_LINKS.map((link, i) => (
                                 <NavLink
                                     key={link.href}
                                     href={link.href}
@@ -405,7 +381,7 @@ export default function Navbar() {
 
                                     {/* Navigation inline */}
                                     <nav className="flex items-center gap-2">
-                                        {NAV_LINKS.map((link, i) => (
+                                        {NAVIGATION_LINKS.map((link, i) => (
                                             <NavLink
                                                 key={link.href}
                                                 href={link.href}
@@ -439,13 +415,14 @@ export default function Navbar() {
                                         <IconSearch className="size-4" />
                                     </ButtonReusable>
                                     <ButtonReusable
+                                        href={ROUTES.LOGIN}
                                         variant="default"
                                         size="sm"
                                         leftIcon={
-                                            <IconUserPlus className="size-4" />
+                                            <IconLogin2 className="size-4" />
                                         }
                                     >
-                                        S&apos;inscrire
+                                        Se connecter
                                     </ButtonReusable>
                                 </motion.div>
                             </div>
@@ -495,7 +472,7 @@ export default function Navbar() {
 
                             {/* Liens de navigation mobile */}
                             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 pt-6">
-                                {NAV_LINKS.map((link) => (
+                                {NAVIGATION_LINKS.map((link) => (
                                     <NavLink
                                         key={link.href}
                                         href={link.href}
@@ -538,24 +515,13 @@ export default function Navbar() {
 
                                 {/* Connexion */}
                                 <ButtonReusable
-                                    variant="ghost"
+                                    href={ROUTES.LOGIN}
+                                    variant="default"
                                     size="lg"
                                     leftIcon={<IconLogin2 className="size-5" />}
                                     className="w-full justify-center"
                                 >
                                     Se connecter
-                                </ButtonReusable>
-
-                                {/* Inscription */}
-                                <ButtonReusable
-                                    variant="default"
-                                    size="lg"
-                                    leftIcon={
-                                        <IconUserPlus className="size-5" />
-                                    }
-                                    className="w-full justify-center"
-                                >
-                                    S&apos;inscrire
                                 </ButtonReusable>
                             </motion.div>
                         </motion.div>
