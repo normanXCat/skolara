@@ -65,15 +65,32 @@ class AuthController {
                     message: "Token de rafraîchissement manquant",
                 });
             }
-            const result = await auth_service_1.default.refresh(currentToken);
-            // Mettre à jour les cookies (rotation)
-            res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
-            res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
-            res.status(200).json({
-                success: true,
-                data: null,
-                message: "Token rafraîchi avec succès",
-            });
+            try {
+                const result = await auth_service_1.default.refresh(currentToken);
+                // Mettre à jour les cookies (rotation)
+                res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
+                res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
+                res.status(200).json({
+                    success: true,
+                    data: null,
+                    message: "Token rafraîchi avec succès",
+                });
+            }
+            catch (err) {
+                // Si le token est invalide ou expiré, on nettoie les cookies
+                // pour éviter les boucles de redirection infinies côté frontend.
+                if (err.status === 401) {
+                    res.clearCookie("refreshToken", {
+                        path: "/",
+                        httpOnly: true,
+                    });
+                    res.clearCookie("accessToken", {
+                        path: "/",
+                        httpOnly: true,
+                    });
+                }
+                throw err;
+            }
         }
         catch (err) {
             next(err);

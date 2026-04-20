@@ -18,6 +18,8 @@ const authenticate = (req, _res, next) => {
     // Le token est maintenant récupéré depuis les cookies HttpOnly
     const token = req.cookies?.accessToken;
     if (!token) {
+        // Optionnel : on nettoie au cas où il resterait un refreshToken orphelin
+        _res.clearCookie("accessToken", { path: "/", httpOnly: true });
         return next({
             status: 401,
             message: "Token d'accès manquant ou session expirée",
@@ -29,6 +31,10 @@ const authenticate = (req, _res, next) => {
         next();
     }
     catch (error) {
+        // En cas de token invalide ou expiré, on nettoie les cookies
+        // pour que le middleware Next.js voie que la session est finie.
+        _res.clearCookie("accessToken", { path: "/", httpOnly: true });
+        _res.clearCookie("refreshToken", { path: "/", httpOnly: true });
         if (error instanceof jsonwebtoken_1.default.TokenExpiredError) {
             return next({
                 status: 401,
