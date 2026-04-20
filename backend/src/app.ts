@@ -10,6 +10,7 @@ import preRegistrationRoutes from "./modules/pre-registration/pre-registration.r
 import gradeRoutes from "./modules/grade/grade.routes";
 import uploadRoutes from "./modules/upload/upload.routes";
 import authRoutes from "./modules/auth/auth.routes";
+import adminRoutes from "./modules/admin/admin.routes";
 import { env } from "./config/env";
 
 /**
@@ -58,6 +59,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /* --- Routes API --- */
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/pre-registrations", preRegistrationRoutes);
 app.use("/api/grades", gradeRoutes);
 app.use("/api/upload", uploadRoutes);
