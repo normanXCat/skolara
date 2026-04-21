@@ -2,30 +2,28 @@ import { Request, Response, NextFunction } from "express";
 import authService from "./auth.service";
 import { env } from "../../config/env";
 
-/**
- * Options du cookie HttpOnly pour le refresh token.
- */
+const isProduction = env.NODE_ENV === "production";
+
 const REFRESH_COOKIE_OPTIONS = {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    secure: isProduction,
+    sameSite: isProduction ? ("none" as const) : ("lax" as const), // ← fix
     path: "/",
     maxAge: env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
 };
 
 const ACCESS_COOKIE_OPTIONS = {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    secure: isProduction,
+    sameSite: isProduction ? ("none" as const) : ("lax" as const), // ← fix
     path: "/",
-    // On met un maxAge un peu plus long que le JWT pour être sûr (ex: 15min)
     maxAge: 15 * 60 * 1000,
 };
 
 const ROLE_COOKIE_OPTIONS = {
-    httpOnly: false, // Accessible par le middleware Next.js
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    httpOnly: false,
+    secure: isProduction,
+    sameSite: isProduction ? ("none" as const) : ("lax" as const), // ← fix
     path: "/",
     maxAge: env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
 };

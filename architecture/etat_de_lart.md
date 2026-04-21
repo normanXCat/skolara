@@ -398,33 +398,33 @@ export default auth((req) => {
 
 ---
 
-## 5. Phase D — Design système
+## 5. Phase D — Design système (UI/UX Pro Max)
 
-### 5.1 Palette de couleurs
+### 5.1 Principes Directeurs
 
-| Usage         | Couleur     | Hex       |
-| ------------- | ----------- | --------- |
-| Primaire      | Bleu école  | `#1E40AF` |
-| Secondaire    | Vert succès | `#16A34A` |
-| Avertissement | Amber       | `#D97706` |
-| Danger        | Rouge       | `#DC2626` |
-| Neutre        | Gris        | `#6B7280` |
-| Fond          | Blanc cassé | `#F9FAFB` |
+- **Esthétique Éditoriale** : Hiérarchie typographique forte, espacements généreux et mise en page inspirée de la presse premium.
+- **Glassmorphism & Profondeur** : Utilisation de `backdrop-blur`, bordures translucides et ombres portées douces.
+- **Standard Visuel** : Uniformisation des arrondis avec `rounded-3xl` pour tous les conteneurs principaux.
+- **Interactivité Laser** : Bordures animées (Laser Border) sur les inputs et la navigation.
 
-### 5.2 Composants shadcn clés
+### 5.2 Palette de couleurs (Sémantique)
 
-| Composant                   | Usage                                       |
-| --------------------------- | ------------------------------------------- |
-| `DataTable`                 | Listes élèves, notes, absences, paiements   |
-| `Form` + `Input` + `Select` | Tous les formulaires de saisie              |
-| `Calendar`                  | Emploi du temps, absences                   |
-| `Badge`                     | Statuts (Payé, Absent, Justifié, En retard) |
-| `Dialog` / `Sheet`          | Formulaires rapides, confirmations          |
-| `Card`                      | Widgets du tableau de bord                  |
-| `Chart` (Recharts)          | Courbes de notes, stats admin               |
-| `Tabs`                      | Navigation dans les profils élèves          |
-| `Avatar`                    | Photos de profil                            |
-| `Command`                   | Recherche globale (⌘K)                      |
+| Usage    | Thème Clair        | Thème Sombre      |
+| -------- | ------------------ | ----------------- |
+| Primaire | Indigo / Violet    | Indigo Électrique |
+| Fond     | Blanc Cassé        | Zinc-950          |
+| Accent   | Shimmer / Gradient | Laser / Glow      |
+
+### 5.3 Bibliothèque de Composants "Pro Max"
+
+| Composant          | Caractéristiques                               |
+| ------------------ | ---------------------------------------------- |
+| `ButtonReusable`   | Multi-variants, support icônes, loading state. |
+| `InputReusable`    | Effet Laser Border, animation d'erreur.        |
+| `TextareaReusable` | Saisie multi-lignes premium glassmorphism.     |
+| `SkeletonReusable` | Chargement par shimmer synchronisé.            |
+| `ConfirmDialog`    | Thémé, icones contextuels, overlay adaptatif.  |
+| `Sidebar`          | Navigation dynamique avec état parent actif.   |
 
 ### 5.3 Écrans prioritaires à wireframer
 

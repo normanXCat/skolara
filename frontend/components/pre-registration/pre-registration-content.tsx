@@ -72,7 +72,7 @@ export function PreRegistrationContent() {
 
             <div className="w-full flex flex-col items-center sm:px-6 py-12 lg:py-16">
                 <div className="mx-auto w-full max-w-7xl">
-                    <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+                    <div className="flex flex-col lg:flex-row items-center justify-center">
                         {/* Left Section: Video/visual */}
                         <div className="w-full lg:w-[45%] flex flex-col items-center">
                             <div className="mb-8">
