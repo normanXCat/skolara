@@ -195,6 +195,7 @@ function SummaryRow({
                 <button
                     type="button"
                     onClick={onEdit}
+                    aria-label={`Modifier ${label}`}
                     className="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-foreground shadow-sm"
                 >
                     <IconPencil size={14} />

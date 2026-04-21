@@ -4,19 +4,25 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { ADMIN_NAVIGATION_LINKS } from "@/config/navigation";
 import InputReusable from "@/components/ui/input-reusable";
-import { AdminSidebar } from "./AdminSidebar";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconUserCircle, IconSearch } from "@tabler/icons-react";
-import SectionDivider from "../ui/section-divider";
+import SectionDivider from "@/components/ui/section-divider";
 import { SkeletonReusable } from "@/components/ui/skeleton-reusable";
 import { useAuthStore } from "@/stores/auth-store";
 import { translateRole } from "@/lib/roles";
+import UserAvatar from "@/components/common/user-avatar";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+/**
+ * Layout persistant pour toute la section administration.
+ * Utilise les conventions Next.js pour éviter le rechargement de la barre latérale
+ * et de l'en-tête lors de la navigation interne.
+ */
+export default function AdminRootLayout({ children }: AdminLayoutProps) {
     const pathname = usePathname();
     const { user, fetchUser, isLoading } = useAuthStore();
 
@@ -29,6 +35,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         (link) => link.href === pathname,
     );
     const pageTitle = currentLink ? currentLink.label : "Tableau de bord";
+
     return (
         <div className="flex h-screen w-full overflow-hidden bg-background p-4 gap-4 relative">
             {/* Global Background Pattern - Distinct Grid */}
@@ -137,41 +144,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                                 ) : null}
                             </AnimatePresence>
 
-                            <button
-                                type="button"
-                                aria-label="Profil utilisateur"
-                                className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 shadow-sm transition-all hover:scale-110 hover:shadow-primary/20 cursor-pointer overflow-hidden backdrop-blur-sm relative"
-                            >
-                                {isLoading ? (
-                                    <SkeletonReusable
-                                        variant="primary"
-                                        shape="circle"
-                                        width="100%"
-                                        height="100%"
-                                    />
-                                ) : user ? (
-                                    <div className="h-full w-full flex items-center justify-center font-black text-sm">
-                                        {user.firstName.charAt(0)}
-                                        {user.name.charAt(0)}
-                                    </div>
-                                ) : (
-                                    <IconUserCircle size={32} />
-                                )}
-                            </button>
+                            <UserAvatar
+                                isLoading={isLoading}
+                                firstName={user?.firstName}
+                                lastName={user?.name}
+                                size={44}
+                            />
                         </div>
                     </div>
                 </header>
                 <SectionDivider className="py-4" />
                 {/* Content Area */}
                 <main className="flex-1 overflow-y-auto custom-scrollbar p-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
-                        className="max-w-7xl mx-auto"
-                    >
-                        {children}
-                    </motion.div>
+                    {/* On ne wrap plus avec motion.div ici si on veut que le layout soit fixe */}
+                    {children}
                 </main>
             </div>
         </div>

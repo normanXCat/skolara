@@ -5,6 +5,7 @@ import { ROUTES } from "@/config/routes";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { ToastContainer } from "@/components/ui/toast";
+import { NetworkStatus } from "@/components/ui/network-status";
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -21,6 +22,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
             <main className="flex-1">{children}</main>
             {!hideLayout && <Footer />}
             <ToastContainer />
+            <NetworkStatus />
         </>
     );
 }

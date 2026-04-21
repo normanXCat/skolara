@@ -56,6 +56,7 @@ export const ConfirmDialog = ({
                         <button
                             onClick={onClose}
                             className="absolute right-8 top-8 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-muted rounded-full"
+                            aria-label="Fermer"
                         >
                             <IconX size={20} />
                         </button>

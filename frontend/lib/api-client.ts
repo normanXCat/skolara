@@ -33,7 +33,41 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
  */
 class ApiClient {
     private isRefreshing = false;
+    private refreshPromise: Promise<boolean> | null = null;
     private refreshQueue: Array<(success: boolean) => void> = [];
+
+    /**
+     * Attend la résolution d'un refresh en cours.
+     * Utilisé par les requêtes concurrentes pour ne pas lancer de refresh parallèle.
+     */
+    private waitForRefresh(): Promise<boolean> {
+        return new Promise((resolve) => {
+            this.refreshQueue.push(resolve);
+        });
+    }
+
+    /**
+     * Tente un refresh du token avec un retry en cas d'erreur réseau.
+     */
+    private async attemptRefresh(): Promise<boolean> {
+        const maxRetries = 2;
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                const refreshRes = await this.post<{ accessToken: string }>(
+                    "/auth/refresh",
+                );
+                if (refreshRes.success) return true;
+                // Si le backend dit explicitement que le token est invalide, on ne retry pas
+                return false;
+            } catch {
+                // Erreur réseau — on attend un peu avant de retenter
+                if (i < maxRetries - 1) {
+                    await new Promise((r) => setTimeout(r, 500));
+                }
+            }
+        }
+        return false;
+    }
 
     private async request<T>(
         endpoint: string,
@@ -72,56 +106,50 @@ class ApiClient {
                 !endpoint.includes("/auth/refresh") &&
                 !endpoint.includes("/auth/login")
             ) {
-                // Si un refresh est déjà en cours, on met la requête en attente
+                // Si un refresh est déjà en cours, on attend sa résolution
                 if (this.isRefreshing) {
-                    return new Promise((resolve) => {
-                        this.refreshQueue.push((success) => {
-                            if (success) {
-                                resolve(this.request<T>(endpoint, options));
-                            } else {
-                                resolve({
-                                    success: false,
-                                    error: "Session expirée",
-                                });
-                            }
-                        });
-                    });
+                    const success = await this.waitForRefresh();
+                    if (success) {
+                        return this.request<T>(endpoint, options);
+                    }
+                    return { success: false, error: "Session expirée" };
                 }
 
+                // On lance le refresh
                 this.isRefreshing = true;
+                this.refreshPromise = this.attemptRefresh();
 
                 try {
-                    const refreshRes = await this.post<{ accessToken: string }>(
-                        "/auth/refresh",
+                    const refreshSuccess = await this.refreshPromise;
+
+                    this.isRefreshing = false;
+                    this.processQueue(refreshSuccess);
+
+                    if (refreshSuccess) {
+                        // Rejouer la requête initiale avec les nouveaux cookies
+                        return this.request<T>(endpoint, options);
+                    }
+
+                    // Le refresh a échoué définitivement
+                    console.warn(
+                        "[ApiClient] Refresh token failed — session expired",
                     );
 
-                    if (refreshRes.success) {
-                        this.isRefreshing = false;
-                        // On libère la file d'attente avec succès
-                        this.processQueue(true);
-                        // Rejouer la requête initiale
-                        return this.request<T>(endpoint, options);
-                    } else {
-                        this.isRefreshing = false;
-                        // On libère la file d'attente avec échec
-                        this.processQueue(false);
+                    // Rediriger uniquement si on est sur une route protégée
+                    if (typeof window !== "undefined") {
+                        const path = window.location.pathname;
+                        const isProtectedRoute = path.startsWith("/admin");
 
-                        // Échec du refresh -> Déconnexion
-                        if (
-                            typeof window !== "undefined" &&
-                            !window.location.pathname.includes("/login")
-                        ) {
-                            window.location.href = "/login";
+                        if (isProtectedRoute) {
+                            window.location.href = `/login?redirect=${encodeURIComponent(path)}`;
                         }
-                        return {
-                            success: false,
-                            error: "Session expirée",
-                        };
                     }
+                    return { success: false, error: "Session expirée" };
                 } catch (err) {
                     this.isRefreshing = false;
                     this.processQueue(false);
-                    throw err;
+                    console.error("[ApiClient] Refresh error:", err);
+                    return { success: false, error: "Session expirée" };
                 }
             }
 

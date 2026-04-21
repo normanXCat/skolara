@@ -39,9 +39,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Logo from "@/components/common/logo";
 import SectionDivider from "../ui/section-divider";
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 const ICON_MAP: Record<string, any> = {
     IconDashboard: IconLayoutDashboard,
@@ -79,124 +80,112 @@ export const AdminSidebar = () => {
 
     const sidebarContent = (
         <div className="flex h-full flex-col transition-colors relative">
-            <div className="flex justify-between items-center px-6 pt-4 lg:justify-center lg:gap-4">
-                <div className="flex items-center gap-3">
-                    <ThemeToggle />
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <button className="relative flex items-center justify-center size-8 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-primary transition-all duration-300 group active:scale-95">
-                                <IconBell
-                                    size={26}
-                                    className="group-hover:rotate-12 transition-transform"
-                                />
-                                <span className="absolute top-1 right-1 flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/30"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-primary border-2 border-background shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]"></span>
-                                </span>
-                            </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                            align="start"
-                            className="w-80 p-0 rounded-2xl overflow-hidden border-border/40 shadow-2xl"
-                        >
-                            <DropdownMenuLabel className="p-4 border-b border-border/10 bg-muted/30">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm font-bold">
-                                        Notifications
+            {/* 2. Logo Section */}
+            <div className="w-full flex items-center justify-between">
+                <motion.div
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                    <Logo size={48} asLink />
+                </motion.div>
+                <div className="flex justify-between items-center lg:justify-center lg:gap-4">
+                    <div className="flex items-center gap-3">
+                        <ThemeToggle />
+                        <div className="mx-1 h-6 w-px bg-border/60" />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button
+                                    className="relative flex items-center justify-center size-8 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-primary transition-all duration-300 group active:scale-95"
+                                    aria-label="Notifications"
+                                >
+                                    <IconBell
+                                        size={26}
+                                        className="group-hover:rotate-12 transition-transform"
+                                    />
+                                    <span className="absolute top-1 right-1 flex h-3 w-3">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/30"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary border-2 border-background shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]"></span>
                                     </span>
-                                    <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase font-black">
-                                        2 nouvelles
-                                    </span>
-                                </div>
-                            </DropdownMenuLabel>
-                            <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
-                                <DropdownMenuItem className="p-4 focus:bg-primary/5 cursor-pointer border-b border-border/5">
-                                    <div className="flex gap-3">
-                                        <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                                            <IconUserCircle
-                                                size={18}
-                                                className="text-primary"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-0.5">
-                                            <p className="text-xs font-bold leading-none">
-                                                Nouvelle pré-inscription
-                                            </p>
-                                            <p className="text-[10px] text-muted-foreground line-clamp-1">
-                                                Un nouvel élève vient de
-                                                s'inscrire.
-                                            </p>
-                                            <p className="text-[9px] text-primary font-medium mt-1">
-                                                Il y a 5 min
-                                            </p>
-                                        </div>
-                                    </div>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="p-4 focus:bg-primary/5 cursor-pointer">
-                                    <div className="flex gap-3">
-                                        <div className="size-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
-                                            <IconBell
-                                                size={18}
-                                                className="text-amber-500"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-0.5">
-                                            <p className="text-xs font-bold leading-none">
-                                                Maintenance système
-                                            </p>
-                                            <p className="text-[10px] text-muted-foreground line-clamp-1">
-                                                Une mise à jour est prévue à
-                                                22h00.
-                                            </p>
-                                            <p className="text-[9px] text-primary font-medium mt-1">
-                                                Il y a 2 heures
-                                            </p>
-                                        </div>
-                                    </div>
-                                </DropdownMenuItem>
-                            </div>
-                            <DropdownMenuSeparator className="m-0" />
-                            <div className="p-2 bg-muted/20">
-                                <button className="w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors py-2">
-                                    <IconCheck size={12} />
-                                    Tout marquer comme lu
                                 </button>
-                            </div>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                <button
-                    onClick={() => setIsMobileOpen(false)}
-                    className="lg:hidden p-2 rounded-xl bg-muted/40 text-foreground"
-                >
-                    <IconX size={24} />
-                </button>
-            </div>
-
-            <SectionDivider className="py-4" />
-
-            {/* 2. User Profile Header */}
-            <div className="w-full flex items-center justify-center px-4">
-                <Link
-                    href={ROUTES.ADMIN.DASHBOARD}
-                    className="flex items-center gap-3 group"
-                >
-                    <div className="relative shrink-0">
-                        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/40 p-0.5 shadow-sm">
-                            <div className="h-full w-full rounded-[0.9rem] overflow-hidden bg-background">
-                                <div className="h-full w-full bg-primary/10 flex items-center justify-center font-black text-primary">
-                                    AD
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                align="start"
+                                className="w-80 p-0 rounded-2xl overflow-hidden border-border/40 shadow-2xl"
+                            >
+                                <DropdownMenuLabel className="p-4 border-b border-border/10 bg-muted/30">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm font-bold">
+                                            Notifications
+                                        </span>
+                                        <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase font-black">
+                                            2 nouvelles
+                                        </span>
+                                    </div>
+                                </DropdownMenuLabel>
+                                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+                                    <DropdownMenuItem className="p-4 focus:bg-primary/5 cursor-pointer border-b border-border/5">
+                                        <div className="flex gap-3">
+                                            <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                                <IconUserCircle
+                                                    size={18}
+                                                    className="text-primary"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-0.5">
+                                                <p className="text-xs font-bold leading-none">
+                                                    Nouvelle pré-inscription
+                                                </p>
+                                                <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                                    Un nouvel élève vient de
+                                                    s'inscrire.
+                                                </p>
+                                                <p className="text-[9px] text-primary font-medium mt-1">
+                                                    Il y a 5 min
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="p-4 focus:bg-primary/5 cursor-pointer">
+                                        <div className="flex gap-3">
+                                            <div className="size-8 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
+                                                <IconBell
+                                                    size={18}
+                                                    className="text-amber-500"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-0.5">
+                                                <p className="text-xs font-bold leading-none">
+                                                    Maintenance système
+                                                </p>
+                                                <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                                    Une mise à jour est prévue à
+                                                    22h00.
+                                                </p>
+                                                <p className="text-[9px] text-primary font-medium mt-1">
+                                                    Il y a 2 heures
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </DropdownMenuItem>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-background animate-pulse" />
+                                <DropdownMenuSeparator className="m-0" />
+                                <div className="p-2 bg-muted/20">
+                                    <button className="w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors py-2">
+                                        <IconCheck size={12} />
+                                        Tout marquer comme lu
+                                    </button>
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
-                    <div className="flex flex-col overflow-hidden">
-                        <span className="text-base font-black text-foreground truncate mt-0.5">
-                            Admin. Skolara
-                        </span>
-                    </div>
-                </Link>
+                    <button
+                        onClick={() => setIsMobileOpen(false)}
+                        className="lg:hidden p-2 rounded-xl bg-muted/40 text-foreground"
+                        aria-label="Fermer le menu"
+                    >
+                        <IconX size={24} />
+                    </button>
+                </div>
             </div>
 
             <SectionDivider className="py-4" />
@@ -372,6 +361,7 @@ export const AdminSidebar = () => {
             <button
                 onClick={() => setIsMobileOpen(true)}
                 className="lg:hidden fixed top-6 left-6 z-[40] p-3 rounded-2xl bg-background border border-border/40 shadow-xl text-foreground active:scale-95 transition-transform"
+                aria-label="Ouvrir le menu"
             >
                 <IconMenu2 size={24} />
             </button>

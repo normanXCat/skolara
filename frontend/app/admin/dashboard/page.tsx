@@ -1,4 +1,3 @@
-import AdminLayout from "@/components/admin/AdminLayout";
 import api from "@/lib/api-client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -38,7 +37,7 @@ export default async function AdminDashboardPage() {
     const stats = statsRes.success ? statsRes.data : null;
 
     return (
-        <AdminLayout>
+        <>
             {/* Ambient Background Effect */}
             <div className="fixed inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-20%,rgba(var(--primary),0.05),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_60%_50%_at_50%_-20%,rgba(var(--primary),0.1),rgba(255,255,255,0))] pointer-events-none z-0" />
 
@@ -63,6 +62,6 @@ export default async function AdminDashboardPage() {
                     data={stats?.latestPreRegistrations || []}
                 />
             </div>
-        </AdminLayout>
+        </>
     );
 }

@@ -81,7 +81,7 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
             href.startsWith("mailto:") ||
             href.startsWith("tel:");
 
-        const Comp = isExternal ? motion.a : motion(Link);
+        const Comp = isExternal ? motion.a : motion.create(Link);
 
         return (
             <Comp

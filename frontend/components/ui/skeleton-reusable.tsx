@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 interface SkeletonReusableProps {
     /** Classes Tailwind supplémentaires */
     className?: string;
-    /** Type d'animation : 'shimmer' (balayage lumineux) ou 'pulse' (battement) */
-    variant?: "shimmer" | "pulse" | "none";
+    /** Type d'animation : 'shimmer' (balayage lumineux), 'pulse' (battement), 'primary' (shimmer coloré) */
+    variant?: "shimmer" | "pulse" | "primary" | "none";
     /** Forme du skeleton */
     shape?: "circle" | "rounded" | "full" | "square" | "none";
     /** Largeur personnalisée (ex: '100%', 200) */
@@ -39,7 +39,8 @@ export const SkeletonReusable = ({
 
     // Style de base
     const baseClasses = cn(
-        "relative overflow-hidden bg-muted/40",
+        "relative overflow-hidden transition-all duration-300",
+        variant === "primary" ? "bg-primary/10" : "bg-muted/40",
         shapeStyles[shape],
         variant === "pulse" && "animate-pulse",
         className,
@@ -51,8 +52,13 @@ export const SkeletonReusable = ({
     };
 
     return (
-        <div className={baseClasses} style={style}>
-            {variant === "shimmer" && (
+        <motion.div
+            initial={{ opacity: 0.8 }}
+            animate={{ opacity: 1 }}
+            className={baseClasses}
+            style={style}
+        >
+            {(variant === "shimmer" || variant === "primary") && (
                 <motion.div
                     className="absolute inset-0 z-10"
                     initial={{ x: "-100%" }}
@@ -60,18 +66,20 @@ export const SkeletonReusable = ({
                     transition={{
                         repeat: Infinity,
                         duration: 1.5,
-                        ease: "easeInOut",
+                        ease: "linear",
                     }}
                     style={{
                         background:
-                            "linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent)",
+                            variant === "primary"
+                                ? "linear-gradient(90deg, transparent, oklch(var(--primary) / 0.1), transparent)"
+                                : "linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent)",
                     }}
                 />
             )}
 
             {/* Effet d'éclat additionnel pour le mode sombre */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
-        </div>
+        </motion.div>
     );
 };
 

@@ -8,7 +8,7 @@ export const ROUTES = {
     PRE_REGISTRATION: "/pre-registration",
     CONTACT: "/contact",
     LOGIN: "/login",
-    DASHBOARD: "/dashboard",
+    DASHBOARD: "/",
     ADMIN: {
         DASHBOARD: "/admin/dashboard",
         STUDENTS: "/admin/students",

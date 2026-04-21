@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { LoginSchema, type LoginFormData } from "@/schemas/login-schema";
 import api from "@/lib/api-client";
 import { toast } from "@/lib/toast-store";
+import { ROUTES } from "@/config/routes";
+import { useAuthStore, type AuthUser } from "@/stores/auth-store";
 
 export type LoginState = "idle" | "loading" | "success" | "error";
 
@@ -16,6 +18,7 @@ export type LoginState = "idle" | "loading" | "success" | "error";
 export const useLoginForm = () => {
     const router = useRouter();
     const [state, setState] = useState<LoginState>("idle");
+    const setUser = useAuthStore((s) => s.setUser);
 
     const form = useForm<LoginFormData>({
         resolver: zodResolver(LoginSchema),
@@ -29,12 +32,22 @@ export const useLoginForm = () => {
         try {
             const response = await api.post<{
                 accessToken: string;
-                user: any;
+                user: AuthUser;
             }>("/auth/login", data);
 
             if (response.success) {
-                setState("success");
-                router.push("/dashboard");
+                const user = response.data?.user;
+                if (user) {
+                    setState("success");
+                    setUser(user);
+                    const isAdmin = user.role === "ADMIN";
+                    router.push(
+                        isAdmin ? ROUTES.ADMIN.DASHBOARD : ROUTES.DASHBOARD,
+                    );
+                } else {
+                    setState("error");
+                    toast.error("Données utilisateur manquantes");
+                }
             } else {
                 setState("error");
                 toast.error(response.error || "Identifiants invalides");

@@ -1,10 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { HexagonPattern } from "@/components/ui/hexagon-pattern";
 import { Typography } from "@/components/ui/typography";
 import { motion } from "framer-motion";
 import { IconSparkles, IconCircleCheck } from "@tabler/icons-react";
+import { SkeletonReusable } from "@/components/ui/skeleton-reusable";
 
 /**
  * Nouveau composant visuel épuré pour la page de connexion.
@@ -12,6 +15,8 @@ import { IconSparkles, IconCircleCheck } from "@tabler/icons-react";
  * Style : Éditorial, Premium, Neutre (Amber/Slate accent).
  */
 export const LoginVisual = () => {
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+
     return (
         <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#050505]">
             {/* 1. Background hexagonal minimaliste (Gris neutre) */}
@@ -82,11 +87,23 @@ export const LoginVisual = () => {
                         </motion.div>
                     </div>
 
-                    {/* Image étudiante (Par-dessus le texte) */}
-                    <img
+                    {/* Skeleton Loader */}
+                    {!isImageLoaded && (
+                        <div className="absolute bottom-0 z-10 flex items-end justify-center w-full h-[70%] px-10 pb-10">
+                            <SkeletonReusable className="w-full max-w-md h-full rounded-t-[4rem] opacity-30" />
+                        </div>
+                    )}
+                    {/* Image étudiante optimisée */}
+                    <Image
                         src="/images/student.png"
                         alt="Élève Skolara"
-                        className="relative z-20 w-full h-[100%] object-contain object-bottom drop-shadow-[0_32px_64px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_32px_64px_rgba(255,255,255,0.03)] scale-110 origin-bottom hover:scale-[1.12] transition-transform duration-700"
+                        fill
+                        priority
+                        className={cn(
+                            "z-20 object-contain object-bottom drop-shadow-[0_32px_64px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_32px_64px_rgba(255,255,255,0.03)] scale-110 origin-bottom hover:scale-[1.12] transition-all duration-700",
+                            isImageLoaded ? "opacity-100" : "opacity-0",
+                        )}
+                        onLoad={() => setIsImageLoaded(true)}
                     />
                 </motion.div>
             </div>

@@ -86,7 +86,7 @@ const ButtonReusable = React.forwardRef<
         const Comp = href
             ? isExternal
                 ? (motion.a as any)
-                : motion(Link as any)
+                : motion.create(Link as any)
             : motion.button;
 
         return (

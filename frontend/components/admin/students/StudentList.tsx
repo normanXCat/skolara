@@ -197,7 +197,10 @@ export function StudentList() {
                     >
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className="h-8 w-8 rounded-xl hover:bg-muted flex items-center justify-center transition-colors">
+                                <button
+                                    className="h-8 w-8 rounded-xl hover:bg-muted flex items-center justify-center transition-colors"
+                                    aria-label="Options"
+                                >
                                     <IconDotsVertical
                                         size={18}
                                         className="text-muted-foreground"
