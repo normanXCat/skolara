@@ -76,7 +76,12 @@ class ApiClient {
         const { params, ...customConfig } = options;
 
         // Gestion des paramètres de requête (Query String)
-        const url = new URL(`${BASE_URL}${endpoint}`);
+        const baseOrigin =
+            typeof window !== "undefined"
+                ? window.location.origin
+                : "http://localhost:3000";
+
+        const url = new URL(`${BASE_URL}${endpoint}`, baseOrigin);
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
                 if (value !== undefined) {

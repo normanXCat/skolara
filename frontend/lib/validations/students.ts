@@ -8,15 +8,12 @@ export const createStudentSchema = z.object({
         .string()
         .min(2, "Le prénom doit contenir au moins 2 caractères"),
     lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-    birthDate: z.preprocess(
-        (arg) => {
-            if (typeof arg === "string" || arg instanceof Date)
-                return new Date(arg);
-        },
-        z.date({ message: "La date de naissance est requise" }),
-    ),
+    birthDate: z
+        .any()
+        .transform((v) => new Date(v))
+        .pipe(z.date()),
     address: z.string().min(5, "L'adresse doit contenir au moins 5 caractères"),
-    status: z.enum(["ACTIVE", "ARCHIVED"]).default("ACTIVE"),
+    status: z.enum(["ACTIVE", "ARCHIVED"]),
     schoolYear: z
         .string()
         .regex(/^\d{4}-\d{4}$/, "Format invalide (ex: 2023-2024)"),
@@ -47,6 +44,18 @@ export const studentFiltersSchema = z.object({
     schoolYear: z.string().optional(),
 });
 
-export type CreateStudentInput = z.infer<typeof createStudentSchema>;
-export type UpdateStudentInput = z.infer<typeof updateStudentSchema>;
+export interface CreateStudentInput {
+    firstName: string;
+    lastName: string;
+    birthDate: Date;
+    address: string;
+    status: "ACTIVE" | "ARCHIVED";
+    schoolYear: string;
+    classId?: number | null;
+    parentName: string;
+    parentPhone: string;
+    parentEmail: string;
+}
+
+export type UpdateStudentInput = Partial<CreateStudentInput>;
 export type StudentFiltersInput = z.infer<typeof studentFiltersSchema>;

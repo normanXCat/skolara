@@ -124,10 +124,18 @@ export function DataTable<TData, TValue>({
                                                 }
                                             >
                                                 <div className="flex items-center gap-2.5">
-                                                    {/* @ts-ignore */}
-                                                    {column.columnDef.icon && (
-                                                        <column.columnDef.icon className="size-3.5 text-muted-foreground/60" />
-                                                    )}
+                                                    {(
+                                                        column.columnDef as ColumnWithIcon<TData>
+                                                    ).icon &&
+                                                        React.createElement(
+                                                            (
+                                                                column.columnDef as ColumnWithIcon<TData>
+                                                            ).icon!,
+                                                            {
+                                                                className:
+                                                                    "size-3.5 text-muted-foreground/60",
+                                                            },
+                                                        )}
                                                     <span className="truncate">
                                                         {typeof column.columnDef
                                                             .header === "string"
@@ -162,12 +170,22 @@ export function DataTable<TData, TValue>({
                                                 className="h-14 px-8 text-[11px] font-black uppercase tracking-widest text-muted-foreground transition-colors group/header"
                                             >
                                                 <div className="flex items-center gap-2.5">
-                                                    {/* @ts-ignore */}
-                                                    {header.column.columnDef
-                                                        .icon && (
+                                                    {(
+                                                        header.column
+                                                            .columnDef as ColumnWithIcon<TData>
+                                                    ).icon && (
                                                         <div className="p-1.5 rounded-lg bg-primary/[0.08] text-primary/70 transition-all duration-300 group-hover/header:bg-primary group-hover/header:text-primary-foreground group-hover/header:scale-110">
-                                                            {/* @ts-ignore */}
-                                                            <header.column.columnDef.icon className="size-3.5" />
+                                                            {React.createElement(
+                                                                (
+                                                                    header
+                                                                        .column
+                                                                        .columnDef as ColumnWithIcon<TData>
+                                                                ).icon!,
+                                                                {
+                                                                    className:
+                                                                        "size-3.5",
+                                                                },
+                                                            )}
                                                         </div>
                                                     )}
                                                     {header.isPlaceholder
