@@ -15,34 +15,36 @@ L'interface utilisateur de Skolara est conçue avec une approche "UI/UX Pro Max"
 
 ## 💎 Points Forts du Design
 
-### 🔹 Dashboard Administratif Premium
+### 🔹 Dashboard Administratif "Next-Gen"
 
 Une interface complète pour la gestion de l'école :
 
 - **Statistiques en temps réel** : Graphiques interactifs (Recharts) avec animations fluides.
-- **DataTables avancées** : Filtrage, pagination, export CSV et gestion des colonnes.
-- **Glassmorphism Sidebar** : Navigation avec effets de "Laser Border" et "Sheen".
-- **Responsive Design** : Expérience optimisée sur PC, tablette et mobile.
+- **DataTables avancées** : Filtrage, pagination, export CSV et gestion dynamique des colonnes.
+- **Glassmorphism Sidebar** : Navigation intelligente avec effets de "Laser Border", "Sheen" et support des routes dynamiques (parent-active state).
+- **Standard Visuel** : Utilisation systématique de `rounded-3xl` et du système typographique personnalisé.
+
+### 🔹 Module de Pré-inscription Avancé
+
+Refactorisation complète pour une maintenance simplifiée :
+
+- **Architecture Modulaire** : Isolation des composants `Header`, `Info`, `Documents`, `Timeline` et `AdminNote`.
+- **Server/Client Hybrid** : Optimisation SEO via Server Components (Metadata) et réactivité via Client Components.
+- **Gestion Administrative** : Note interne via le nouveau `TextareaReusable`, historique de traitement et conversion "One-Click" en compte élève.
+- **ConfirmDialog Premium** : Modales de confirmation adaptatives (Theme-aware) avec iconographie riche.
 
 ### 🔹 Expérience Vidéo Interactive (Remotion)
 
 Le portail de pré-inscription intègre une introduction vidéo dynamique générée par code.
 
 - **Theme-Aware** : Adaptation automatique des couleurs au mode clair/sombre.
-- **Dynamic Content** : Injection programmable de l'année et des labels.
+- **Dynamic Content** : Injection programmable de l'année et des étiquettes scolaires.
 
 ### 🔹 Résilience & UX
 
-- **Network Status** : Détection en temps réel de l'état "Offline" ou des pannes serveur (500) avec overlay premium et toast de récupération automatique.
-- **Modern Logic** : Refactorisation en Server Components pour l'optimisation SEO (Metadata) tout en isolant les interactions complexes dans des Client Components dédiés.
-- **Auth Store** : Gestion centralisée de la session utilisateur via Zustand.
-
-### 🔹 Formulaire de Pré-inscription Intelligent
-
-Un système multi-étapes sophistiqué :
-
-- **Data-Driven** : Les niveaux scolaires (Grades) sont récupérés dynamiquement depuis l'API.
-- **Validation Zod** : Gestion robuste des données et retours utilisateurs instantanés.
+- **Network Status** : Détection en temps réel de l'état "Offline" ou des pannes serveur avec overlay premium.
+- **Premium Loading** : Skeleton Loaders sur-mesure pour chaque section, garantissant une perception de vitesse accrue.
+- **Auth Store** : Gestion robuste des sessions avec files d'attente de rafraîchissement de tokens.
 
 ## 🛠️ Développement
 

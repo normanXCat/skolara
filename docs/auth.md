@@ -13,7 +13,8 @@ Skolara utilise une architecture **Access Token + Refresh Token** avec les princ
 
 - **Access Token en mémoire** : Inaccessible aux scripts XSS, ne persiste pas entre les onglets (sécurité maximale).
 - **Refresh Token en HttpOnly cookie** : Invisible au JavaScript côté client, envoyé automatiquement par le navigateur.
-- **Rotation des refresh tokens** : À chaque `/refresh`, l'ancien token est révoqué et un nouveau est émis (mitigation du vol de token).
+- **Rotation Atomique** : À chaque renouvellement, l'ancien token est révoqué et un nouveau couple est émis.
+- **Gestion des Race Conditions (Grace Period)** : Pour éviter les déconnexions intempestives lors de requêtes parallèles, le système autorise l'utilisation d'un token révoqué s'il l'a été il y a moins de 30 secondes, redirigeant vers le nouveau token valide.
 - **Bcrypt 12 rounds** : Hash résistant aux attaques brute-force.
 
 ---

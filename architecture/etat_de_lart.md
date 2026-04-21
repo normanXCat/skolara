@@ -1,9 +1,10 @@
 # État de l'art — Site Web École
+
 ## Méthode BMAD avec Antigravity
 
-**Version :** 1.0  
+**Version :** 1.1 — "Next-Gen Refactor"
 **Date :** Avril 2026  
-**Stack :** Next.js · Node.js · Prisma · PostgreSQL · shadcn/ui  
+**Stack :** Next.js 15 · React 19 · Node.js · Prisma · PostgreSQL · Tailwind CSS (UI/UX Pro Max)
 
 ---
 
@@ -35,14 +36,14 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 
 ### 1.3 Périmètre
 
-| Domaine | Inclus | Exclu (v1) |
-|---------|--------|------------|
-| Gestion des élèves | Oui | Dossier médical |
-| Notes et bulletins | Oui | Notation par compétences |
-| Emplois du temps | Oui | Gestion des salles |
-| Paiements | Oui | Intégration bancaire directe |
-| Communication | Oui (messagerie interne) | Application mobile native |
-| Site public | Oui | Portail alumni |
+| Domaine            | Inclus                   | Exclu (v1)                   |
+| ------------------ | ------------------------ | ---------------------------- |
+| Gestion des élèves | Oui                      | Dossier médical              |
+| Notes et bulletins | Oui                      | Notation par compétences     |
+| Emplois du temps   | Oui                      | Gestion des salles           |
+| Paiements          | Oui                      | Intégration bancaire directe |
+| Communication      | Oui (messagerie interne) | Application mobile native    |
+| Site public        | Oui                      | Portail alumni               |
 
 ---
 
@@ -51,30 +52,35 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 ### 2.1 Personas
 
 #### Administrateur (Directeur / Secrétaire)
+
 - Gère les inscriptions, les classes, le personnel
 - Génère les bulletins et les rapports
 - Suit les paiements des frais de scolarité
 - Accès complet à toutes les fonctionnalités
 
 #### Enseignant
+
 - Saisit les notes et appréciations
 - Gère les absences de ses élèves
 - Tient un cahier de texte numérique
 - Consulte ses classes et son emploi du temps
 
 #### Élève
+
 - Consulte ses notes et bulletins
 - Suit son emploi du temps
 - Accède aux ressources pédagogiques
 - Communique avec ses enseignants
 
 #### Parent d'élève
+
 - Consulte les notes et absences de son enfant
 - Reçoit les notifications de l'école
 - Effectue les paiements en ligne
 - Communique avec les enseignants
 
 #### Visiteur (public)
+
 - Consulte les informations de l'école
 - Soumet un dossier d'inscription
 - Prend contact avec l'établissement
@@ -82,6 +88,7 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 ### 2.2 Cartographie fonctionnelle
 
 #### Module public (visiteurs non connectés)
+
 - Page d'accueil avec présentation de l'école
 - Actualités et événements
 - Calendrier scolaire public
@@ -91,6 +98,7 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 - FAQ
 
 #### Module administration
+
 - Tableau de bord avec indicateurs clés
 - Gestion des élèves (CRUD, dossiers, classes)
 - Gestion des enseignants et du personnel
@@ -104,6 +112,7 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 - Configuration de l'établissement
 
 #### Module enseignant
+
 - Tableau de bord personnalisé
 - Saisie des notes par matière et par classe
 - Gestion des absences (justifiées / injustifiées)
@@ -113,6 +122,7 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 - Partage de ressources pédagogiques
 
 #### Module élève / parent
+
 - Tableau de bord avec résumé
 - Consultation des notes et moyennes
 - Téléchargement des bulletins PDF
@@ -124,12 +134,12 @@ Ce projet consiste à concevoir et développer un site web complet pour une éco
 
 ### 2.3 Analyse concurrentielle
 
-| Solution | Points forts | Points faibles | Pertinence |
-|----------|-------------|----------------|------------|
-| Pronote | Complet, robuste | Coûteux, non personnalisable | Référence marché |
-| EcoleDirecte | Interface moderne | Prix élevé | Bonne UX |
-| OpenScolaris (open source) | Gratuit | Peu maintenu | Technique vieilli |
-| Solution custom (ce projet) | Adapté, moderne, évolutif | Développement initial | Objectif cible |
+| Solution                    | Points forts              | Points faibles               | Pertinence        |
+| --------------------------- | ------------------------- | ---------------------------- | ----------------- |
+| Pronote                     | Complet, robuste          | Coûteux, non personnalisable | Référence marché  |
+| EcoleDirecte                | Interface moderne         | Prix élevé                   | Bonne UX          |
+| OpenScolaris (open source)  | Gratuit                   | Peu maintenu                 | Technique vieilli |
+| Solution custom (ce projet) | Adapté, moderne, évolutif | Développement initial        | Objectif cible    |
 
 ---
 
@@ -295,18 +305,18 @@ model Post {
 
 ### 4.1 Stack technologique
 
-| Couche | Technologie | Justification |
-|--------|-------------|---------------|
-| Framework | Next.js 14+ (App Router) | SSR, API routes, performances |
-| Runtime | Node.js 20 LTS | Stabilité, écosystème |
-| ORM | Prisma 5 | Type-safe, migrations, studio |
-| Base de données | PostgreSQL 16 | Robustesse, relations complexes |
-| UI Components | shadcn/ui + Tailwind | Accessibilité, personnalisation |
-| Auth | Auth.js v5 (NextAuth) | RBAC, sessions, providers |
-| Email | Resend | API moderne, templates React |
-| Upload | Cloudinary | CDN, transformations images |
-| PDF | React-PDF ou Puppeteer | Génération bulletins |
-| Déploiement | Vercel + Supabase (PG) | Scalabilité, facilité |
+| Couche          | Technologie              | Justification                   |
+| --------------- | ------------------------ | ------------------------------- |
+| Framework       | Next.js 14+ (App Router) | SSR, API routes, performances   |
+| Runtime         | Node.js 20 LTS           | Stabilité, écosystème           |
+| ORM             | Prisma 5                 | Type-safe, migrations, studio   |
+| Base de données | PostgreSQL 16            | Robustesse, relations complexes |
+| UI Components   | shadcn/ui + Tailwind     | Accessibilité, personnalisation |
+| Auth            | Auth.js v5 (NextAuth)    | RBAC, sessions, providers       |
+| Email           | Resend                   | API moderne, templates React    |
+| Upload          | Cloudinary               | CDN, transformations images     |
+| PDF             | React-PDF ou Puppeteer   | Génération bulletins            |
+| Déploiement     | Vercel + Supabase (PG)   | Scalabilité, facilité           |
 
 ### 4.2 Structure du projet Next.js
 
@@ -359,19 +369,23 @@ model Post {
 
 ```typescript
 // middleware.ts
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth";
 
 export default auth((req) => {
-  const { pathname } = req.nextUrl
-  const role = req.auth?.user?.role
+    const { pathname } = req.nextUrl;
+    const role = req.auth?.user?.role;
 
-  if (pathname.startsWith("/admin") && role !== "ADMIN") {
-    return Response.redirect(new URL("/login", req.url))
-  }
-  if (pathname.startsWith("/teacher") && role !== "TEACHER" && role !== "ADMIN") {
-    return Response.redirect(new URL("/login", req.url))
-  }
-})
+    if (pathname.startsWith("/admin") && role !== "ADMIN") {
+        return Response.redirect(new URL("/login", req.url));
+    }
+    if (
+        pathname.startsWith("/teacher") &&
+        role !== "TEACHER" &&
+        role !== "ADMIN"
+    ) {
+        return Response.redirect(new URL("/login", req.url));
+    }
+});
 ```
 
 ### 4.4 Décisions d'architecture
@@ -388,29 +402,29 @@ export default auth((req) => {
 
 ### 5.1 Palette de couleurs
 
-| Usage | Couleur | Hex |
-|-------|---------|-----|
-| Primaire | Bleu école | `#1E40AF` |
-| Secondaire | Vert succès | `#16A34A` |
-| Avertissement | Amber | `#D97706` |
-| Danger | Rouge | `#DC2626` |
-| Neutre | Gris | `#6B7280` |
-| Fond | Blanc cassé | `#F9FAFB` |
+| Usage         | Couleur     | Hex       |
+| ------------- | ----------- | --------- |
+| Primaire      | Bleu école  | `#1E40AF` |
+| Secondaire    | Vert succès | `#16A34A` |
+| Avertissement | Amber       | `#D97706` |
+| Danger        | Rouge       | `#DC2626` |
+| Neutre        | Gris        | `#6B7280` |
+| Fond          | Blanc cassé | `#F9FAFB` |
 
 ### 5.2 Composants shadcn clés
 
-| Composant | Usage |
-|-----------|-------|
-| `DataTable` | Listes élèves, notes, absences, paiements |
-| `Form` + `Input` + `Select` | Tous les formulaires de saisie |
-| `Calendar` | Emploi du temps, absences |
-| `Badge` | Statuts (Payé, Absent, Justifié, En retard) |
-| `Dialog` / `Sheet` | Formulaires rapides, confirmations |
-| `Card` | Widgets du tableau de bord |
-| `Chart` (Recharts) | Courbes de notes, stats admin |
-| `Tabs` | Navigation dans les profils élèves |
-| `Avatar` | Photos de profil |
-| `Command` | Recherche globale (⌘K) |
+| Composant                   | Usage                                       |
+| --------------------------- | ------------------------------------------- |
+| `DataTable`                 | Listes élèves, notes, absences, paiements   |
+| `Form` + `Input` + `Select` | Tous les formulaires de saisie              |
+| `Calendar`                  | Emploi du temps, absences                   |
+| `Badge`                     | Statuts (Payé, Absent, Justifié, En retard) |
+| `Dialog` / `Sheet`          | Formulaires rapides, confirmations          |
+| `Card`                      | Widgets du tableau de bord                  |
+| `Chart` (Recharts)          | Courbes de notes, stats admin               |
+| `Tabs`                      | Navigation dans les profils élèves          |
+| `Avatar`                    | Photos de profil                            |
+| `Command`                   | Recherche globale (⌘K)                      |
 
 ### 5.3 Écrans prioritaires à wireframer
 
@@ -432,17 +446,17 @@ Antigravity est une approche itérative qui commence par le noyau dur (MVP) et e
 
 ### Roadmap des sprints
 
-| Sprint | Durée | Objectif | Livrable |
-|--------|-------|----------|----------|
-| S1 | 1 sem | Fondations | Auth, rôles, layout, DB setup |
-| S2 | 1 sem | Gestion de base | CRUD élèves, classes, enseignants |
-| S3 | 1 sem | Évaluation | Saisie et consultation des notes |
-| S4 | 1 sem | Présence | Absences + emploi du temps |
-| S5 | 1 sem | Documents | Bulletins PDF + notifications email |
-| S6 | 1 sem | Finance | Module paiements + historique |
-| S7 | 1 sem | Site public | Vitrine, blog, formulaire inscription |
-| S8 | 1 sem | Analytics | Dashboard stats, rapports export |
-| S9 | 1 sem | Finitions | Tests, optimisations, déploiement prod |
+| Sprint | Durée | Objectif        | Livrable                               |
+| ------ | ----- | --------------- | -------------------------------------- |
+| S1     | 1 sem | Fondations      | Auth, rôles, layout, DB setup          |
+| S2     | 1 sem | Gestion de base | CRUD élèves, classes, enseignants      |
+| S3     | 1 sem | Évaluation      | Saisie et consultation des notes       |
+| S4     | 1 sem | Présence        | Absences + emploi du temps             |
+| S5     | 1 sem | Documents       | Bulletins PDF + notifications email    |
+| S6     | 1 sem | Finance         | Module paiements + historique          |
+| S7     | 1 sem | Site public     | Vitrine, blog, formulaire inscription  |
+| S8     | 1 sem | Analytics       | Dashboard stats, rapports export       |
+| S9     | 1 sem | Finitions       | Tests, optimisations, déploiement prod |
 
 ### Sprint 1 — Détail (MVP fondations)
 
@@ -467,13 +481,13 @@ Antigravity est une approche itérative qui commence par le noyau dur (MVP) et e
 
 ### 7.1 Risques identifiés
 
-| Risque | Probabilité | Impact | Mitigation |
-|--------|-------------|--------|------------|
-| Données sensibles élèves (RGPD) | Haute | Critique | Chiffrement, politique de confidentialité, consentement |
-| Performance avec grande volumétrie | Moyenne | Haute | Pagination, indexation BDD, query optimization |
-| Adoption par les enseignants | Haute | Haute | UX simple, formation, mode offline partiel |
-| Génération PDF complexe | Moyenne | Moyenne | Tester React-PDF vs Puppeteer dès S5 |
-| Dépassement de budget / délais | Moyenne | Haute | Prioriser MVP, report des features v2 |
+| Risque                             | Probabilité | Impact   | Mitigation                                              |
+| ---------------------------------- | ----------- | -------- | ------------------------------------------------------- |
+| Données sensibles élèves (RGPD)    | Haute       | Critique | Chiffrement, politique de confidentialité, consentement |
+| Performance avec grande volumétrie | Moyenne     | Haute    | Pagination, indexation BDD, query optimization          |
+| Adoption par les enseignants       | Haute       | Haute    | UX simple, formation, mode offline partiel              |
+| Génération PDF complexe            | Moyenne     | Moyenne  | Tester React-PDF vs Puppeteer dès S5                    |
+| Dépassement de budget / délais     | Moyenne     | Haute    | Prioriser MVP, report des features v2                   |
 
 ### 7.2 Recommandations
 
@@ -485,4 +499,4 @@ Antigravity est une approche itérative qui commence par le noyau dur (MVP) et e
 
 ---
 
-*Document produit dans le cadre de la méthode BMAD + Antigravity — Version 1.0*
+_Document produit dans le cadre de la méthode BMAD + Antigravity — Version 1.0_

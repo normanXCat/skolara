@@ -66,10 +66,12 @@ Accédez à la documentation interactive Swagger pour tester les endpoints :
 
 ## 🔗 Modules Principaux
 
-### 🔑 Authentification (`/api/auth`)
+### 🔑 Authentification & Sécurité (`/api/auth`)
 
-- Login/Logout avec rotation de Refresh Token (HttpOnly cookies).
-- Récupération du profil (`/me`).
+- **Rotation Atomique** : Système de rafraîchissement de tokens avec révocation immédiate et émission d'un nouveau couple.
+- **Gestion des Race Conditions** : Implémentation d'une "Grace Period" (période de grâce) permettant de gérer les requêtes parallèles sans déconnecter l'utilisateur.
+- **Cookies Sécurisés** : Utilisation de HttpOnly, Secure, et SameSite pour prévenir les attaques XSS et CSRF.
+- **Récupération du profil** : Endpoint `/me` pour l'initialisation de l'état client.
 
 ### 🎓 Niveaux scolaires (`/api/grades`)
 
