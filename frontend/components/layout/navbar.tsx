@@ -10,17 +10,34 @@ import {
     useMotionTemplate,
     type Variants,
 } from "framer-motion";
-import { IconSearch, IconX, IconLogin2 } from "@tabler/icons-react";
+import {
+    IconSearch,
+    IconX,
+    IconLogin2,
+    IconLayoutDashboard,
+    IconLogout,
+} from "@tabler/icons-react";
+import { useAuthStore } from "@/stores/auth-store";
+import api from "@/lib/api-client";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import WrapperSection from "@/components/wrapper-section";
 import { ButtonReusable } from "@/components/ui/button-reusable";
 import { NavLink } from "@/components/ui/nav-link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Logo from "@/components/common/logo";
+import UserAvatar from "@/components/common/user-avatar";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/config/routes";
 import { NAVIGATION_LINKS } from "@/config/navigation";
+import { SkeletonReusable } from "@/components/ui/skeleton-reusable";
 /* ------------------------------------------------------------------ */
 /*                    Variantes d'animation                            */
 /* ------------------------------------------------------------------ */
@@ -108,6 +125,27 @@ export default function Navbar() {
     const [isSticky, setIsSticky] = useState(false);
     const bottomNavRef = useRef<HTMLDivElement>(null);
     const navbarRef = useRef<HTMLElement>(null);
+
+    const { user, clearUser, fetchUser, isLoading } = useAuthStore();
+
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser]);
+
+    const handleLogout = async () => {
+        try {
+            await api.post("/auth/logout");
+        } catch (error) {
+            console.error("Logout error", error);
+        } finally {
+            clearUser();
+            window.location.href = "/";
+        }
+    };
+
+    const getInitials = (firstName?: string, lastName?: string) => {
+        return `${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}`.toUpperCase();
+    };
 
     /* ---- Effet de suivi de souris (Spotlight) ---- */
     const mouseX = useMotionValue(0);
@@ -232,7 +270,7 @@ export default function Navbar() {
                                 damping: 10,
                             }}
                         >
-                            <Logo size={48} />
+                            <Logo size={48} asLink />
                         </motion.div>
 
                         {/* Actions Desktop */}
@@ -261,15 +299,85 @@ export default function Navbar() {
                             {/* Séparateur */}
                             <div className="mx-1 h-6 w-px bg-border/60" />
 
-                            {/* Connexion */}
-                            <ButtonReusable
-                                href={ROUTES.LOGIN}
-                                variant="default"
-                                size="lg"
-                                leftIcon={<IconLogin2 className="size-5" />}
-                            >
-                                Se connecter
-                            </ButtonReusable>
+                            {/* Connexion / Avatar */}
+                            {/* Connexion / Avatar area with loading state */}
+                            <AnimatePresence mode="wait">
+                                {isLoading ? (
+                                    <UserAvatar isLoading size={40} />
+                                ) : user ? (
+                                    <motion.div
+                                        key="nav-user"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="flex items-center"
+                                    >
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <div className="cursor-pointer">
+                                                    <UserAvatar
+                                                        firstName={
+                                                            user.firstName
+                                                        }
+                                                        lastName={user.name}
+                                                        size={42}
+                                                    />
+                                                </div>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                align="end"
+                                                className="w-48 bg-background/95 backdrop-blur-xl rounded-2xl border-border/40 shadow-2xl p-2"
+                                            >
+                                                <div className="px-2 py-1.5 text-sm font-bold truncate">
+                                                    {user.firstName} {user.name}
+                                                </div>
+                                                <DropdownMenuSeparator className="bg-border/40" />
+                                                {user.role === "ADMIN" && (
+                                                    <DropdownMenuItem
+                                                        asChild
+                                                        className="rounded-xl cursor-pointer"
+                                                    >
+                                                        <Link
+                                                            href={
+                                                                ROUTES.ADMIN
+                                                                    .DASHBOARD
+                                                            }
+                                                            className="w-full flex items-center text-foreground/80 hover:text-primary"
+                                                        >
+                                                            <IconLayoutDashboard className="mr-2 h-4 w-4" />
+                                                            Tableau de bord
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                )}
+                                                <DropdownMenuSeparator className="bg-border/40" />
+                                                <DropdownMenuItem
+                                                    onClick={handleLogout}
+                                                    className="rounded-xl cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                >
+                                                    <IconLogout className="mr-2 h-4 w-4" />
+                                                    Déconnexion
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="nav-guest"
+                                        initial={{ opacity: 0, x: 10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                    >
+                                        <ButtonReusable
+                                            href={ROUTES.LOGIN}
+                                            variant="default"
+                                            size="lg"
+                                            leftIcon={
+                                                <IconLogin2 className="size-5" />
+                                            }
+                                        >
+                                            Se connecter
+                                        </ButtonReusable>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </motion.div>
 
                         {/* Bouton hamburger (mobile) */}
@@ -373,7 +481,7 @@ export default function Navbar() {
                                             damping: 10,
                                         }}
                                     >
-                                        <Logo size={32} />
+                                        <Logo size={32} asLink />
                                     </motion.div>
 
                                     {/* Séparateur vertical */}
@@ -414,16 +522,71 @@ export default function Navbar() {
                                     >
                                         <IconSearch className="size-4" />
                                     </ButtonReusable>
-                                    <ButtonReusable
-                                        href={ROUTES.LOGIN}
-                                        variant="default"
-                                        size="sm"
-                                        leftIcon={
-                                            <IconLogin2 className="size-4" />
-                                        }
-                                    >
-                                        Se connecter
-                                    </ButtonReusable>
+                                    <AnimatePresence mode="wait">
+                                        {isLoading ? (
+                                            <UserAvatar isLoading size={32} />
+                                        ) : user ? (
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <div className="cursor-pointer">
+                                                        <UserAvatar
+                                                            firstName={
+                                                                user.firstName
+                                                            }
+                                                            lastName={user.name}
+                                                            size={32}
+                                                        />
+                                                    </div>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent
+                                                    align="end"
+                                                    className="w-48 bg-background/95 backdrop-blur-xl rounded-2xl border-border/40 shadow-2xl p-2"
+                                                >
+                                                    <div className="px-2 py-1.5 text-sm font-bold truncate">
+                                                        {user.firstName}{" "}
+                                                        {user.name}
+                                                    </div>
+                                                    <DropdownMenuSeparator className="bg-border/40" />
+                                                    {user.role === "ADMIN" && (
+                                                        <DropdownMenuItem
+                                                            asChild
+                                                            className="rounded-xl cursor-pointer"
+                                                        >
+                                                            <Link
+                                                                href={
+                                                                    ROUTES.ADMIN
+                                                                        .DASHBOARD
+                                                                }
+                                                                className="w-full flex items-center text-foreground/80 hover:text-primary"
+                                                            >
+                                                                <IconLayoutDashboard className="mr-2 h-4 w-4" />
+                                                                Tableau de bord
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    <DropdownMenuSeparator className="bg-border/40" />
+                                                    <DropdownMenuItem
+                                                        onClick={handleLogout}
+                                                        className="rounded-xl cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                    >
+                                                        <IconLogout className="mr-2 h-4 w-4" />
+                                                        Déconnexion
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        ) : (
+                                            <ButtonReusable
+                                                href={ROUTES.LOGIN}
+                                                variant="default"
+                                                size="sm"
+                                                leftIcon={
+                                                    <IconLogin2 className="size-4" />
+                                                }
+                                            >
+                                                Se connecter
+                                            </ButtonReusable>
+                                        )}
+                                    </AnimatePresence>
                                 </motion.div>
                             </div>
                         </WrapperSection>
@@ -458,7 +621,7 @@ export default function Navbar() {
                             {/* En-tête du panneau mobile */}
                             <div className="flex h-16 items-center justify-between border-b border-border/30 px-5">
                                 <div className="flex items-center gap-4">
-                                    <Logo size={36} />
+                                    <Logo size={36} asLink />
                                     <ThemeToggle />
                                 </div>
                                 <button
@@ -513,16 +676,91 @@ export default function Navbar() {
                                     Rechercher
                                 </ButtonReusable>
 
-                                {/* Connexion */}
-                                <ButtonReusable
-                                    href={ROUTES.LOGIN}
-                                    variant="default"
-                                    size="lg"
-                                    leftIcon={<IconLogin2 className="size-5" />}
-                                    className="w-full justify-center"
-                                >
-                                    Se connecter
-                                </ButtonReusable>
+                                {/* Connexion / Actions User Mobile */}
+                                <AnimatePresence mode="wait">
+                                    {isLoading ? (
+                                        <div className="flex items-center gap-3 px-3 py-3 bg-primary/5 rounded-2xl border border-primary/10 mb-2">
+                                            <UserAvatar isLoading size={44} />
+                                            <div className="flex flex-col gap-2 flex-1">
+                                                <SkeletonReusable
+                                                    width="60%"
+                                                    height={14}
+                                                />
+                                                <SkeletonReusable
+                                                    width="40%"
+                                                    height={10}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : user ? (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                        >
+                                            <div className="flex items-center gap-3 px-3 py-3 bg-primary/5 rounded-2xl border border-primary/10 mb-2">
+                                                <UserAvatar
+                                                    firstName={user.firstName}
+                                                    lastName={user.name}
+                                                    size={44}
+                                                />
+                                                <div className="flex flex-col truncate">
+                                                    <span className="text-sm font-bold text-foreground">
+                                                        {user.firstName}{" "}
+                                                        {user.name}
+                                                    </span>
+                                                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                                                        {user.role === "ADMIN"
+                                                            ? "Administrateur"
+                                                            : "Utilisateur"}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {user.role === "ADMIN" && (
+                                                <ButtonReusable
+                                                    href={
+                                                        ROUTES.ADMIN.DASHBOARD
+                                                    }
+                                                    variant="outline"
+                                                    size="lg"
+                                                    leftIcon={
+                                                        <IconLayoutDashboard className="size-5" />
+                                                    }
+                                                    className="w-full justify-center mb-1"
+                                                >
+                                                    Tableau de bord
+                                                </ButtonReusable>
+                                            )}
+                                            <ButtonReusable
+                                                onClick={handleLogout}
+                                                variant="default"
+                                                size="lg"
+                                                className="w-full justify-center bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground border-transparent"
+                                                leftIcon={
+                                                    <IconLogout className="size-5" />
+                                                }
+                                            >
+                                                Déconnexion
+                                            </ButtonReusable>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                        >
+                                            <ButtonReusable
+                                                href={ROUTES.LOGIN}
+                                                variant="default"
+                                                size="lg"
+                                                leftIcon={
+                                                    <IconLogin2 className="size-5" />
+                                                }
+                                                className="w-full justify-center"
+                                            >
+                                                Se connecter
+                                            </ButtonReusable>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </motion.div>
                         </motion.div>
                     </>

@@ -14,6 +14,8 @@ export declare class PreRegistrationRepository {
     create(data: Prisma.PreRegistrationCreateInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -21,8 +23,6 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -45,6 +45,8 @@ export declare class PreRegistrationRepository {
     findFirst(where: Prisma.PreRegistrationWhereInput, orderBy?: Prisma.PreRegistrationOrderByWithRelationInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -52,8 +54,6 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -80,6 +80,8 @@ export declare class PreRegistrationRepository {
         data: {
             status: import("../../generated/prisma").$Enums.Status;
             id: number;
+            parentEmail: string;
+            parentPhone: string;
             childFirstName: string;
             childLastName: string;
             childDateOfBirth: Date;
@@ -87,8 +89,6 @@ export declare class PreRegistrationRepository {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
-            parentEmail: string;
-            parentPhone: string;
             updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
@@ -114,6 +114,8 @@ export declare class PreRegistrationRepository {
     findById(id: number): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -121,8 +123,6 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -147,6 +147,8 @@ export declare class PreRegistrationRepository {
     update(id: number, data: UpdatePreRegistrationInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -154,8 +156,6 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -179,6 +179,8 @@ export declare class PreRegistrationRepository {
     delete(id: number): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -186,8 +188,6 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;

@@ -24,6 +24,8 @@ export declare class PreRegistrationService {
     create(data: CreatePreRegistrationInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -31,8 +33,6 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -62,6 +62,8 @@ export declare class PreRegistrationService {
         data: {
             status: import("../../generated/prisma").$Enums.Status;
             id: number;
+            parentEmail: string;
+            parentPhone: string;
             childFirstName: string;
             childLastName: string;
             childDateOfBirth: Date;
@@ -69,8 +71,6 @@ export declare class PreRegistrationService {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
-            parentEmail: string;
-            parentPhone: string;
             updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
@@ -103,6 +103,8 @@ export declare class PreRegistrationService {
     findById(id: number): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -110,8 +112,6 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -138,6 +138,8 @@ export declare class PreRegistrationService {
     update(id: number, data: UpdatePreRegistrationInput): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -145,8 +147,6 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -172,6 +172,8 @@ export declare class PreRegistrationService {
     delete(id: number): Promise<{
         status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -179,8 +181,6 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;

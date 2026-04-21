@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutWrapper } from "@/components/layout/layout-wrapper";
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -32,6 +33,17 @@ export default function RootLayout({
         >
             <body className="min-h-full flex flex-col">
                 <ThemeProvider>
+                    <NextTopLoader
+                        color="oklch(0.6602 0.1878 250.1786)"
+                        initialPosition={0.08}
+                        crawlSpeed={200}
+                        height={3}
+                        crawl={true}
+                        showSpinner={false}
+                        easing="ease"
+                        speed={200}
+                        shadow="0 0 10px oklch(0.6602 0.1878 250.1786),0 0 5px oklch(0.6602 0.1878 250.1786)"
+                    />
                     <LayoutWrapper>{children}</LayoutWrapper>
                 </ThemeProvider>
             </body>

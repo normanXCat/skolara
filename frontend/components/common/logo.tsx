@@ -16,29 +16,21 @@ interface LogoProps {
     className?: string;
     size?: number;
     showText?: boolean;
+    asLink?: boolean;
 }
 
 /**
  * Composant Logo pour Skolara.
  * Affiche l'image du logo avec une animation Framer Motion et le nom du site.
- *
- * @param props - Les propriétés du composant.
- * @returns Le composant Logo animé.
  */
 export default function Logo({
     className,
     size = 40,
     showText = true,
+    asLink = false,
 }: LogoProps) {
-    return (
-        <motion.a
-            href="/"
-            className={cn("flex items-center gap-3", className)}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-        >
+    const content = (
+        <div className={cn("flex items-center gap-3", className)}>
             {/* Conteneur de l'image avec animation de rotation légère au survol */}
             <motion.div
                 className="relative overflow-hidden"
@@ -67,6 +59,30 @@ export default function Logo({
                     <span className="text-primary">ara</span>
                 </motion.span>
             )}
-        </motion.a>
+        </div>
+    );
+
+    if (asLink) {
+        return (
+            <motion.a
+                href="/"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+                {content}
+            </motion.a>
+        );
+    }
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+            {content}
+        </motion.div>
     );
 }

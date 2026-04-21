@@ -93,16 +93,53 @@ export class AuthService {
      * Rafraîchit l'access token à partir d'un refresh token valide.
      * Applique la rotation : l'ancien token est révoqué, un nouveau est émis.
      *
+     * Gère les race conditions : si le token a été récemment révoqué par
+     * une requête parallèle, on retrouve le token de remplacement au lieu
+     * de déconnecter l'utilisateur.
+     *
      * @throws {AppError} 401 si le refresh token est invalide, expiré ou révoqué
      */
-    async refresh(
-        currentRefreshToken: string,
-    ): Promise<{ accessToken: string; refreshToken: string }> {
+    async refresh(currentRefreshToken: string): Promise<{
+        accessToken: string;
+        refreshToken: string;
+        user: SafeUser;
+    }> {
         // 1. Vérifier le token existant
         const existing =
             await authRepository.findValidRefreshToken(currentRefreshToken);
 
         if (!existing) {
+            // Grace period: le token a peut-être été révoqué par une requête parallèle
+            // On cherche si ce token a été révoqué récemment (< 30s) et si un nouveau existe
+            const recentlyRevoked =
+                await authRepository.findRecentlyRevokedToken(
+                    currentRefreshToken,
+                );
+
+            if (recentlyRevoked) {
+                // Un autre refresh a déjà généré un nouveau token pour cet utilisateur
+                // On récupère le plus récent token valide de cet utilisateur
+                const latestToken =
+                    await authRepository.findLatestValidTokenForUser(
+                        recentlyRevoked.userId,
+                    );
+
+                if (latestToken) {
+                    // Générer un nouvel access token et renvoyer le refresh token existant
+                    const accessToken = this.generateAccessToken({
+                        id: recentlyRevoked.userId,
+                        email: latestToken.user.email,
+                        role: latestToken.user.role,
+                    });
+
+                    return {
+                        accessToken,
+                        refreshToken: latestToken.token,
+                        user: this.toSafeUser(latestToken.user),
+                    };
+                }
+            }
+
             throw {
                 status: 401,
                 message: "Token de rafraîchissement invalide ou expiré",
@@ -118,10 +155,18 @@ export class AuthService {
             };
         }
 
-        // 3. Rotation : révoquer l'ancien, créer un nouveau
-        await authRepository.revokeRefreshToken(currentRefreshToken);
-        const newRefreshToken = await this.generateRefreshToken(
-            existing.userId,
+        // 3. Rotation atomique
+        const newToken = uuidv4();
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + env.REFRESH_TOKEN_EXPIRES_DAYS);
+
+        const newRefreshToken = await authRepository.rotateToken(
+            currentRefreshToken,
+            {
+                token: newToken,
+                userId: existing.userId,
+                expiresAt,
+            },
         );
 
         // 4. Nouvel access token
@@ -131,7 +176,11 @@ export class AuthService {
             role: existing.user.role,
         });
 
-        return { accessToken, refreshToken: newRefreshToken };
+        return {
+            accessToken,
+            refreshToken: newRefreshToken.token,
+            user: this.toSafeUser(existing.user),
+        };
     }
 
     /**

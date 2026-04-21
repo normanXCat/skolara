@@ -32,6 +32,57 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
  * Client API robuste pour Next.js / TypeScript
  */
 class ApiClient {
+    private isRefreshing = false;
+    private refreshPromise: Promise<any | null> | null = null;
+    private refreshQueue: Array<(userData: any | null) => void> = [];
+
+    /**
+     * Attend la résolution d'un refresh en cours.
+     * Utilisé par les requêtes concurrentes pour ne pas lancer de refresh parallèle.
+     */
+    private waitForRefresh(): Promise<any | null> {
+        return new Promise((resolve) => {
+            this.refreshQueue.push(resolve);
+        });
+    }
+
+    private onRefreshSuccess?: (userData: any) => void;
+
+    /**
+     * Permet au store d'authentification de s'enregistrer pour être notifié
+     * quand un refresh réussit automatiquement.
+     */
+    public setRefreshCallback(callback: (userData: any) => void) {
+        this.onRefreshSuccess = callback;
+    }
+
+    /**
+     * Tente un refresh du token avec un retry en cas d'erreur réseau.
+     * Retourne les données utilisateur en cas de succès.
+     */
+    private async attemptRefresh(): Promise<any | null> {
+        const maxRetries = 2;
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                const refreshRes = await this.post<any>("/auth/refresh");
+                if (refreshRes.success) {
+                    if (this.onRefreshSuccess) {
+                        this.onRefreshSuccess(refreshRes.data);
+                    }
+                    return refreshRes.data;
+                }
+                // Si le backend dit explicitement que le token est invalide, on ne retry pas
+                return null;
+            } catch {
+                // Erreur réseau — on attend un peu avant de retenter
+                if (i < maxRetries - 1) {
+                    await new Promise((r) => setTimeout(r, 500));
+                }
+            }
+        }
+        return null;
+    }
+
     private async request<T>(
         endpoint: string,
         options: RequestOptions = {},
@@ -39,7 +90,12 @@ class ApiClient {
         const { params, ...customConfig } = options;
 
         // Gestion des paramètres de requête (Query String)
-        const url = new URL(`${BASE_URL}${endpoint}`);
+        const baseOrigin =
+            typeof window !== "undefined"
+                ? window.location.origin
+                : "http://localhost:3000";
+
+        const url = new URL(`${BASE_URL}${endpoint}`, baseOrigin);
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
                 if (value !== undefined) {
@@ -69,24 +125,56 @@ class ApiClient {
                 !endpoint.includes("/auth/refresh") &&
                 !endpoint.includes("/auth/login")
             ) {
-                const refreshRes = await this.post<{ accessToken: string }>(
-                    "/auth/refresh",
-                );
-
-                if (refreshRes.success) {
-                    // Le nouveau token est automatiquement mis à jour via le cookie
-                    response = await fetch(url.toString(), {
-                        ...config,
-                        headers,
-                    });
-                } else {
-                    // Échec du refresh -> Déconnexion
-                    if (
-                        typeof window !== "undefined" &&
-                        !window.location.pathname.includes("/login")
-                    ) {
-                        window.location.href = "/login";
+                // Si un refresh est déjà en cours, on attend sa résolution
+                if (this.isRefreshing) {
+                    const userData = await this.waitForRefresh();
+                    if (userData) {
+                        return this.request<T>(endpoint, options);
                     }
+                    return { success: false, error: "Session expirée" };
+                }
+
+                // On lance le refresh
+                console.log(
+                    "[ApiClient] 401 detected, attempting token refresh...",
+                );
+                this.isRefreshing = true;
+                this.refreshPromise = this.attemptRefresh();
+
+                try {
+                    const userData = await this.refreshPromise;
+                    console.log(
+                        `[ApiClient] Refresh ${userData ? "succeeded" : "failed"}`,
+                    );
+
+                    this.isRefreshing = false;
+                    this.processQueue(userData);
+
+                    if (userData) {
+                        // Rejouer la requête initiale avec les nouveaux cookies
+                        return this.request<T>(endpoint, options);
+                    }
+
+                    // Le refresh a échoué définitivement
+                    console.warn(
+                        "[ApiClient] Refresh token failed — session expired",
+                    );
+
+                    // Rediriger uniquement si on est sur une route protégée
+                    if (typeof window !== "undefined") {
+                        const path = window.location.pathname;
+                        const isProtectedRoute = path.startsWith("/admin");
+
+                        if (isProtectedRoute) {
+                            window.location.href = `/login?redirect=${encodeURIComponent(path)}`;
+                        }
+                    }
+                    return { success: false, error: "Session expirée" };
+                } catch (err) {
+                    this.isRefreshing = false;
+                    this.processQueue(null);
+                    console.error("[ApiClient] Refresh error:", err);
+                    return { success: false, error: "Session expirée" };
                 }
             }
 
@@ -126,6 +214,11 @@ class ApiClient {
                         : "Erreur de connexion au serveur",
             };
         }
+    }
+
+    private processQueue(userData: any | null) {
+        this.refreshQueue.forEach((callback) => callback(userData));
+        this.refreshQueue = [];
     }
 
     /**
@@ -169,18 +262,23 @@ class ApiClient {
     }
 
     // Méthodes HTTP
-    get<T>(endpoint: string, params?: RequestOptions["params"]) {
-        return this.request<T>(endpoint, { method: "GET", params });
+    get<T>(endpoint: string, options: RequestOptions = {}) {
+        return this.request<T>(endpoint, { ...options, method: "GET" });
     }
 
-    post<T>(endpoint: string, data?: any) {
+    post<T>(endpoint: string, data?: any, options: RequestOptions = {}) {
         return this.request<T>(endpoint, {
+            ...options,
             method: "POST",
-            body: JSON.stringify(data),
+            body: data instanceof FormData ? data : JSON.stringify(data),
         });
     }
 
-    upload<T>(endpoint: string, file: File | FileList) {
+    upload<T>(
+        endpoint: string,
+        file: File | FileList,
+        options: RequestOptions = {},
+    ) {
         const formData = new FormData();
 
         if (file instanceof FileList) {
@@ -189,34 +287,35 @@ class ApiClient {
             formData.append("file", file);
         }
 
-        // Pour l'upload, on ne doit pas fixer de Content-Type manuel
-        // Le navigateur le fera automatiquement avec le boundary.
         return this.request<T>(endpoint, {
+            ...options,
             method: "POST",
             body: formData,
-            headers: {
-                // On écrase le header par défaut en l'enlevant si possible,
-                // ou on laisse le navigateur gérer.
-            },
         } as any);
     }
 
-    put<T>(endpoint: string, data?: any) {
+    put<T>(endpoint: string, data?: any, options: RequestOptions = {}) {
         return this.request<T>(endpoint, {
+            ...options,
             method: "PUT",
             body: JSON.stringify(data),
         });
     }
 
-    patch<T>(endpoint: string, data?: any) {
+    patch<T>(endpoint: string, data?: any, options: RequestOptions = {}) {
         return this.request<T>(endpoint, {
+            ...options,
             method: "PATCH",
             body: JSON.stringify(data),
         });
     }
 
-    delete<T>(endpoint: string) {
-        return this.request<T>(endpoint, { method: "DELETE" });
+    delete<T>(endpoint: string, options: RequestOptions = {}) {
+        return this.request<T>(endpoint, { ...options, method: "DELETE" });
+    }
+
+    getBaseUrl() {
+        return BASE_URL;
     }
 }
 

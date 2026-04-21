@@ -15,6 +15,7 @@ const pre_registration_routes_1 = __importDefault(require("./modules/pre-registr
 const grade_routes_1 = __importDefault(require("./modules/grade/grade.routes"));
 const upload_routes_1 = __importDefault(require("./modules/upload/upload.routes"));
 const auth_routes_1 = __importDefault(require("./modules/auth/auth.routes"));
+const admin_routes_1 = __importDefault(require("./modules/admin/admin.routes"));
 const env_1 = require("./config/env");
 /**
  * Application Express principale.
@@ -53,6 +54,7 @@ app.use("/uploads", express_1.default.static(path_1.default.join(process.cwd(), 
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerDocument));
 /* --- Routes API --- */
 app.use("/api/auth", auth_routes_1.default);
+app.use("/api/admin", admin_routes_1.default);
 app.use("/api/pre-registrations", pre_registration_routes_1.default);
 app.use("/api/grades", grade_routes_1.default);
 app.use("/api/upload", upload_routes_1.default);

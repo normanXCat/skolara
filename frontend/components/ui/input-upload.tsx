@@ -210,6 +210,7 @@ export default function InputUpload({
                                         e.stopPropagation();
                                         removeFile();
                                     }}
+                                    aria-label="Supprimer le fichier"
                                     className="absolute top-2 right-2 size-8 rounded-full bg-background/80 backdrop-blur-md border border-border/40 flex items-center justify-center text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-all shadow-sm"
                                 >
                                     <IconX size={16} stroke={2} />

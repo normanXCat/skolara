@@ -193,6 +193,144 @@ GET   /api/admin/pre-registrations/[id]         → détail complet
 PATCH /api/admin/pre-registrations/[id]/status  → changer statut
 POST  /api/admin/pre-registrations/[id]/convert → convertir en élève réel
 
+#### Possible statuses (consistent with the MLD)
+pending → in_progress → accepted | rejected
 
+#### `POST /api/admin/pre-registrations/[id]/convert`
+Action la plus importante : transforme une pré-inscription acceptée en :
+1. `User` (student account)
+2. `Student` (avec les données de la pré-inscription)
+3. Optionnellement : `Parent` + `User` parent + `PARENT_STUDENT` link
+4. Marks the `PRE_REGISTRATION` as `accepted`
+5. Envoie un email de bienvenue à l'email parent (utilise le système d'email déjà en place)
+
+Utilise une **Prisma transaction** pour garantir l'atomicité — si une étape échoue, tout est annulé.
+
+### UI — Pre-registration list
+
+**Filters** : status / desired class / submission date (range)
+
+**Table** :
+- Columns : Child last name / First name / Desired class / Parent / Submission date / Status / Actions
+- Colored status badge (`pending` = orange, `in_progress` = bleu, `accepted` = vert, `rejected` = rouge)
+- Quick inline action : change status directly from the list
+
+### UI — Pre-registration detail `/admin/pre-registrations/[id]`
+
+**Two columns** :
+- Left : toutes les informations du dossier (child + parents + uploaded documents)
+- Right : processing panel — current status, change timeline, internal notes area, action buttons
+
+**Action buttons** selon le statut actuel :
+- `pending` → "Take charge" / "Reject"
+- `in_progress` → "Accept and convert to student" / "Reject"
+- `accepted` → readonly + link to created student profile
+- `rejected` → readonly
+
+**Confirmation dialog "Convert to student"** :
+- Summary of data that will be created
+- Class assignment selector
+- Checkbox "Create parent account"
+- Confirmation button avec état loading
+
+---
+
+## 🧩 Shared components to create
+
+Ces composants devront être réutilisables dans les prochains modules :
+components/admin/
+├── AdminLayout.tsx          → layout avec sidebar + header admin
+├── AdminSidebar.tsx         → admin navigation (active state, icons)
+├── StatCard.tsx             → reusable KPI card
+├── DataTable/               → configured TanStack Table wrapper
+│   ├── DataTable.tsx
+│   ├── DataTablePagination.tsx
+│   └── DataTableToolbar.tsx
+├── StatusBadge.tsx          → generic status badge
+├── ConfirmDialog.tsx        → reusable confirmation dialog
+└── EmptyState.tsx           → empty state with illustration
+
+**AdminSidebar** — nav links (prépare les items pour les modules futurs, même si les routes n'existent pas encore — les liens seront `disabled` visuellement) :
+- Dashboard
+- Students
+- Teachers *(coming soon)*
+- Classes *(coming soon)*
+- Timetables *(coming soon)*
+- Grades *(coming soon)*
+- Absences *(coming soon)*
+- Report cards *(coming soon)*
+- Payments *(coming soon)*
+- Pre-registrations
+- Messages *(coming soon)*
+- Settings *(coming soon)*
+
+---
+
+## 🎨 UI/UX Requirements (ProMax)
+
+- **Visual consistency** avec la page d'accueil et la page login déjà livrées
+- **Responsive** : sidebar collapsible sur mobile (drawer), horizontally scrollable table
+- **Skeleton loaders** sur tous les fetches — jamais de spinner nu
+- **Micro-animations** : card entrances, hover rows, page transitions
+- **Immediate feedback** sur toutes les actions utilisateur
+- **Loading, empty, error states** gérés pour chaque section
+- **Toasts** uniquement pour les succès et erreurs globales — les erreurs de formulaire sont inline
+- **Accessibility** : WCAG 2.1 AA, keyboard navigation, aria-labels sur tous les boutons d'action
+
+---
+
+## 🧪 Backend tests
+
+Crée des tests pour toutes les routes API (framework déjà en place dans le projet) :
+
+**Dashboard stats :**
+- ✅ Returns correct stats for authenticated admin
+- ❌ 403 if non-admin role
+
+**Students :**
+- ✅ Paginated list with working filters
+- ✅ Full-text search on last name / first name
+- ✅ Student creation → user + student created in DB
+- ✅ Partial update
+- ✅ Archiving → status `archived`, no physical deletion
+- ✅ CSV export with correct columns and encoding (UTF-8 with BOM for Excel)
+- ❌ Creation with existing email → 409
+- ❌ Access without auth → 401
+
+**Pre-registrations :**
+- ✅ Status change respects allowed transitions
+- ✅ Conversion creates user + student + (optional) parent in atomic transaction
+- ❌ Converting an already converted pre-registration → 409
+- ❌ Conversion rollback if a step fails (simulate an error)
+
+---
+
+## 📝 README
+
+Create/update `docs/admin-module.md` :
+- Module description and sub-sections
+- Required environment variables
+- Explanation of the pre-registration → student conversion logic
+- Instructions to run the module tests
+
+---
+
+## ✅ Validation checklist
+
+Avant de terminer, vérifie chaque point :
+
+- [ ] Existing project structure analyzed and conventions respected 100%
+- [ ] MLD Skolara consulted — all fields match Prisma models
+- [ ] Existing pre-registration form analyzed before coding the conversion part
+- [ ] UI/UX ProMax skill applied
+- [ ] All admin routes verify the `ADMIN` role
+- [ ] No physical deletion — archiving only
+- [ ] CSV export encoded in UTF-8 with BOM (Excel compatible)
+- [ ] Pre-registration → student conversion uses a Prisma transaction
+- [ ] Skeleton loaders present on all fetches
+- [ ] Shared components created in `components/admin/`
+- [ ] Sidebar prepares future module items (disabled if route doesn't exist yet)
+- [ ] All tests pass
+- [ ] README up to date
 
 

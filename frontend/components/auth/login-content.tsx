@@ -1,20 +1,60 @@
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
-
 import { Typography } from "@/components/ui/typography";
 import { LoginForm } from "@/components/auth/login-form";
 import { LoginVisual } from "@/components/auth/login-visual";
 import Logo from "@/components/common/logo";
 import ButtonBack from "@/components/ui/button-back";
 import SectionDivider from "@/components/ui/section-divider";
-import TypingWelcome from "./typing-welcome";
 
 /**
- * Composant client pour le contenu de la page de connexion.
+ * Composant pour l'effet de frappe du message de bienvenue.
  */
-export const LoginContent = () => {
+const TypingWelcome = () => {
+    const [index, setIndex] = useState(0);
+    const fullText = "Heureux de vous revoir.";
+
+    useEffect(() => {
+        if (index < fullText.length) {
+            const timeout = setTimeout(() => {
+                setIndex((prev) => prev + 1);
+            }, 60);
+            return () => clearTimeout(timeout);
+        }
+    }, [index]);
+
+    const currentText = fullText.slice(0, index);
+    const breakPoint = 10; // "Heureux de"
+    const serifPoint = 16; // "vous "
+
+    return (
+        <>
+            {currentText.slice(0, breakPoint)}
+            {index > breakPoint && <br />}
+            {currentText.slice(breakPoint + 1, serifPoint)}
+            {index > serifPoint && (
+                <span className="text-primary italic font-serif">
+                    {currentText.slice(serifPoint)}
+                </span>
+            )}
+            <motion.span
+                animate={{
+                    opacity: [1, 0, 1],
+                }}
+                transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+                className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 translate-y-[0.1em] rounded-full shadow-[0_0_12px_var(--primary)] ring-2 ring-primary/10"
+            />
+        </>
+    );
+};
+
+export function LoginContent() {
     // Variants for staggered entry animations
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
@@ -55,8 +95,8 @@ export const LoginContent = () => {
 
                         {/* Logo & Back button */}
                         <div className="flex justify-between items-center">
-                            <Logo />
-                            <ButtonBack text="Revenir" />
+                            <Logo asLink />
+                            <ButtonBack text="" />
                         </div>
 
                         {/* Séparateur interne stylé */}
@@ -101,6 +141,4 @@ export const LoginContent = () => {
             </motion.div>
         </div>
     );
-};
-
-export default LoginContent;
+}

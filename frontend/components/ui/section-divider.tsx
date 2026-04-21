@@ -1,13 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+interface SectionDividerProps {
+    className?: string;
+}
 
 /**
  * Séparateur de section premium avec un effet de faisceau lumineux.
  */
-export default function SectionDivider() {
+export default function SectionDivider({ className }: SectionDividerProps) {
     return (
-        <div className="relative flex w-full items-center justify-center py-8">
+        <div
+            className={cn(
+                "relative flex w-full items-center justify-center py-8",
+                className,
+            )}
+        >
             {/* Ligne de base */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent opacity-50" />
 

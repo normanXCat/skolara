@@ -24,6 +24,13 @@ const ACCESS_COOKIE_OPTIONS = {
     // On met un maxAge un peu plus long que le JWT pour être sûr (ex: 15min)
     maxAge: 15 * 60 * 1000,
 };
+const ROLE_COOKIE_OPTIONS = {
+    httpOnly: false, // Accessible par le middleware Next.js
+    secure: env_1.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: env_1.env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
+};
 /**
  * Contrôleur Express pour l'authentification.
  * Chaque méthode délègue la logique au service et formate la réponse.
@@ -40,6 +47,7 @@ class AuthController {
             // Stocker les tokens dans des cookies HttpOnly
             res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
             res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
+            res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
             res.status(200).json({
                 success: true,
                 data: {
@@ -58,22 +66,61 @@ class AuthController {
      */
     static async refresh(req, res, next) {
         try {
-            const currentToken = req.cookies?.refreshToken;
-            if (!currentToken) {
+            console.log("[DEBUG] Cookies:", req.cookies);
+            console.log("[DEBUG] Cookie Header:", req.headers.cookie);
+            // 1. Extraire TOUS les refresh tokens potentiels du header Cookie
+            // (Utile si plusieurs cookies du même nom existent à cause de trajets/domaines différents)
+            const allTokens = [];
+            if (req.cookies?.refreshToken) {
+                allTokens.push(req.cookies.refreshToken);
+            }
+            if (req.headers.cookie) {
+                const rawCookies = req.headers.cookie.split(";");
+                rawCookies.forEach((c) => {
+                    const [name, value] = c.trim().split("=");
+                    if (name === "refreshToken" && !allTokens.includes(value)) {
+                        allTokens.push(value);
+                    }
+                });
+            }
+            if (allTokens.length === 0) {
                 return next({
                     status: 401,
                     message: "Token de rafraîchissement manquant",
                 });
             }
-            const result = await auth_service_1.default.refresh(currentToken);
-            // Mettre à jour les cookies (rotation)
-            res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
-            res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
-            res.status(200).json({
-                success: true,
-                data: null,
-                message: "Token rafraîchi avec succès",
-            });
+            console.log("[DEBUG] Tokens à tester:", allTokens);
+            // 2. Tester les tokens un par un jusqu'à en trouver un valide
+            let result = null;
+            let lastError = null;
+            for (const token of allTokens) {
+                try {
+                    result = await auth_service_1.default.refresh(token);
+                    if (result)
+                        break; // Valid token found!
+                }
+                catch (err) {
+                    lastError = err;
+                    // On continue vers le suivant
+                }
+            }
+            if (!result) {
+                throw lastError || { status: 401, message: "Session expirée" };
+            }
+            try {
+                // Mettre à jour les cookies (rotation)
+                res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
+                res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
+                res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
+                res.status(200).json({
+                    success: true,
+                    data: result.user,
+                    message: "Token rafraîchi avec succès",
+                });
+            }
+            catch (err) {
+                throw err;
+            }
         }
         catch (err) {
             next(err);
@@ -102,6 +149,7 @@ class AuthController {
                 sameSite: "lax",
                 path: "/",
             });
+            res.clearCookie("userRole", { path: "/" });
             res.status(200).json({
                 success: true,
                 data: null,

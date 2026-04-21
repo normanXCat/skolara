@@ -22,6 +22,14 @@ const ACCESS_COOKIE_OPTIONS = {
     maxAge: 15 * 60 * 1000,
 };
 
+const ROLE_COOKIE_OPTIONS = {
+    httpOnly: false, // Accessible par le middleware Next.js
+    secure: env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
+};
+
 /**
  * Contrôleur Express pour l'authentification.
  * Chaque méthode délègue la logique au service et formate la réponse.
@@ -49,6 +57,8 @@ export class AuthController {
                 ACCESS_COOKIE_OPTIONS,
             );
 
+            res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
+
             res.status(200).json({
                 success: true,
                 data: {
@@ -67,35 +77,78 @@ export class AuthController {
      */
     static async refresh(req: Request, res: Response, next: NextFunction) {
         try {
-            const currentToken = req.cookies?.refreshToken;
+            console.log("[DEBUG] Cookies:", req.cookies);
+            console.log("[DEBUG] Cookie Header:", req.headers.cookie);
 
-            if (!currentToken) {
+            // 1. Extraire TOUS les refresh tokens potentiels du header Cookie
+            // (Utile si plusieurs cookies du même nom existent à cause de trajets/domaines différents)
+            const allTokens: string[] = [];
+
+            if (req.cookies?.refreshToken) {
+                allTokens.push(req.cookies.refreshToken);
+            }
+
+            if (req.headers.cookie) {
+                const rawCookies = req.headers.cookie.split(";");
+                rawCookies.forEach((c) => {
+                    const [name, value] = c.trim().split("=");
+                    if (name === "refreshToken" && !allTokens.includes(value)) {
+                        allTokens.push(value);
+                    }
+                });
+            }
+
+            if (allTokens.length === 0) {
                 return next({
                     status: 401,
                     message: "Token de rafraîchissement manquant",
                 });
             }
 
-            const result = await authService.refresh(currentToken);
+            console.log("[DEBUG] Tokens à tester:", allTokens);
 
-            // Mettre à jour les cookies (rotation)
-            res.cookie(
-                "refreshToken",
-                result.refreshToken,
-                REFRESH_COOKIE_OPTIONS,
-            );
+            // 2. Tester les tokens un par un jusqu'à en trouver un valide
+            let result = null;
+            let lastError = null;
 
-            res.cookie(
-                "accessToken",
-                result.accessToken,
-                ACCESS_COOKIE_OPTIONS,
-            );
+            for (const token of allTokens) {
+                try {
+                    result = await authService.refresh(token);
+                    if (result) break; // Valid token found!
+                } catch (err) {
+                    lastError = err;
+                    // On continue vers le suivant
+                }
+            }
 
-            res.status(200).json({
-                success: true,
-                data: null,
-                message: "Token rafraîchi avec succès",
-            });
+            if (!result) {
+                throw lastError || { status: 401, message: "Session expirée" };
+            }
+
+            try {
+                // Mettre à jour les cookies (rotation)
+                res.cookie(
+                    "refreshToken",
+                    result.refreshToken,
+                    REFRESH_COOKIE_OPTIONS,
+                );
+
+                res.cookie(
+                    "accessToken",
+                    result.accessToken,
+                    ACCESS_COOKIE_OPTIONS,
+                );
+
+                res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
+
+                res.status(200).json({
+                    success: true,
+                    data: result.user,
+                    message: "Token rafraîchi avec succès",
+                });
+            } catch (err: any) {
+                throw err;
+            }
         } catch (err) {
             next(err);
         }
@@ -127,6 +180,8 @@ export class AuthController {
                 sameSite: "lax" as const,
                 path: "/",
             });
+
+            res.clearCookie("userRole", { path: "/" });
 
             res.status(200).json({
                 success: true,

@@ -5,55 +5,46 @@ L'interface utilisateur de Skolara est conçue avec une approche "UI/UX Pro Max"
 ## 🚀 Technologies
 
 - **Framework** : [Next.js 15 (App Router)](https://nextjs.org/)
+- **State Management** : [Zustand](https://zustand-demo.pmnd.rs/) (Auth & Notifications)
 - **Langage** : [TypeScript](https://www.typescriptlang.org/)
 - **Animations** : [Framer Motion](https://www.framer.com/motion/) & [Remotion](https://www.remotion.dev/)
+- **Visualisation** : [Recharts](https://recharts.org/) (Tableaux de bord)
 - **Styling** : [Tailwind CSS](https://tailwindcss.com/)
-- **Composants UI** : Système personnalisé et Aceternity Components
 - **Icônes** : [Tabler Icons](https://tabler-icons.io/)
 - **Runtime** : [Bun](https://bun.sh/)
 
 ## 💎 Points Forts du Design
+
+### 🔹 Dashboard Administratif "Next-Gen"
+
+Une interface complète pour la gestion de l'école :
+
+- **Statistiques en temps réel** : Graphiques interactifs (Recharts) avec animations fluides.
+- **DataTables avancées** : Filtrage, pagination, export CSV et gestion dynamique des colonnes.
+- **Glassmorphism Sidebar** : Navigation intelligente avec effets de "Laser Border", "Sheen" et support des routes dynamiques (parent-active state).
+- **Standard Visuel** : Utilisation systématique de `rounded-3xl` et du système typographique personnalisé.
+
+### 🔹 Module de Pré-inscription Avancé
+
+Refactorisation complète pour une maintenance simplifiée :
+
+- **Architecture Modulaire** : Isolation des composants `Header`, `Info`, `Documents`, `Timeline` et `AdminNote`.
+- **Server/Client Hybrid** : Optimisation SEO via Server Components (Metadata) et réactivité via Client Components.
+- **Gestion Administrative** : Note interne via le nouveau `TextareaReusable`, historique de traitement et conversion "One-Click" en compte élève.
+- **ConfirmDialog Premium** : Modales de confirmation adaptatives (Theme-aware) avec iconographie riche.
 
 ### 🔹 Expérience Vidéo Interactive (Remotion)
 
 Le portail de pré-inscription intègre une introduction vidéo dynamique générée par code.
 
 - **Theme-Aware** : Adaptation automatique des couleurs au mode clair/sombre.
-- **Dynamic Content** : Injection programmable de l'année et des labels.
-- **Loop Infini** : Arrière-plan hexagonal ambient et typographie "désordre maîtrisé".
+- **Dynamic Content** : Injection programmable de l'année et des étiquettes scolaires.
 
-### 🔹 Le Mag Skolara (Blog)
+### 🔹 Résilience & UX
 
-Un blog éditorial premium structuré autour d'un système de **Tracing Beam**.
-
-- **Lecture Guidée** : Un faisceau lumineux intelligent suit la progression du scroll de l'utilisateur.
-- **Esthétique Magazine** : Large usage du Glassmorphism, de coins ultra-arrondis et d'une hiérarchie typographique forte via le composant `Typography`.
-
-### 🔹 Formulaire de Pré-inscription Intelligent
-
-Un système multi-étapes sophistiqué pour l'acquisition d'élèves.
-
-- **Data-Driven** : Les niveaux scolaires (Grades) sont récupérés dynamiquement depuis l'API.
-- **UX Réactive** : Gestion des états de chargement (loaders) et désactivation intelligente des sélecteurs.
-- **Validation Zod** : Gestion robuste des données et retours utilisateurs instantanés avec focus automatique sur les erreurs.
-- **Transitions Fluides** : Passage d'étape animé avec Framer Motion.
-
-### 🔹 Editorial School Presentation
-
-Une section de présentation utilisant un **Peek Carousel** fluide et une galerie statique de haute qualité, alignée sur les standards du design "Agency".
-
-### 🔹 Performance Dashboard (Key Figures)
-
-Une section de chiffres clés interactive avec :
-
-- **Compteurs Animés** : Les nombres s'animent lors du scroll.
-- **Glassmorphism Panels** : Utilisation de flous d'arrière-plan et de bordures lumineuses.
-- **Background "The Dark Horizon"** : Texture de grain premium et lueurs radiales asymétriques.
-
-### 🔹 Système de Navigation
-
-- **Sticky Navbar** : Une barre de navigation qui s'adapte et se réduit au scroll avec des effets de "Spotlight" suivant la souris.
-- **ButtonBack** : Un composant de retour intelligent utilisant `ButtonReusable` avec effets laser.
+- **Network Status** : Détection en temps réel de l'état "Offline" ou des pannes serveur avec overlay premium.
+- **Premium Loading** : Skeleton Loaders sur-mesure pour chaque section, garantissant une perception de vitesse accrue.
+- **Auth Store** : Gestion robuste des sessions avec files d'attente de rafraîchissement de tokens.
 
 ## 🛠️ Développement
 
@@ -75,18 +66,13 @@ bun run dev
 bun run video
 ```
 
-### Build
+## 📂 Structure du projet
 
-```bash
-bun run build
-```
-
-## 📂 Structure des Composants
-
-- `app/` : Structure des pages (Home, Blog, Pre-registration).
-- `components/layout/` : Sections majeures de la page (Hero, Presentation, Navbar, Footer).
-- `components/ui/` : Atomes et molécules réutilisables (Button, Typography, TracingBeam, etc.).
-- `components/remotion/` : Compositions vidéo et lecteurs.
+- `app/` : Pages (Server Components pour le SEO).
+- `components/admin/` : Modules spécifiques à l'administration (Students, Pre-registrations, Stats).
+- `components/ui/` : Système de composants réutilisables (Typography, ButtonReusable, etc.).
+- `stores/` : État global de l'application (Auth, Toast).
+- `lib/` : Utilitaires (API Client, Helpers).
 
 ---
 

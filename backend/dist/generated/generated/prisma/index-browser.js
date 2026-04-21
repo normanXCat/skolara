@@ -168,6 +168,69 @@ exports.Prisma.PreRegistrationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  classId: 'classId',
+  status: 'status',
+  schoolYear: 'schoolYear',
+  birthDate: 'birthDate',
+  address: 'address',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ParentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  phone: 'phone',
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClassScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MarkScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  subject: 'subject',
+  value: 'value',
+  coefficient: 'coefficient',
+  term: 'term',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AbsenceScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  date: 'date',
+  reason: 'reason',
+  justified: 'justified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  amount: 'amount',
+  dueDate: 'dueDate',
+  status: 'status',
+  paymentDate: 'paymentDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.GradeScalarFieldEnum = {
   id: 'id',
   value: 'value',
@@ -202,10 +265,27 @@ exports.Status = exports.$Enums.Status = {
   REJECTED: 'REJECTED'
 };
 
+exports.StudentStatus = exports.$Enums.StudentStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  LATE: 'LATE'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
   PreRegistration: 'PreRegistration',
+  Student: 'Student',
+  Parent: 'Parent',
+  Class: 'Class',
+  Mark: 'Mark',
+  Absence: 'Absence',
+  Payment: 'Payment',
   Grade: 'Grade'
 };
 

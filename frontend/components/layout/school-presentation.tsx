@@ -202,6 +202,7 @@ function StrengthCarousel() {
                     {strengths.map((_, i) => (
                         <button
                             key={i}
+                            aria-label={`Aller au point fort ${i + 1}`}
                             onClick={() => setCurrentIndex(i)}
                             className={cn(
                                 "h-1.5 rounded-full transition-all duration-500",
@@ -217,12 +218,14 @@ function StrengthCarousel() {
                 <div className="flex gap-4">
                     <button
                         onClick={prevSlide}
+                        aria-label="Atout précédent"
                         className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-background/50 text-foreground backdrop-blur-md transition-all hover:bg-primary hover:text-primary-foreground"
                     >
                         <IconChevronLeft className="size-5" />
                     </button>
                     <button
                         onClick={nextSlide}
+                        aria-label="Atout suivant"
                         className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-background/50 text-foreground backdrop-blur-md transition-all hover:bg-primary hover:text-primary-foreground"
                     >
                         <IconChevronRight className="size-5" />
@@ -249,6 +252,7 @@ function ImageGallery() {
                     src={galleryImages[0].src}
                     alt={galleryImages[0].alt}
                     fill
+                    sizes="(max-width: 1024px) 80vw, 40vw"
                     className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -260,6 +264,7 @@ function ImageGallery() {
                     src={galleryImages[1].src}
                     alt={galleryImages[1].alt}
                     fill
+                    sizes="(max-width: 1024px) 60vw, 30vw"
                     className="object-cover"
                 />
             </div>
@@ -270,6 +275,7 @@ function ImageGallery() {
                     src={galleryImages[2].src}
                     alt={galleryImages[2].alt}
                     fill
+                    sizes="(max-width: 1024px) 40vw, 20vw"
                     className="object-cover"
                 />
             </div>
@@ -280,6 +286,7 @@ function ImageGallery() {
                     src={galleryImages[3].src}
                     alt={galleryImages[3].alt}
                     fill
+                    sizes="(max-width: 1024px) 45vw, 22vw"
                     className="object-cover"
                 />
             </div>

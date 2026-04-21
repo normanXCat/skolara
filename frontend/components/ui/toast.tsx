@@ -74,6 +74,7 @@ export function ToastItem({ toast }: { toast: Toast }) {
 
             <button
                 onClick={() => toastManager.removeToast(toast.id)}
+                aria-label="Fermer"
                 className="flex-shrink-0 text-muted-foreground/40 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-all p-1.5 rounded-full"
             >
                 <IconX className="w-3.5 h-3.5" />

@@ -7,8 +7,8 @@ import { IconUser, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export interface InputReusableProps {
-    label: string;
+export interface InputReusableProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    label?: string;
     id: string;
     type?: string;
     placeholder?: string;
@@ -45,6 +45,9 @@ export default function InputReusable({
     showPasswordToggle = true,
     disabled = false,
     autoFocus = false,
+    value,
+    onChange,
+    ...props
 }: InputReusableProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -55,28 +58,34 @@ export default function InputReusable({
     return (
         <div className={cn("flex flex-col gap-2 w-full", className)}>
             {/* Header: Label + Forgot Password */}
-            <div className="flex items-center justify-between px-1">
-                <Label
-                    htmlFor={id}
-                    className={cn(
-                        "transition-colors duration-300",
-                        isFocused ? "text-primary" : "text-foreground/70",
-                        error && "text-destructive",
-                        disabled && "opacity-50 cursor-not-allowed",
+            {(label || (isPassword && forgot)) && (
+                <div className="flex items-center justify-between px-1">
+                    {label && (
+                        <Label
+                            htmlFor={id}
+                            className={cn(
+                                "transition-colors duration-300",
+                                isFocused
+                                    ? "text-primary"
+                                    : "text-foreground/70",
+                                error && "text-destructive",
+                                disabled && "opacity-50 cursor-not-allowed",
+                            )}
+                        >
+                            {label}
+                        </Label>
                     )}
-                >
-                    {label}
-                </Label>
-                {isPassword && forgot && (
-                    <motion.a
-                        href="#"
-                        whileHover={{ scale: 1.05, x: -2 }}
-                        className="text-sm font-semibold text-primary/80 hover:text-primary hover:underline transition-all"
-                    >
-                        Mot de passe oublié ?
-                    </motion.a>
-                )}
-            </div>
+                    {isPassword && forgot && (
+                        <motion.a
+                            href="#"
+                            whileHover={{ scale: 1.05, x: -2 }}
+                            className="text-sm font-semibold text-primary/80 hover:text-primary hover:underline transition-all"
+                        >
+                            Mot de passe oublié ?
+                        </motion.a>
+                    )}
+                </div>
+            )}
 
             {/* Input Container */}
             <div className="relative group">
@@ -142,16 +151,21 @@ export default function InputReusable({
                                   : type
                         }
                         placeholder={placeholder}
+                        value={value}
+                        onChange={onChange}
                         {...register}
+                        {...props}
                         disabled={disabled}
                         autoFocus={autoFocus}
                         onFocus={(e) => {
                             setIsFocused(true);
                             if (register?.onFocus) register.onFocus(e);
+                            if (props.onFocus) props.onFocus(e);
                         }}
                         onBlur={(e) => {
                             setIsFocused(false);
                             if (register?.onBlur) register.onBlur(e);
+                            if (props.onBlur) props.onBlur(e);
                         }}
                         className={cn(
                             "pl-12 pr-12 !h-14 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full !py-0",
@@ -167,6 +181,11 @@ export default function InputReusable({
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-primary transition-colors p-1"
+                        aria-label={
+                            showPassword
+                                ? "Masquer le mot de passe"
+                                : "Afficher le mot de passe"
+                        }
                     >
                         {showPassword ? (
                             <IconEyeOff size={20} stroke={1.5} />
