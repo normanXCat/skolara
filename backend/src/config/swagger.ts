@@ -30,11 +30,21 @@ export const swaggerDocument = {
         },
         {
             name: "PreRegistrations",
-            description: "Opérations CRUD sur les pré-inscriptions",
+            description:
+                "Opérations sur les pré-inscriptions (Public et Admin)",
         },
         {
             name: "Grades",
             description: "Récupération des niveaux scolaires (grades)",
+        },
+        {
+            name: "Admin-Students",
+            description: "Gestion des élèves (Accès Admin uniquement)",
+        },
+        {
+            name: "Admin-Stats",
+            description:
+                "Statistiques du tableau de bord (Accès Admin uniquement)",
         },
     ],
     paths: {
@@ -225,7 +235,8 @@ export const swaggerDocument = {
             get: {
                 tags: ["PreRegistrations"],
                 summary:
-                    "Lister les pré-inscriptions avec pagination et filtre (admin)",
+                    "Lister les pré-inscriptions avec pagination et filtre (Admin Legacy)",
+                security: [{ bearerAuth: [] }],
                 parameters: [
                     {
                         name: "page",
@@ -268,54 +279,122 @@ export const swaggerDocument = {
                 },
             },
         },
-        "/pre-registrations/{id}": {
+        "/admin/stats": {
             get: {
-                tags: ["PreRegistrations"],
-                summary:
-                    "Obtenir le détail d'une pré-inscription par id (admin)",
-                parameters: [
-                    {
-                        name: "id",
-                        in: "path",
-                        required: true,
-                        schema: { type: "integer" },
-                        description: "Identifiant de la pré-inscription",
-                    },
-                ],
+                tags: ["Admin-Stats"],
+                summary: "Récupérer les statistiques globales (Admin)",
+                security: [{ bearerAuth: [] }],
                 responses: {
                     "200": {
-                        description: "Détail de la pré-inscription",
+                        description: "Statistiques récupérées avec succès",
                         content: {
                             "application/json": {
                                 schema: {
-                                    $ref: "#/components/schemas/SuccessResponse",
-                                },
-                            },
-                        },
-                    },
-                    "404": {
-                        description: "Pré-inscription non trouvée",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: "#/components/schemas/ErrorResponse",
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean" },
+                                        data: {
+                                            $ref: "#/components/schemas/AdminStats",
+                                        },
+                                    },
                                 },
                             },
                         },
                     },
                 },
             },
+        },
+        "/admin/students": {
+            get: {
+                tags: ["Admin-Students"],
+                summary: "Lister les élèves avec filtres (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "page",
+                        in: "query",
+                        schema: { type: "integer" },
+                    },
+                    { name: "limit", in: "query", schema: { type: "integer" } },
+                    { name: "search", in: "query", schema: { type: "string" } },
+                    {
+                        name: "status",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["ACTIVE", "ARCHIVED"],
+                        },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Liste paginée des élèves",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/StudentPaginatedResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            post: {
+                tags: ["Admin-Students"],
+                summary: "Créer manuellement un élève (Admin)",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/CreateStudentInput",
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "201": {
+                        description: "Élève créé avec succès",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/StudentSuccessResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/admin/students/export": {
+            get: {
+                tags: ["Admin-Students"],
+                summary: "Exporter la liste des élèves en CSV (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Fichier CSV retourné",
+                        content: {
+                            "text/csv": {
+                                schema: { type: "string", format: "binary" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/admin/students/{id}/status": {
             patch: {
-                tags: ["PreRegistrations"],
-                summary:
-                    "Mettre à jour le statut d'une pré-inscription (admin)",
+                tags: ["Admin-Students"],
+                summary: "Changer le statut d'un élève (Admin)",
+                security: [{ bearerAuth: [] }],
                 parameters: [
                     {
                         name: "id",
                         in: "path",
                         required: true,
                         schema: { type: "integer" },
-                        description: "Identifiant de la pré-inscription",
                     },
                 ],
                 requestBody: {
@@ -323,63 +402,45 @@ export const swaggerDocument = {
                     content: {
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/UpdatePreRegistration",
+                                type: "object",
+                                properties: {
+                                    status: {
+                                        type: "string",
+                                        enum: ["ACTIVE", "ARCHIVED"],
+                                    },
+                                },
                             },
                         },
                     },
                 },
                 responses: {
-                    "200": {
-                        description: "Pré-inscription mise à jour",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: "#/components/schemas/SuccessResponse",
-                                },
-                            },
-                        },
-                    },
-                    "404": {
-                        description: "Pré-inscription non trouvée",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: "#/components/schemas/ErrorResponse",
-                                },
-                            },
-                        },
-                    },
+                    "200": { description: "Statut mis à jour" },
                 },
             },
-            delete: {
+        },
+        "/admin/pre-registrations/{id}/convert": {
+            post: {
                 tags: ["PreRegistrations"],
-                summary: "Supprimer une pré-inscription (admin)",
+                summary:
+                    "Convertir une pré-inscription en élève officiel (Admin)",
+                description:
+                    "Crée un compte élève, des comptes parents et clôture la pré-inscription.",
+                security: [{ bearerAuth: [] }],
                 parameters: [
                     {
                         name: "id",
                         in: "path",
                         required: true,
                         schema: { type: "integer" },
-                        description: "Identifiant de la pré-inscription",
                     },
                 ],
                 responses: {
                     "200": {
-                        description: "Pré-inscription supprimée",
+                        description: "Conversion réussie",
                         content: {
                             "application/json": {
                                 schema: {
                                     $ref: "#/components/schemas/SuccessResponse",
-                                },
-                            },
-                        },
-                    },
-                    "404": {
-                        description: "Pré-inscription non trouvée",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: "#/components/schemas/ErrorResponse",
                                 },
                             },
                         },
@@ -461,6 +522,86 @@ export const swaggerDocument = {
     },
     components: {
         schemas: {
+            AdminStats: {
+                type: "object",
+                properties: {
+                    totalStudents: { type: "integer" },
+                    activeStudents: { type: "integer" },
+                    pendingPreRegistrations: { type: "integer" },
+                    registrationsGrowth: { type: "number" },
+                    monthlyStats: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                month: { type: "string" },
+                                registrations: { type: "integer" },
+                                students: { type: "integer" },
+                            },
+                        },
+                    },
+                },
+            },
+            CreateStudentInput: {
+                type: "object",
+                required: [
+                    "firstName",
+                    "lastName",
+                    "birthDate",
+                    "address",
+                    "schoolYear",
+                    "parentName",
+                    "parentEmail",
+                    "parentPhone",
+                ],
+                properties: {
+                    firstName: { type: "string", example: "Jean" },
+                    lastName: { type: "string", example: "Dupont" },
+                    birthDate: { type: "string", format: "date" },
+                    address: { type: "string" },
+                    schoolYear: { type: "string", example: "2024-2025" },
+                    classId: { type: "integer", nullable: true },
+                    parentName: { type: "string" },
+                    parentEmail: { type: "string", format: "email" },
+                    parentPhone: { type: "string" },
+                },
+            },
+            Student: {
+                type: "object",
+                properties: {
+                    id: { type: "integer" },
+                    studentCardNumber: { type: "string" },
+                    user: { $ref: "#/components/schemas/User" },
+                    status: { type: "string" },
+                    schoolYear: { type: "string" },
+                    createdAt: { type: "string", format: "date-time" },
+                },
+            },
+            StudentPaginatedResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean" },
+                    data: {
+                        type: "array",
+                        items: { $ref: "#/components/schemas/Student" },
+                    },
+                    meta: {
+                        type: "object",
+                        properties: {
+                            total: { type: "integer" },
+                            page: { type: "integer" },
+                            limit: { type: "integer" },
+                        },
+                    },
+                },
+            },
+            StudentSuccessResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean" },
+                    data: { $ref: "#/components/schemas/Student" },
+                },
+            },
             CreatePreRegistration: {
                 type: "object",
                 required: [
@@ -726,7 +867,7 @@ export const swaggerDocument = {
                     email: { type: "string", format: "email" },
                     role: {
                         type: "string",
-                        enum: ["ADMIN", "ENSEIGNANT", "ELEVE", "PARENT"],
+                        enum: ["ADMIN", "TEACHER", "STUDENT", "PARENT"],
                     },
                     active: { type: "boolean" },
                     createdAt: { type: "string", format: "date-time" },

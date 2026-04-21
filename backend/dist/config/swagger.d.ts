@@ -218,6 +218,9 @@ export declare const swaggerDocument: {
             get: {
                 tags: string[];
                 summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
                 parameters: ({
                     name: string;
                     in: string;
@@ -251,19 +254,57 @@ export declare const swaggerDocument: {
                 };
             };
         };
-        "/pre-registrations/{id}": {
+        "/admin/stats": {
             get: {
                 tags: string[];
                 summary: string;
-                parameters: {
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                        };
+                                        data: {
+                                            $ref: string;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/students": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: ({
                     name: string;
                     in: string;
-                    required: boolean;
                     schema: {
                         type: string;
+                        enum?: undefined;
                     };
-                    description: string;
-                }[];
+                } | {
+                    name: string;
+                    in: string;
+                    schema: {
+                        type: string;
+                        enum: string[];
+                    };
+                })[];
                 responses: {
                     "200": {
                         description: string;
@@ -275,29 +316,13 @@ export declare const swaggerDocument: {
                             };
                         };
                     };
-                    "404": {
-                        description: string;
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: string;
-                                };
-                            };
-                        };
-                    };
                 };
             };
-            patch: {
+            post: {
                 tags: string[];
                 summary: string;
-                parameters: {
-                    name: string;
-                    in: string;
-                    required: boolean;
-                    schema: {
-                        type: string;
-                    };
-                    description: string;
+                security: {
+                    bearerAuth: never[];
                 }[];
                 requestBody: {
                     required: boolean;
@@ -310,17 +335,7 @@ export declare const swaggerDocument: {
                     };
                 };
                 responses: {
-                    "200": {
-                        description: string;
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: string;
-                                };
-                            };
-                        };
-                    };
-                    "404": {
+                    "201": {
                         description: string;
                         content: {
                             "application/json": {
@@ -332,9 +347,36 @@ export declare const swaggerDocument: {
                     };
                 };
             };
-            delete: {
+        };
+        "/admin/students/export": {
+            get: {
                 tags: string[];
                 summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "text/csv": {
+                                schema: {
+                                    type: string;
+                                    format: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/students/{id}/status": {
+            patch: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
                 parameters: {
                     name: string;
                     in: string;
@@ -342,20 +384,48 @@ export declare const swaggerDocument: {
                     schema: {
                         type: string;
                     };
-                    description: string;
                 }[];
-                responses: {
-                    "200": {
-                        description: string;
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: string;
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: string;
+                                properties: {
+                                    status: {
+                                        type: string;
+                                        enum: string[];
+                                    };
                                 };
                             };
                         };
                     };
-                    "404": {
+                };
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/admin/pre-registrations/{id}/convert": {
+            post: {
+                tags: string[];
+                summary: string;
+                description: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
                         description: string;
                         content: {
                             "application/json": {
@@ -442,6 +512,142 @@ export declare const swaggerDocument: {
     };
     components: {
         schemas: {
+            AdminStats: {
+                type: string;
+                properties: {
+                    totalStudents: {
+                        type: string;
+                    };
+                    activeStudents: {
+                        type: string;
+                    };
+                    pendingPreRegistrations: {
+                        type: string;
+                    };
+                    registrationsGrowth: {
+                        type: string;
+                    };
+                    monthlyStats: {
+                        type: string;
+                        items: {
+                            type: string;
+                            properties: {
+                                month: {
+                                    type: string;
+                                };
+                                registrations: {
+                                    type: string;
+                                };
+                                students: {
+                                    type: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            CreateStudentInput: {
+                type: string;
+                required: string[];
+                properties: {
+                    firstName: {
+                        type: string;
+                        example: string;
+                    };
+                    lastName: {
+                        type: string;
+                        example: string;
+                    };
+                    birthDate: {
+                        type: string;
+                        format: string;
+                    };
+                    address: {
+                        type: string;
+                    };
+                    schoolYear: {
+                        type: string;
+                        example: string;
+                    };
+                    classId: {
+                        type: string;
+                        nullable: boolean;
+                    };
+                    parentName: {
+                        type: string;
+                    };
+                    parentEmail: {
+                        type: string;
+                        format: string;
+                    };
+                    parentPhone: {
+                        type: string;
+                    };
+                };
+            };
+            Student: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                    };
+                    studentCardNumber: {
+                        type: string;
+                    };
+                    user: {
+                        $ref: string;
+                    };
+                    status: {
+                        type: string;
+                    };
+                    schoolYear: {
+                        type: string;
+                    };
+                    createdAt: {
+                        type: string;
+                        format: string;
+                    };
+                };
+            };
+            StudentPaginatedResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                    };
+                    data: {
+                        type: string;
+                        items: {
+                            $ref: string;
+                        };
+                    };
+                    meta: {
+                        type: string;
+                        properties: {
+                            total: {
+                                type: string;
+                            };
+                            page: {
+                                type: string;
+                            };
+                            limit: {
+                                type: string;
+                            };
+                        };
+                    };
+                };
+            };
+            StudentSuccessResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                    };
+                    data: {
+                        $ref: string;
+                    };
+                };
+            };
             CreatePreRegistration: {
                 type: string;
                 required: string[];

@@ -61,12 +61,37 @@ class AuthService {
      * Rafraîchit l'access token à partir d'un refresh token valide.
      * Applique la rotation : l'ancien token est révoqué, un nouveau est émis.
      *
+     * Gère les race conditions : si le token a été récemment révoqué par
+     * une requête parallèle, on retrouve le token de remplacement au lieu
+     * de déconnecter l'utilisateur.
+     *
      * @throws {AppError} 401 si le refresh token est invalide, expiré ou révoqué
      */
     async refresh(currentRefreshToken) {
         // 1. Vérifier le token existant
         const existing = await auth_repository_1.default.findValidRefreshToken(currentRefreshToken);
         if (!existing) {
+            // Grace period: le token a peut-être été révoqué par une requête parallèle
+            // On cherche si ce token a été révoqué récemment (< 30s) et si un nouveau existe
+            const recentlyRevoked = await auth_repository_1.default.findRecentlyRevokedToken(currentRefreshToken);
+            if (recentlyRevoked) {
+                // Un autre refresh a déjà généré un nouveau token pour cet utilisateur
+                // On récupère le plus récent token valide de cet utilisateur
+                const latestToken = await auth_repository_1.default.findLatestValidTokenForUser(recentlyRevoked.userId);
+                if (latestToken) {
+                    // Générer un nouvel access token et renvoyer le refresh token existant
+                    const accessToken = this.generateAccessToken({
+                        id: recentlyRevoked.userId,
+                        email: latestToken.user.email,
+                        role: latestToken.user.role,
+                    });
+                    return {
+                        accessToken,
+                        refreshToken: latestToken.token,
+                        role: latestToken.user.role,
+                    };
+                }
+            }
             throw {
                 status: 401,
                 message: "Token de rafraîchissement invalide ou expiré",
@@ -89,7 +114,11 @@ class AuthService {
             email: existing.user.email,
             role: existing.user.role,
         });
-        return { accessToken, refreshToken: newRefreshToken };
+        return {
+            accessToken,
+            refreshToken: newRefreshToken,
+            role: existing.user.role,
+        };
     }
     /**
      * Révoque le refresh token (déconnexion).

@@ -22,6 +22,14 @@ const ACCESS_COOKIE_OPTIONS = {
     maxAge: 15 * 60 * 1000,
 };
 
+const ROLE_COOKIE_OPTIONS = {
+    httpOnly: false, // Accessible par le middleware Next.js
+    secure: env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
+};
+
 /**
  * Contrôleur Express pour l'authentification.
  * Chaque méthode délègue la logique au service et formate la réponse.
@@ -48,6 +56,8 @@ export class AuthController {
                 result.accessToken,
                 ACCESS_COOKIE_OPTIONS,
             );
+
+            res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
 
             res.status(200).json({
                 success: true,
@@ -92,24 +102,17 @@ export class AuthController {
                     ACCESS_COOKIE_OPTIONS,
                 );
 
+                res.cookie("userRole", result.role, ROLE_COOKIE_OPTIONS);
+
                 res.status(200).json({
                     success: true,
                     data: null,
                     message: "Token rafraîchi avec succès",
                 });
             } catch (err: any) {
-                // Si le token est invalide ou expiré, on nettoie les cookies
-                // pour éviter les boucles de redirection infinies côté frontend.
-                if (err.status === 401) {
-                    res.clearCookie("refreshToken", {
-                        path: "/",
-                        httpOnly: true,
-                    });
-                    res.clearCookie("accessToken", {
-                        path: "/",
-                        httpOnly: true,
-                    });
-                }
+                // On ne nettoie plus les cookies ici pour éviter de déconnecter l'utilisateur
+                // en cas de "race condition" (plusieurs requêtes de refresh en parallèle).
+                // Le frontend gérera la redirection si le refresh échoue vraiment.
                 throw err;
             }
         } catch (err) {
@@ -143,6 +146,8 @@ export class AuthController {
                 sameSite: "lax" as const,
                 path: "/",
             });
+
+            res.clearCookie("userRole", { path: "/" });
 
             res.status(200).json({
                 success: true,

@@ -35,6 +35,21 @@ export declare class AuthRepository {
      */
     revokeAllUserRefreshTokens(userId: number): Promise<void>;
     /**
+     * Recherche un token récemment révoqué (grace period pour race conditions).
+     * Si le token existe en base avec revoked=true, et qu'un nouveau token
+     * a été créé récemment pour cet utilisateur, c'est une race condition.
+     */
+    findRecentlyRevokedToken(token: string): Promise<{
+        userId: number;
+    } | null>;
+    /**
+     * Recherche le token valide le plus récent pour un utilisateur donné.
+     * Utilisé pour récupérer le token de remplacement après une rotation.
+     */
+    findLatestValidTokenForUser(userId: number): Promise<(RefreshToken & {
+        user: Pick<User, "id" | "email" | "role" | "active">;
+    }) | null>;
+    /**
      * Supprime les tokens expirés (nettoyage périodique).
      */
     deleteExpiredTokens(): Promise<number>;

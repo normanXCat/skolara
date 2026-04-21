@@ -24,6 +24,13 @@ const ACCESS_COOKIE_OPTIONS = {
     // On met un maxAge un peu plus long que le JWT pour être sûr (ex: 15min)
     maxAge: 15 * 60 * 1000,
 };
+const ROLE_COOKIE_OPTIONS = {
+    httpOnly: false, // Accessible par le middleware Next.js
+    secure: env_1.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: env_1.env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
+};
 /**
  * Contrôleur Express pour l'authentification.
  * Chaque méthode délègue la logique au service et formate la réponse.
@@ -40,6 +47,7 @@ class AuthController {
             // Stocker les tokens dans des cookies HttpOnly
             res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
             res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
+            res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
             res.status(200).json({
                 success: true,
                 data: {
@@ -70,6 +78,7 @@ class AuthController {
                 // Mettre à jour les cookies (rotation)
                 res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
                 res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
+                res.cookie("userRole", result.role, ROLE_COOKIE_OPTIONS);
                 res.status(200).json({
                     success: true,
                     data: null,
@@ -77,18 +86,9 @@ class AuthController {
                 });
             }
             catch (err) {
-                // Si le token est invalide ou expiré, on nettoie les cookies
-                // pour éviter les boucles de redirection infinies côté frontend.
-                if (err.status === 401) {
-                    res.clearCookie("refreshToken", {
-                        path: "/",
-                        httpOnly: true,
-                    });
-                    res.clearCookie("accessToken", {
-                        path: "/",
-                        httpOnly: true,
-                    });
-                }
+                // On ne nettoie plus les cookies ici pour éviter de déconnecter l'utilisateur
+                // en cas de "race condition" (plusieurs requêtes de refresh en parallèle).
+                // Le frontend gérera la redirection si le refresh échoue vraiment.
                 throw err;
             }
         }
@@ -119,6 +119,7 @@ class AuthController {
                 sameSite: "lax",
                 path: "/",
             });
+            res.clearCookie("userRole", { path: "/" });
             res.status(200).json({
                 success: true,
                 data: null,

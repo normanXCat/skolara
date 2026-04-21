@@ -40,11 +40,16 @@ export declare class AuthService {
      * Rafraîchit l'access token à partir d'un refresh token valide.
      * Applique la rotation : l'ancien token est révoqué, un nouveau est émis.
      *
+     * Gère les race conditions : si le token a été récemment révoqué par
+     * une requête parallèle, on retrouve le token de remplacement au lieu
+     * de déconnecter l'utilisateur.
+     *
      * @throws {AppError} 401 si le refresh token est invalide, expiré ou révoqué
      */
     refresh(currentRefreshToken: string): Promise<{
         accessToken: string;
         refreshToken: string;
+        role: string;
     }>;
     /**
      * Révoque le refresh token (déconnexion).

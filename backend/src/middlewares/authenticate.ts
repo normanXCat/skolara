@@ -33,10 +33,10 @@ export const authenticate = (
         (req as any).user = payload;
         next();
     } catch (error) {
-        // En cas de token invalide ou expiré, on nettoie les cookies
-        // pour que le middleware Next.js voie que la session est finie.
+        // On nettoie UNIQUEMENT le cookie accessToken.
+        // Le refreshToken DOIT rester en place pour que le frontend
+        // puisse tenter un /auth/refresh et obtenir un nouveau JWT.
         _res.clearCookie("accessToken", { path: "/", httpOnly: true });
-        _res.clearCookie("refreshToken", { path: "/", httpOnly: true });
 
         if (error instanceof jwt.TokenExpiredError) {
             return next({

@@ -10,6 +10,8 @@ export declare class AdminPreRegistrationService {
         data: {
             status: import("../../../generated/prisma").$Enums.Status;
             id: number;
+            parentEmail: string;
+            parentPhone: string;
             childFirstName: string;
             childLastName: string;
             childDateOfBirth: Date;
@@ -17,8 +19,6 @@ export declare class AdminPreRegistrationService {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
-            parentEmail: string;
-            parentPhone: string;
             updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
@@ -43,9 +43,9 @@ export declare class AdminPreRegistrationService {
         student: ({
             user: {
                 id: number;
+                firstName: string;
                 email: string;
                 name: string;
-                firstName: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
@@ -55,20 +55,20 @@ export declare class AdminPreRegistrationService {
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            birthDate: Date;
+            address: string | null;
+            schoolYear: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number;
             classId: number | null;
-            schoolYear: string;
-            birthDate: Date;
-            address: string | null;
             parentId: number | null;
         }) | null;
         processedByUser: {
             id: number;
+            firstName: string;
             email: string;
             name: string;
-            firstName: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -78,6 +78,8 @@ export declare class AdminPreRegistrationService {
     } & {
         status: import("../../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -85,8 +87,6 @@ export declare class AdminPreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -107,6 +107,8 @@ export declare class AdminPreRegistrationService {
     updateStatus(id: number, status: Status, adminId: number, comment?: string): Promise<{
         status: import("../../../generated/prisma").$Enums.Status;
         id: number;
+        parentEmail: string;
+        parentPhone: string;
         childFirstName: string;
         childLastName: string;
         childDateOfBirth: Date;
@@ -114,8 +116,6 @@ export declare class AdminPreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        parentEmail: string;
-        parentPhone: string;
         updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
@@ -140,13 +140,13 @@ export declare class AdminPreRegistrationService {
     }): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        birthDate: Date;
+        address: string | null;
+        schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
         classId: number | null;
-        schoolYear: string;
-        birthDate: Date;
-        address: string | null;
         parentId: number | null;
     }>;
 }
