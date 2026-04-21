@@ -127,6 +127,21 @@ class AuthRepository {
         });
     }
     /**
+     * Effectue une rotation atomique du token.
+     * Révoque l'ancien et crée le nouveau dans une seule transaction.
+     */
+    async rotateToken(oldToken, newData) {
+        return client_1.prisma.$transaction(async (tx) => {
+            await tx.refreshToken.updateMany({
+                where: { token: oldToken },
+                data: { revoked: true },
+            });
+            return tx.refreshToken.create({
+                data: newData,
+            });
+        });
+    }
+    /**
      * Supprime les tokens expirés (nettoyage périodique).
      */
     async deleteExpiredTokens() {

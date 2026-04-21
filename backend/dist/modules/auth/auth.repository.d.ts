@@ -50,6 +50,15 @@ export declare class AuthRepository {
         user: Pick<User, "id" | "email" | "role" | "active">;
     }) | null>;
     /**
+     * Effectue une rotation atomique du token.
+     * Révoque l'ancien et crée le nouveau dans une seule transaction.
+     */
+    rotateToken(oldToken: string, newData: {
+        token: string;
+        userId: number;
+        expiresAt: Date;
+    }): Promise<RefreshToken>;
+    /**
      * Supprime les tokens expirés (nettoyage périodique).
      */
     deleteExpiredTokens(): Promise<number>;

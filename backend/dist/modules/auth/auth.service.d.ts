@@ -49,7 +49,7 @@ export declare class AuthService {
     refresh(currentRefreshToken: string): Promise<{
         accessToken: string;
         refreshToken: string;
-        role: string;
+        user: SafeUser;
     }>;
     /**
      * Révoque le refresh token (déconnexion).

@@ -66,29 +66,59 @@ class AuthController {
      */
     static async refresh(req, res, next) {
         try {
-            const currentToken = req.cookies?.refreshToken;
-            if (!currentToken) {
+            console.log("[DEBUG] Cookies:", req.cookies);
+            console.log("[DEBUG] Cookie Header:", req.headers.cookie);
+            // 1. Extraire TOUS les refresh tokens potentiels du header Cookie
+            // (Utile si plusieurs cookies du même nom existent à cause de trajets/domaines différents)
+            const allTokens = [];
+            if (req.cookies?.refreshToken) {
+                allTokens.push(req.cookies.refreshToken);
+            }
+            if (req.headers.cookie) {
+                const rawCookies = req.headers.cookie.split(";");
+                rawCookies.forEach((c) => {
+                    const [name, value] = c.trim().split("=");
+                    if (name === "refreshToken" && !allTokens.includes(value)) {
+                        allTokens.push(value);
+                    }
+                });
+            }
+            if (allTokens.length === 0) {
                 return next({
                     status: 401,
                     message: "Token de rafraîchissement manquant",
                 });
             }
+            console.log("[DEBUG] Tokens à tester:", allTokens);
+            // 2. Tester les tokens un par un jusqu'à en trouver un valide
+            let result = null;
+            let lastError = null;
+            for (const token of allTokens) {
+                try {
+                    result = await auth_service_1.default.refresh(token);
+                    if (result)
+                        break; // Valid token found!
+                }
+                catch (err) {
+                    lastError = err;
+                    // On continue vers le suivant
+                }
+            }
+            if (!result) {
+                throw lastError || { status: 401, message: "Session expirée" };
+            }
             try {
-                const result = await auth_service_1.default.refresh(currentToken);
                 // Mettre à jour les cookies (rotation)
                 res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
                 res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
-                res.cookie("userRole", result.role, ROLE_COOKIE_OPTIONS);
+                res.cookie("userRole", result.user.role, ROLE_COOKIE_OPTIONS);
                 res.status(200).json({
                     success: true,
-                    data: null,
+                    data: result.user,
                     message: "Token rafraîchi avec succès",
                 });
             }
             catch (err) {
-                // On ne nettoie plus les cookies ici pour éviter de déconnecter l'utilisateur
-                // en cas de "race condition" (plusieurs requêtes de refresh en parallèle).
-                // Le frontend gérera la redirection si le refresh échoue vraiment.
                 throw err;
             }
         }

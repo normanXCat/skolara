@@ -88,7 +88,7 @@ class AuthService {
                     return {
                         accessToken,
                         refreshToken: latestToken.token,
-                        role: latestToken.user.role,
+                        user: this.toSafeUser(latestToken.user),
                     };
                 }
             }
@@ -105,9 +105,15 @@ class AuthService {
                 message: "Ce compte a été désactivé",
             };
         }
-        // 3. Rotation : révoquer l'ancien, créer un nouveau
-        await auth_repository_1.default.revokeRefreshToken(currentRefreshToken);
-        const newRefreshToken = await this.generateRefreshToken(existing.userId);
+        // 3. Rotation atomique
+        const newToken = (0, uuid_1.v4)();
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + env_1.env.REFRESH_TOKEN_EXPIRES_DAYS);
+        const newRefreshToken = await auth_repository_1.default.rotateToken(currentRefreshToken, {
+            token: newToken,
+            userId: existing.userId,
+            expiresAt,
+        });
         // 4. Nouvel access token
         const accessToken = this.generateAccessToken({
             id: existing.userId,
@@ -116,8 +122,8 @@ class AuthService {
         });
         return {
             accessToken,
-            refreshToken: newRefreshToken,
-            role: existing.user.role,
+            refreshToken: newRefreshToken.token,
+            user: this.toSafeUser(existing.user),
         };
     }
     /**

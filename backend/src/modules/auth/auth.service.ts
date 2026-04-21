@@ -99,9 +99,11 @@ export class AuthService {
      *
      * @throws {AppError} 401 si le refresh token est invalide, expiré ou révoqué
      */
-    async refresh(
-        currentRefreshToken: string,
-    ): Promise<{ accessToken: string; refreshToken: string; role: string }> {
+    async refresh(currentRefreshToken: string): Promise<{
+        accessToken: string;
+        refreshToken: string;
+        user: SafeUser;
+    }> {
         // 1. Vérifier le token existant
         const existing =
             await authRepository.findValidRefreshToken(currentRefreshToken);
@@ -133,7 +135,7 @@ export class AuthService {
                     return {
                         accessToken,
                         refreshToken: latestToken.token,
-                        role: latestToken.user.role,
+                        user: this.toSafeUser(latestToken.user),
                     };
                 }
             }
@@ -153,10 +155,18 @@ export class AuthService {
             };
         }
 
-        // 3. Rotation : révoquer l'ancien, créer un nouveau
-        await authRepository.revokeRefreshToken(currentRefreshToken);
-        const newRefreshToken = await this.generateRefreshToken(
-            existing.userId,
+        // 3. Rotation atomique
+        const newToken = uuidv4();
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + env.REFRESH_TOKEN_EXPIRES_DAYS);
+
+        const newRefreshToken = await authRepository.rotateToken(
+            currentRefreshToken,
+            {
+                token: newToken,
+                userId: existing.userId,
+                expiresAt,
+            },
         );
 
         // 4. Nouvel access token
@@ -168,8 +178,8 @@ export class AuthService {
 
         return {
             accessToken,
-            refreshToken: newRefreshToken,
-            role: existing.user.role,
+            refreshToken: newRefreshToken.token,
+            user: this.toSafeUser(existing.user),
         };
     }
 
