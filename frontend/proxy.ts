@@ -2,14 +2,19 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Middleware Next.js pour la protection des routes.
+ * Proxy Next.js pour la protection des routes.
+ * (Anciennement middleware)
  * Vérifie la présence d'un refresh token cookie côté serveur.
  *
  * Note : Le vrai contrôle d'accès se fait côté backend (JWT).
- * Ce middleware est un gardien de premier niveau côté navigation.
+ * Ce proxy est un gardien de premier niveau côté navigation.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
+    console.log(
+        `[Proxy] Path: ${pathname}, Cookies:`,
+        request.cookies.getAll().map((c) => c.name),
+    );
 
     // 1. Définition des types de routes
     const isPublicPath = pathname === "/" || pathname.startsWith("/blog");
@@ -21,7 +26,9 @@ export function middleware(request: NextRequest) {
     const isProtected = isAdminPath;
 
     // 2. Récupérer les cookies de session
-    const hasRefreshToken = request.cookies.has("refreshToken");
+    const hasRefreshToken =
+        request.cookies.has("refreshToken") ||
+        !!request.headers.get("cookie")?.includes("refreshToken=");
     const userRole = request.cookies.get("userRole")?.value;
 
     // 3. Logique de redirection pour les routes protégées
@@ -60,7 +67,8 @@ export const config = {
          * - _next/static (static files)
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
+         * - _next/webpack-hmr (Fast Refresh)
          */
-        "/((?!api|_next/static|_next/image|favicon.ico).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|_next/webpack-hmr).*)",
     ],
 };

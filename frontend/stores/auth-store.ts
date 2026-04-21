@@ -51,3 +51,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     clearUser: () => set({ user: null, isAuthenticated: false }),
 }));
+
+// Synchronisation automatique après un refresh silencieux dans l'ApiClient
+if (typeof window !== "undefined") {
+    api.setRefreshCallback((userData) => {
+        useAuthStore.getState().setUser(userData);
+    });
+}

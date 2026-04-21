@@ -25,12 +25,13 @@ import {
     IconBell,
     IconUserCircle,
     IconCheck,
+    IconPlus,
+    IconMinus,
+    IconChevronRight,
 } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { ButtonReusable } from "@/components/ui/button-reusable";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -63,6 +64,41 @@ export const AdminSidebar = () => {
     const pathname = usePathname();
     const router = useRouter();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    // State for expanded sections - expanded by default
+    const [openSections, setOpenSections] = useState<string[]>(() =>
+        ADMIN_NAVIGATION_LINKS.filter((link) => "subLinks" in link).map(
+            (link) => link.label,
+        ),
+    );
+
+    // Automatically expand the section if a sub-link is active on mount or path change
+    useEffect(() => {
+        const activeSection = ADMIN_NAVIGATION_LINKS.find((link) => {
+            const sl = "subLinks" in link ? link.subLinks : undefined;
+            return sl?.some((sub) => {
+                if (sub.label === "Examiner") {
+                    return (
+                        pathname.startsWith(ROUTES.ADMIN.PRE_REGISTRATIONS) &&
+                        pathname !== ROUTES.ADMIN.PRE_REGISTRATIONS
+                    );
+                }
+                return pathname === sub.href;
+            });
+        });
+
+        if (activeSection && !openSections.includes(activeSection.label)) {
+            setOpenSections((prev) => [...prev, activeSection.label]);
+        }
+    }, [pathname]);
+
+    const toggleSection = (label: string) => {
+        setOpenSections((prev) =>
+            prev.includes(label)
+                ? prev.filter((l) => l !== label)
+                : [...prev, label],
+        );
+    };
 
     // Close mobile menu on path change
     useEffect(() => {
@@ -191,142 +227,236 @@ export const AdminSidebar = () => {
             <SectionDivider className="py-4" />
 
             {/* 3. Navigation Links */}
-            <nav className="flex-1 px-4 space-y-2 overflow-y-auto custom-scrollbar scroll-smooth pt-2">
+            <nav className="flex-1 space-y-2 overflow-y-auto custom-scrollbar scroll-smooth px-4">
                 {ADMIN_NAVIGATION_LINKS.map((link) => {
                     const Icon = ICON_MAP[link.icon];
-                    const isActive = pathname === link.href;
+                    const subLinks =
+                        "subLinks" in link ? link.subLinks : undefined;
+                    const hasSubLinks = !!subLinks && subLinks.length > 0;
+
+                    const isChildActive =
+                        hasSubLinks &&
+                        subLinks?.some((sub) => {
+                            // Si c'est le lien "Examiner", on vérifie si on est sur une sous-page dynamique
+                            if (sub.label === "Examiner") {
+                                return (
+                                    pathname.startsWith(
+                                        ROUTES.ADMIN.PRE_REGISTRATIONS,
+                                    ) &&
+                                    pathname !== ROUTES.ADMIN.PRE_REGISTRATIONS
+                                );
+                            }
+                            return pathname === sub.href;
+                        });
+
+                    const isActive = pathname === link.href || isChildActive;
+                    const isExpanded = openSections.includes(link.label);
 
                     return (
-                        <MotionLink
-                            key={link.href}
-                            href={link.disabled ? "#" : link.href}
-                            initial="initial"
-                            whileHover="hover"
-                            whileTap="tap"
-                            className={cn(
-                                "group relative flex items-center gap-3 rounded-2xl px-4 py-3.5 overflow-hidden transition-all duration-300",
-                                isActive
-                                    ? "text-primary bg-primary/10"
-                                    : "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
-                                link.disabled &&
-                                    "cursor-not-allowed opacity-30 grayscale pointer-events-none",
-                            )}
-                        >
-                            {isActive && (
-                                <motion.div
-                                    layoutId="active-pill"
-                                    className="absolute inset-0 bg-primary/5 rounded-2xl -z-10"
-                                    transition={{
-                                        type: "spring",
-                                        stiffness: 350,
-                                        damping: 30,
-                                    }}
-                                />
-                            )}
-
-                            {/* Effet de Balayage (Sheen) */}
-                            <motion.div
-                                className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
-                                variants={{
-                                    initial: { x: "-100%", skewX: -20 },
-                                    hover: {
-                                        x: "100%",
-                                        transition: {
-                                            duration: 0.8,
-                                            ease: "easeInOut",
-                                        },
-                                    },
-                                }}
-                            />
-
-                            {Icon && (
-                                <motion.div
-                                    animate={
-                                        isActive
-                                            ? {
-                                                  y: [0, -3, 0],
-                                                  rotate: [0, 8, -8, 0],
-                                                  scale: [1, 1.1, 1],
-                                              }
-                                            : {
-                                                  y: 0,
-                                                  rotate: 0,
-                                                  scale: 1,
-                                              }
+                        <div key={link.label} className="space-y-1">
+                            <MotionLink
+                                href={
+                                    link.disabled || hasSubLinks
+                                        ? "#"
+                                        : link.href
+                                }
+                                onClick={(e) => {
+                                    if (hasSubLinks) {
+                                        e.preventDefault();
+                                        toggleSection(link.label);
+                                    } else if (link.disabled) {
+                                        e.preventDefault();
                                     }
-                                    whileHover={{
-                                        scale: 1.2,
-                                        rotate: [0, -10, 10, 0],
-                                    }}
-                                    transition={{
-                                        y: {
-                                            repeat: Infinity,
-                                            duration: 2.5,
-                                            ease: "easeInOut",
-                                        },
-                                        rotate: {
-                                            repeat: Infinity,
-                                            duration: 3.5,
-                                            ease: "easeInOut",
-                                        },
-                                        scale: {
-                                            repeat: Infinity,
-                                            duration: 3,
-                                            ease: "easeInOut",
-                                        },
-                                        type: "spring",
-                                        stiffness: 400,
-                                        damping: 10,
-                                    }}
-                                    className={cn(
-                                        "shrink-0 transition-colors duration-300 relative z-10",
-                                        isActive
-                                            ? "text-primary"
-                                            : "text-muted-foreground/60 group-hover:text-primary",
-                                    )}
-                                >
-                                    <Icon size={22} strokeWidth={2.4} />
-                                </motion.div>
-                            )}
-                            <motion.span
-                                initial={{ opacity: 0, x: -5 }}
-                                animate={{ opacity: 1, x: 0 }}
+                                }}
+                                initial="initial"
+                                whileHover="hover"
+                                whileTap="tap"
                                 className={cn(
-                                    "font-bold tracking-tight whitespace-nowrap transition-all duration-300",
+                                    "group relative flex items-center gap-3 rounded-2xl px-4 py-3.5 overflow-hidden transition-all duration-300",
                                     isActive
-                                        ? "text-primary"
-                                        : "text-muted-foreground group-hover:translate-x-1",
+                                        ? "text-primary bg-primary/10"
+                                        : "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
+                                    link.disabled &&
+                                        "cursor-not-allowed opacity-30 grayscale pointer-events-none",
                                 )}
                             >
-                                {link.label}
-                            </motion.span>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="active-pill"
+                                        className="absolute inset-0 bg-primary/5 rounded-2xl -z-10"
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 350,
+                                            damping: 30,
+                                        }}
+                                    />
+                                )}
 
-                            {isActive && (
+                                {/* Effet de Balayage (Sheen) */}
                                 <motion.div
-                                    layoutId="sidebar-active-indicator"
-                                    className="absolute left-0 w-1.5 h-6 rounded-r-full bg-primary shadow-[4px_0_12px_rgba(var(--primary-rgb),0.6)]"
+                                    className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
+                                    variants={{
+                                        initial: { x: "-100%", skewX: -20 },
+                                        hover: {
+                                            x: "100%",
+                                            transition: {
+                                                duration: 0.8,
+                                                ease: "easeInOut",
+                                            },
+                                        },
+                                    }}
                                 />
-                            )}
-                        </MotionLink>
+
+                                {Icon && (
+                                    <motion.div
+                                        animate={
+                                            isActive
+                                                ? {
+                                                      y: [0, -3, 0],
+                                                      rotate: [0, 8, -8, 0],
+                                                      scale: [1, 1.1, 1],
+                                                  }
+                                                : {
+                                                      y: 0,
+                                                      rotate: 0,
+                                                      scale: 1,
+                                                  }
+                                        }
+                                        whileHover={{
+                                            scale: 1.2,
+                                            rotate: [0, -10, 10, 0],
+                                        }}
+                                        transition={{
+                                            y: {
+                                                repeat: Infinity,
+                                                duration: 2.5,
+                                                ease: "easeInOut",
+                                            },
+                                            rotate: {
+                                                repeat: Infinity,
+                                                duration: 3.5,
+                                                ease: "easeInOut",
+                                            },
+                                            scale: {
+                                                repeat: Infinity,
+                                                duration: 3,
+                                                ease: "easeInOut",
+                                            },
+                                            type: "spring",
+                                            stiffness: 400,
+                                            damping: 10,
+                                        }}
+                                        className={cn(
+                                            "shrink-0 transition-colors duration-300 relative z-10",
+                                            isActive
+                                                ? "text-primary"
+                                                : "text-muted-foreground/60 group-hover:text-primary",
+                                        )}
+                                    >
+                                        <Icon size={22} strokeWidth={2.4} />
+                                    </motion.div>
+                                )}
+                                <span
+                                    className={cn(
+                                        "flex-1 font-bold tracking-tight whitespace-nowrap transition-all duration-300",
+                                        isActive
+                                            ? "text-primary"
+                                            : "text-muted-foreground group-hover:translate-x-1",
+                                    )}
+                                >
+                                    {link.label}
+                                </span>
+
+                                {hasSubLinks && (
+                                    <div className="text-muted-foreground/40 group-hover:text-primary transition-colors">
+                                        {isExpanded ? (
+                                            <IconMinus
+                                                size={14}
+                                                strokeWidth={3}
+                                            />
+                                        ) : (
+                                            <IconPlus
+                                                size={14}
+                                                strokeWidth={3}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="sidebar-active-indicator"
+                                        className="absolute left-0 w-1.5 h-6 rounded-r-full bg-primary shadow-[4px_0_12px_rgba(var(--primary-rgb),0.6)]"
+                                    />
+                                )}
+                            </MotionLink>
+
+                            {/* Sous-navigation avec style Tree */}
+                            <AnimatePresence>
+                                {hasSubLinks && isExpanded && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{
+                                            duration: 0.3,
+                                            ease: "easeInOut",
+                                        }}
+                                        className="ml-7 relative overflow-hidden"
+                                    >
+                                        {/* Ligne verticale principale */}
+                                        <div className="absolute left-0 top-0 bottom-4 w-px bg-border/40" />
+
+                                        <div className="space-y-1 pt-1 pb-2">
+                                            {subLinks?.map((sub) => {
+                                                const isSubActive =
+                                                    pathname === sub.href ||
+                                                    (sub.label === "Examiner" &&
+                                                        pathname.startsWith(
+                                                            ROUTES.ADMIN
+                                                                .PRE_REGISTRATIONS,
+                                                        ) &&
+                                                        pathname !==
+                                                            ROUTES.ADMIN
+                                                                .PRE_REGISTRATIONS);
+                                                return (
+                                                    <Link
+                                                        key={sub.label}
+                                                        href={sub.href}
+                                                        className={cn(
+                                                            "relative flex items-center group pl-6 py-2 rounded-xl transition-all duration-300",
+                                                            isSubActive
+                                                                ? "bg-primary/5 text-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.05)]"
+                                                                : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/30",
+                                                        )}
+                                                    >
+                                                        {/* Connecteur horizontal (L-shape simulation) */}
+                                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-px bg-border/40 group-hover:bg-primary/30" />
+
+                                                        <span
+                                                            className={cn(
+                                                                "text-sm font-semibold transition-all",
+                                                                isSubActive
+                                                                    ? "translate-x-1"
+                                                                    : "group-hover:translate-x-1",
+                                                            )}
+                                                        >
+                                                            {sub.label}
+                                                        </span>
+
+                                                        {isSubActive && (
+                                                            <div className="ml-auto mr-2 size-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary-rgb),0.6)]" />
+                                                        )}
+                                                    </Link>
+                                                );
+                                            })}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     );
                 })}
-
-                {/* Simulation de sous-menu raffiné */}
-                {pathname.includes("/classes") && (
-                    <div className="ml-8 pl-4 border-l border-border/20 space-y-1 my-2">
-                        {["Maths", "English", "Economics"].map((sub) => (
-                            <div
-                                key={sub}
-                                className="relative flex items-center group cursor-pointer pl-4 py-2 hover:bg-muted/30 rounded-xl transition-all"
-                            >
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-[1px] bg-border/40 group-hover:bg-primary/60" />
-                                <span className="text-[11px] font-bold text-muted-foreground/60 group-hover:text-primary transition-all uppercase tracking-wider">
-                                    {sub}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                )}
             </nav>
 
             <SectionDivider className="py-2" />

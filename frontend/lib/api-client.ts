@@ -33,32 +33,46 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
  */
 class ApiClient {
     private isRefreshing = false;
-    private refreshPromise: Promise<boolean> | null = null;
-    private refreshQueue: Array<(success: boolean) => void> = [];
+    private refreshPromise: Promise<any | null> | null = null;
+    private refreshQueue: Array<(userData: any | null) => void> = [];
 
     /**
      * Attend la résolution d'un refresh en cours.
      * Utilisé par les requêtes concurrentes pour ne pas lancer de refresh parallèle.
      */
-    private waitForRefresh(): Promise<boolean> {
+    private waitForRefresh(): Promise<any | null> {
         return new Promise((resolve) => {
             this.refreshQueue.push(resolve);
         });
     }
 
+    private onRefreshSuccess?: (userData: any) => void;
+
+    /**
+     * Permet au store d'authentification de s'enregistrer pour être notifié
+     * quand un refresh réussit automatiquement.
+     */
+    public setRefreshCallback(callback: (userData: any) => void) {
+        this.onRefreshSuccess = callback;
+    }
+
     /**
      * Tente un refresh du token avec un retry en cas d'erreur réseau.
+     * Retourne les données utilisateur en cas de succès.
      */
-    private async attemptRefresh(): Promise<boolean> {
+    private async attemptRefresh(): Promise<any | null> {
         const maxRetries = 2;
         for (let i = 0; i < maxRetries; i++) {
             try {
-                const refreshRes = await this.post<{ accessToken: string }>(
-                    "/auth/refresh",
-                );
-                if (refreshRes.success) return true;
+                const refreshRes = await this.post<any>("/auth/refresh");
+                if (refreshRes.success) {
+                    if (this.onRefreshSuccess) {
+                        this.onRefreshSuccess(refreshRes.data);
+                    }
+                    return refreshRes.data;
+                }
                 // Si le backend dit explicitement que le token est invalide, on ne retry pas
-                return false;
+                return null;
             } catch {
                 // Erreur réseau — on attend un peu avant de retenter
                 if (i < maxRetries - 1) {
@@ -66,7 +80,7 @@ class ApiClient {
                 }
             }
         }
-        return false;
+        return null;
     }
 
     private async request<T>(
@@ -113,24 +127,30 @@ class ApiClient {
             ) {
                 // Si un refresh est déjà en cours, on attend sa résolution
                 if (this.isRefreshing) {
-                    const success = await this.waitForRefresh();
-                    if (success) {
+                    const userData = await this.waitForRefresh();
+                    if (userData) {
                         return this.request<T>(endpoint, options);
                     }
                     return { success: false, error: "Session expirée" };
                 }
 
                 // On lance le refresh
+                console.log(
+                    "[ApiClient] 401 detected, attempting token refresh...",
+                );
                 this.isRefreshing = true;
                 this.refreshPromise = this.attemptRefresh();
 
                 try {
-                    const refreshSuccess = await this.refreshPromise;
+                    const userData = await this.refreshPromise;
+                    console.log(
+                        `[ApiClient] Refresh ${userData ? "succeeded" : "failed"}`,
+                    );
 
                     this.isRefreshing = false;
-                    this.processQueue(refreshSuccess);
+                    this.processQueue(userData);
 
-                    if (refreshSuccess) {
+                    if (userData) {
                         // Rejouer la requête initiale avec les nouveaux cookies
                         return this.request<T>(endpoint, options);
                     }
@@ -152,7 +172,7 @@ class ApiClient {
                     return { success: false, error: "Session expirée" };
                 } catch (err) {
                     this.isRefreshing = false;
-                    this.processQueue(false);
+                    this.processQueue(null);
                     console.error("[ApiClient] Refresh error:", err);
                     return { success: false, error: "Session expirée" };
                 }
@@ -196,8 +216,8 @@ class ApiClient {
         }
     }
 
-    private processQueue(success: boolean) {
-        this.refreshQueue.forEach((callback) => callback(success));
+    private processQueue(userData: any | null) {
+        this.refreshQueue.forEach((callback) => callback(userData));
         this.refreshQueue = [];
     }
 

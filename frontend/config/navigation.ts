@@ -23,6 +23,10 @@ export const ADMIN_NAVIGATION_LINKS = [
         href: ROUTES.ADMIN.STUDENTS,
         icon: "IconSchool",
         disabled: false,
+        subLinks: [
+            { label: "Liste des élèves", href: ROUTES.ADMIN.STUDENTS },
+            { label: "Ajouter un élève", href: ROUTES.ADMIN.STUDENTS_NEW },
+        ],
     },
     {
         label: "Enseignants",
@@ -71,6 +75,16 @@ export const ADMIN_NAVIGATION_LINKS = [
         href: ROUTES.ADMIN.PRE_REGISTRATIONS,
         icon: "IconClipboardList",
         disabled: false,
+        subLinks: [
+            {
+                label: "Liste des demandes",
+                href: ROUTES.ADMIN.PRE_REGISTRATIONS,
+            },
+            {
+                label: "Examiner",
+                href: ROUTES.ADMIN.PRE_REGISTRATIONS + "/example",
+            }, // Placeholder for dynamic detail
+        ],
     },
     {
         label: "Messages",
@@ -82,6 +96,15 @@ export const ADMIN_NAVIGATION_LINKS = [
         label: "Paramètres",
         href: ROUTES.ADMIN.SETTINGS,
         icon: "IconSettings",
-        disabled: true,
+        disabled: false,
+        subLinks: [
+            { label: "Mon profil", href: ROUTES.ADMIN.SETTINGS + "/profile" },
+            { label: "Sécurité", href: ROUTES.ADMIN.SETTINGS + "/security" },
+            {
+                label: "Notifications",
+                href: ROUTES.ADMIN.SETTINGS + "/notifications",
+            },
+            { label: "Facturation", href: ROUTES.ADMIN.SETTINGS + "/billing" },
+        ],
     },
 ] as const;
