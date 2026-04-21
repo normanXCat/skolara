@@ -6,28 +6,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const auth_service_1 = __importDefault(require("./auth.service"));
 const env_1 = require("../../config/env");
-/**
- * Options du cookie HttpOnly pour le refresh token.
- */
+const isProduction = env_1.env.NODE_ENV === "production";
 const REFRESH_COOKIE_OPTIONS = {
     httpOnly: true,
-    secure: env_1.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax", // ← fix
     path: "/",
     maxAge: env_1.env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
 };
 const ACCESS_COOKIE_OPTIONS = {
     httpOnly: true,
-    secure: env_1.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax", // ← fix
     path: "/",
-    // On met un maxAge un peu plus long que le JWT pour être sûr (ex: 15min)
     maxAge: 15 * 60 * 1000,
 };
 const ROLE_COOKIE_OPTIONS = {
-    httpOnly: false, // Accessible par le middleware Next.js
-    secure: env_1.env.NODE_ENV === "production",
-    sameSite: "lax",
+    httpOnly: false,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax", // ← fix
     path: "/",
     maxAge: env_1.env.REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
 };
