@@ -33,19 +33,19 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
-        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
+        fileNumber: string;
         adminComment: string | null;
-        processedBy: number | null;
         processedAt: Date | null;
-        studentId: number | null;
         submittedAt: Date;
+        updatedAt: Date;
+        processedBy: number | null;
+        studentId: number | null;
     }>;
     /**
      * Génère un numéro de dossier unique formaté : PRE-YYYY-XXXX.
@@ -71,19 +71,19 @@ export declare class PreRegistrationService {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
-            updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
             parentAddress: string | null;
-            fileNumber: string;
             receiptNumber: string | null;
             receiptImageUrl: string | null;
             documentUrls: string[];
+            fileNumber: string;
             adminComment: string | null;
-            processedBy: number | null;
             processedAt: Date | null;
-            studentId: number | null;
             submittedAt: Date;
+            updatedAt: Date;
+            processedBy: number | null;
+            studentId: number | null;
         }[];
         meta: {
             total: number;
@@ -112,19 +112,19 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
-        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
+        fileNumber: string;
         adminComment: string | null;
-        processedBy: number | null;
         processedAt: Date | null;
-        studentId: number | null;
         submittedAt: Date;
+        updatedAt: Date;
+        processedBy: number | null;
+        studentId: number | null;
     }>;
     /**
      * Met à jour le statut d'une pré-inscription existante.
@@ -147,19 +147,19 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
-        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
+        fileNumber: string;
         adminComment: string | null;
-        processedBy: number | null;
         processedAt: Date | null;
-        studentId: number | null;
         submittedAt: Date;
+        updatedAt: Date;
+        processedBy: number | null;
+        studentId: number | null;
     }>;
     /**
      * Supprime une pré-inscription.
@@ -181,19 +181,19 @@ export declare class PreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
-        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
+        fileNumber: string;
         adminComment: string | null;
-        processedBy: number | null;
         processedAt: Date | null;
-        studentId: number | null;
         submittedAt: Date;
+        updatedAt: Date;
+        processedBy: number | null;
+        studentId: number | null;
     }>;
 }
 //# sourceMappingURL=pre-registration.service.d.ts.map
