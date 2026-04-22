@@ -7,8 +7,8 @@ export declare class AdminPreRegistrationController {
     private service;
     constructor(service: AdminPreRegistrationService);
     findAll(req: Request, res: Response, next: NextFunction): Promise<void>;
-    findById(req: Request, res: Response, next: NextFunction): Promise<void>;
+    findById(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
     updateStatus(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
-    convert(req: Request, res: Response, next: NextFunction): Promise<void>;
+    convert(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
 }
 //# sourceMappingURL=admin-pre-registration.controller.d.ts.map

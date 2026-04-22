@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PreRegistrationService } from "./pre-registration.service";
 import { PreRegistrationRepository } from "./pre-registration.repository";
+import { checkMxRecord } from "../../utils/email-validation";
 
 /** Instance partagée du service */
 const service = new PreRegistrationService(new PreRegistrationRepository());
@@ -63,7 +64,14 @@ export class PreRegistrationController {
      */
     static async findById(req: Request, res: Response, next: NextFunction) {
         try {
-            const record = await service.findById(Number(req.params.id));
+            const id = parseInt(req.params.id as string, 10);
+            if (!Number.isInteger(id)) {
+                return res
+                    .status(400)
+                    .json({ success: false, error: "Identifiant invalide" });
+            }
+
+            const record = await service.findById(id);
             res.json({
                 success: true,
                 data: record,
@@ -111,6 +119,31 @@ export class PreRegistrationController {
                 success: true,
                 data: null,
                 message: "Pré-inscription supprimée avec succès",
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    /**
+     * Vérifie la validité d'une adresse email (DNS MX).
+     * Route légère pour le feedback visuel frontend.
+     *
+     * @param req - Requête Express avec email en query
+     * @param res - Réponse Express
+     * @param next - Fonction next
+     */
+    static async checkEmail(req: Request, res: Response, next: NextFunction) {
+        try {
+            const email = req.query.email as string;
+            const isValid = await checkMxRecord(email);
+
+            res.json({
+                success: true,
+                data: { isValid },
+                message: isValid
+                    ? "L'adresse email semble valide"
+                    : "L'adresse email ne possède pas de serveurs de messagerie valides",
             });
         } catch (err) {
             next(err);

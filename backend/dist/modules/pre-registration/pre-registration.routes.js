@@ -10,6 +10,11 @@ const pre_registration_schema_1 = require("./pre-registration.schema");
  */
 const router = (0, express_1.Router)();
 /**
+ * GET /api/pre-registrations/validate-email
+ * Vérifie si un email a un domaine valide (MX record).
+ */
+router.get("/validate-email", (0, validate_1.validate)({ query: pre_registration_schema_1.validateEmailSchema }), pre_registration_controller_1.PreRegistrationController.checkEmail);
+/**
  * POST /api/pre-registrations
  * Crée une nouvelle pré-inscription (accès public).
  */

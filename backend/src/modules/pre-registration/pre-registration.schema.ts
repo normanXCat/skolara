@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { checkMxRecord } from "../../utils/email-validation";
 
 /**
  * Valeurs autorisées pour le statut d'une pré-inscription.
@@ -57,6 +58,30 @@ export const createPreRegistrationSchema = z.object({
         .or(z.literal("")),
     /** URLs des documents joints (optionnel) */
     documentUrls: z.array(z.string().url()).optional().default([]),
+}).superRefine(async (data, ctx) => {
+    // Toujours vérifier l'email du parent (obligatoire)
+    const parentEmailValid = await checkMxRecord(data.parentEmail);
+    if (!parentEmailValid) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["parentEmail"],
+            message:
+                "Cette adresse email ne semble pas valide (domaine invalide). Veuillez vérifier.",
+        });
+    }
+
+    // Vérifier l'email de l'enfant uniquement s'il est renseigné
+    if (data.childEmail && data.childEmail.trim() !== "") {
+        const childEmailValid = await checkMxRecord(data.childEmail);
+        if (!childEmailValid) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["childEmail"],
+                message:
+                    "Cette adresse email ne semble pas valide (domaine invalide). Veuillez vérifier.",
+            });
+        }
+    }
 });
 
 /**
@@ -87,6 +112,13 @@ export const listQuerySchema = z.object({
     limit: z.coerce.number().int().positive().max(100).optional().default(10),
     /** Filtre optionnel par statut */
     status: StatusEnum.optional(),
+});
+
+/**
+ * Schéma Zod pour la vérification rapide d'un email (route légère).
+ */
+export const validateEmailSchema = z.object({
+    email: z.string().email("Format d'email invalide"),
 });
 
 /** Type TypeScript inféré pour la création */

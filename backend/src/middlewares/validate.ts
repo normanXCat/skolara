@@ -28,13 +28,25 @@ export const validate = (schemas: ValidationSchemas) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         try {
             if (schemas.body) {
-                req.body = schemas.body.parse(req.body);
+                req.body = await schemas.body.parseAsync(req.body);
             }
             if (schemas.query) {
-                req.query = schemas.query.parse(req.query) as any;
+                const validatedQuery = await schemas.query.parseAsync(req.query);
+                Object.defineProperty(req, "query", {
+                    value: validatedQuery,
+                    writable: true,
+                    configurable: true,
+                    enumerable: true,
+                });
             }
             if (schemas.params) {
-                req.params = schemas.params.parse(req.params) as any;
+                const validatedParams = await schemas.params.parseAsync(req.params);
+                Object.defineProperty(req, "params", {
+                    value: validatedParams,
+                    writable: true,
+                    configurable: true,
+                    enumerable: true,
+                });
             }
             next();
         } catch (error) {

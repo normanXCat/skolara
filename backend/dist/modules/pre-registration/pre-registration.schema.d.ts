@@ -62,6 +62,12 @@ export declare const listQuerySchema: z.ZodObject<{
         REJECTED: "REJECTED";
     }>>;
 }, z.core.$strip>;
+/**
+ * Schéma Zod pour la vérification rapide d'un email (route légère).
+ */
+export declare const validateEmailSchema: z.ZodObject<{
+    email: z.ZodString;
+}, z.core.$strip>;
 /** Type TypeScript inféré pour la création */
 export type CreatePreRegistrationInput = z.infer<typeof createPreRegistrationSchema>;
 /** Type TypeScript inféré pour la mise à jour */

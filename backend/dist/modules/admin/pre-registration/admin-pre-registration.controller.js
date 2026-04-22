@@ -25,6 +25,11 @@ class AdminPreRegistrationController {
     async findById(req, res, next) {
         try {
             const id = parseInt(req.params.id, 10);
+            if (!Number.isInteger(id)) {
+                return res
+                    .status(400)
+                    .json({ success: false, error: "Identifiant invalide" });
+            }
             const data = await this.service.findById(id);
             res.json({ success: true, data, message: "Détail du dossier" });
         }
@@ -37,6 +42,11 @@ class AdminPreRegistrationController {
             const id = parseInt(req.params.id, 10);
             const { status, comment } = req.body;
             const adminId = req.user.userId;
+            if (!Number.isInteger(id)) {
+                return res
+                    .status(400)
+                    .json({ success: false, error: "Identifiant invalide" });
+            }
             if (!Object.values(prisma_1.Status).includes(status)) {
                 return res
                     .status(400)
@@ -58,6 +68,11 @@ class AdminPreRegistrationController {
             const id = parseInt(req.params.id, 10);
             const { classId, createParentAccount } = req.body;
             const adminId = req.user.userId;
+            if (!Number.isInteger(id)) {
+                return res
+                    .status(400)
+                    .json({ success: false, error: "Identifiant invalide" });
+            }
             const student = await this.service.convertToStudent(id, adminId, {
                 classId: classId ? parseInt(classId, 10) : undefined,
                 createParentAccount: !!createParentAccount,
