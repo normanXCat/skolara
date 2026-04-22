@@ -143,11 +143,11 @@ export declare class StudentsService {
         marks: {
             id: number;
             date: Date;
-            value: number;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
             subject: string;
+            value: number;
             coefficient: number;
             term: string;
         }[];

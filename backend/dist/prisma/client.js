@@ -2,13 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prisma = void 0;
 const prisma_1 = require("../generated/prisma");
-const env_1 = require("../config/env");
+const adapter_pg_1 = require("@prisma/adapter-pg");
+require("dotenv/config");
 const globalForPrisma = globalThis;
 function createPrismaClient() {
-    return new prisma_1.PrismaClient({
-        datasourceUrl: env_1.env.DATABASE_URL,
+    const adapter = new adapter_pg_1.PrismaPg({
+        connectionString: process.env.DATABASE_URL,
     });
+    return new prisma_1.PrismaClient({ adapter });
 }
 exports.prisma = globalForPrisma.prisma ?? createPrismaClient();
-globalForPrisma.prisma = exports.prisma;
+if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = exports.prisma;
+}
 //# sourceMappingURL=client.js.map
