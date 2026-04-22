@@ -4,7 +4,7 @@ exports.prisma = void 0;
 const prisma_1 = require("../generated/prisma");
 const globalForPrisma = globalThis;
 function createPrismaClient() {
-    return new prisma_1.PrismaClient();
+    return new prisma_1.PrismaClient({});
 }
 exports.prisma = globalForPrisma.prisma ?? createPrismaClient();
 if (process.env.NODE_ENV !== "production") {
