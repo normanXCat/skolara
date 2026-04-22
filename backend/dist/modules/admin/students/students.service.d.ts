@@ -14,38 +14,38 @@ export declare class StudentsService {
             id: number;
             firstName: string;
             email: string;
-            updatedAt: Date;
             name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
             createdAt: Date;
+            updatedAt: Date;
         };
         parent: ({
             user: {
                 id: number;
                 firstName: string;
                 email: string;
-                updatedAt: Date;
                 name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
                 createdAt: Date;
+                updatedAt: Date;
             };
         } & {
             id: number;
             address: string | null;
-            updatedAt: Date;
             createdAt: Date;
+            updatedAt: Date;
             userId: number;
             phone: string;
         }) | null;
         class: {
             id: number;
-            updatedAt: Date;
             name: string;
             createdAt: Date;
+            updatedAt: Date;
             level: string;
         } | null;
     } & {
@@ -54,8 +54,8 @@ export declare class StudentsService {
         birthDate: Date;
         address: string | null;
         schoolYear: string;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
         userId: number;
         classId: number | null;
         parentId: number | null;
@@ -74,9 +74,9 @@ export declare class StudentsService {
             };
             class: {
                 id: number;
-                updatedAt: Date;
                 name: string;
                 createdAt: Date;
+                updatedAt: Date;
                 level: string;
             } | null;
         } & {
@@ -85,8 +85,8 @@ export declare class StudentsService {
             birthDate: Date;
             address: string | null;
             schoolYear: string;
-            updatedAt: Date;
             createdAt: Date;
+            updatedAt: Date;
             userId: number;
             classId: number | null;
             parentId: number | null;
@@ -106,78 +106,78 @@ export declare class StudentsService {
             id: number;
             firstName: string;
             email: string;
-            updatedAt: Date;
             name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
             createdAt: Date;
+            updatedAt: Date;
         };
         parent: ({
             user: {
                 id: number;
                 firstName: string;
                 email: string;
-                updatedAt: Date;
                 name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
                 createdAt: Date;
+                updatedAt: Date;
             };
         } & {
             id: number;
             address: string | null;
-            updatedAt: Date;
             createdAt: Date;
+            updatedAt: Date;
             userId: number;
             phone: string;
         }) | null;
-        class: {
-            id: number;
-            updatedAt: Date;
-            name: string;
-            createdAt: Date;
-            level: string;
-        } | null;
-        marks: {
-            id: number;
-            date: Date;
-            value: number;
-            updatedAt: Date;
-            studentId: number;
-            createdAt: Date;
-            subject: string;
-            coefficient: number;
-            term: string;
-        }[];
         absences: {
             id: number;
             date: Date;
+            createdAt: Date;
             updatedAt: Date;
             studentId: number;
-            createdAt: Date;
             reason: string | null;
             justified: boolean;
+        }[];
+        marks: {
+            id: number;
+            date: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            studentId: number;
+            subject: string;
+            value: number;
+            coefficient: number;
+            term: string;
         }[];
         payments: {
             status: import("../../../generated/prisma").$Enums.PaymentStatus;
             id: number;
+            createdAt: Date;
             updatedAt: Date;
             studentId: number;
-            createdAt: Date;
             amount: number;
             dueDate: Date;
             paymentDate: Date | null;
         }[];
+        class: {
+            id: number;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            level: string;
+        } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
         userId: number;
         classId: number | null;
         parentId: number | null;
@@ -190,18 +190,18 @@ export declare class StudentsService {
             id: number;
             firstName: string;
             email: string;
-            updatedAt: Date;
             name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
             createdAt: Date;
+            updatedAt: Date;
         };
         class: {
             id: number;
-            updatedAt: Date;
             name: string;
             createdAt: Date;
+            updatedAt: Date;
             level: string;
         } | null;
     } & {
@@ -210,8 +210,8 @@ export declare class StudentsService {
         birthDate: Date;
         address: string | null;
         schoolYear: string;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
         userId: number;
         classId: number | null;
         parentId: number | null;
@@ -225,8 +225,8 @@ export declare class StudentsService {
         birthDate: Date;
         address: string | null;
         schoolYear: string;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
         userId: number;
         classId: number | null;
         parentId: number | null;
@@ -240,8 +240,8 @@ export declare class StudentsService {
         birthDate: Date;
         address: string | null;
         schoolYear: string;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
         userId: number;
         classId: number | null;
         parentId: number | null;

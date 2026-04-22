@@ -1,16 +1,24 @@
+import "dotenv/config";
 import { PrismaClient } from "../generated/prisma";
-import { env } from "../config/env";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const globalForPrisma = globalThis as unknown as {
-    prisma: PrismaClient | undefined;
-};
+function createPrismaClient(): PrismaClient {
+    const connectionString = process.env.DATABASE_URL;
 
-function createPrismaClient() {
-    return new PrismaClient({});
+    if (!connectionString) {
+        throw new Error("[Prisma] DATABASE_URL est manquant sur Render !");
+    }
+
+    const adapter = new PrismaPg({ connectionString });
+    return new PrismaClient({ adapter });
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = prisma;
+declare global {
+    var prisma: PrismaClient | undefined;
 }
+
+if (!global.prisma) {
+    global.prisma = createPrismaClient();
+}
+
+export const prisma = global.prisma;

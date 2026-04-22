@@ -120,6 +120,27 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  name: 'name',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  role: 'role',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  revoked: 'revoked'
+};
+
 exports.Prisma.PreRegistrationScalarFieldEnum = {
   id: 'id',
   childFirstName: 'childFirstName',
@@ -147,6 +168,69 @@ exports.Prisma.PreRegistrationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  classId: 'classId',
+  status: 'status',
+  schoolYear: 'schoolYear',
+  birthDate: 'birthDate',
+  address: 'address',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ParentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  phone: 'phone',
+  address: 'address',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClassScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MarkScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  subject: 'subject',
+  value: 'value',
+  coefficient: 'coefficient',
+  term: 'term',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AbsenceScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  date: 'date',
+  reason: 'reason',
+  justified: 'justified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  amount: 'amount',
+  dueDate: 'dueDate',
+  status: 'status',
+  paymentDate: 'paymentDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.GradeScalarFieldEnum = {
   id: 'id',
   value: 'value',
@@ -167,6 +251,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  ADMIN: 'ADMIN',
+  ENSEIGNANT: 'ENSEIGNANT',
+  ELEVE: 'ELEVE',
+  PARENT: 'PARENT'
+};
+
 exports.Status = exports.$Enums.Status = {
   PENDING: 'PENDING',
   IN_REVIEW: 'IN_REVIEW',
@@ -174,8 +265,27 @@ exports.Status = exports.$Enums.Status = {
   REJECTED: 'REJECTED'
 };
 
+exports.StudentStatus = exports.$Enums.StudentStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  LATE: 'LATE'
+};
+
 exports.Prisma.ModelName = {
+  User: 'User',
+  RefreshToken: 'RefreshToken',
   PreRegistration: 'PreRegistration',
+  Student: 'Student',
+  Parent: 'Parent',
+  Class: 'Class',
+  Mark: 'Mark',
+  Absence: 'Absence',
+  Payment: 'Payment',
   Grade: 'Grade'
 };
 

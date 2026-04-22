@@ -23,19 +23,19 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
+        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
-        fileNumber: string;
         adminComment: string | null;
-        processedAt: Date | null;
-        submittedAt: Date;
-        updatedAt: Date;
         processedBy: number | null;
+        processedAt: Date | null;
         studentId: number | null;
+        submittedAt: Date;
     }>;
     /**
      * Recherche un premier enregistrement correspondant aux critères.
@@ -54,19 +54,19 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
+        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
-        fileNumber: string;
         adminComment: string | null;
-        processedAt: Date | null;
-        submittedAt: Date;
-        updatedAt: Date;
         processedBy: number | null;
+        processedAt: Date | null;
         studentId: number | null;
+        submittedAt: Date;
     } | null>;
     /**
      * Récupère une liste paginée de pré-inscriptions avec filtre optionnel par statut.
@@ -89,19 +89,19 @@ export declare class PreRegistrationRepository {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
+            updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
             parentAddress: string | null;
+            fileNumber: string;
             receiptNumber: string | null;
             receiptImageUrl: string | null;
             documentUrls: string[];
-            fileNumber: string;
             adminComment: string | null;
-            processedAt: Date | null;
-            submittedAt: Date;
-            updatedAt: Date;
             processedBy: number | null;
+            processedAt: Date | null;
             studentId: number | null;
+            submittedAt: Date;
         }[];
         total: number;
     }>;
@@ -123,19 +123,19 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
+        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
-        fileNumber: string;
         adminComment: string | null;
-        processedAt: Date | null;
-        submittedAt: Date;
-        updatedAt: Date;
         processedBy: number | null;
+        processedAt: Date | null;
         studentId: number | null;
+        submittedAt: Date;
     } | null>;
     /**
      * Met à jour une pré-inscription existante.
@@ -156,19 +156,19 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
+        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
-        fileNumber: string;
         adminComment: string | null;
-        processedAt: Date | null;
-        submittedAt: Date;
-        updatedAt: Date;
         processedBy: number | null;
+        processedAt: Date | null;
         studentId: number | null;
+        submittedAt: Date;
     }>;
     /**
      * Supprime une pré-inscription par son identifiant.
@@ -188,19 +188,19 @@ export declare class PreRegistrationRepository {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
+        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
+        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
-        fileNumber: string;
         adminComment: string | null;
-        processedAt: Date | null;
-        submittedAt: Date;
-        updatedAt: Date;
         processedBy: number | null;
+        processedAt: Date | null;
         studentId: number | null;
+        submittedAt: Date;
     }>;
 }
 //# sourceMappingURL=pre-registration.repository.d.ts.map

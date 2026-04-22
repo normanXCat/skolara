@@ -1,0 +1,1 @@
+const { PrismaClient } = require("./src/generated/prisma"); try { const prisma = new PrismaClient(); console.log("Init successful"); console.log("User model:", typeof prisma.user); } catch (e) { console.error("Init failed:", e.message); if (e.stack) console.error(e.stack); }

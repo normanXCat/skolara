@@ -1,15 +1,167 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
-  output          = "../src/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id                     Int               @id @default(autoincrement())
+  firstName              String
+  name                   String
+  email                  String            @unique
+  passwordHash           String
+  role                   Role              @default(ELEVE)
+  active                 Boolean           @default(true)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  parent                 Parent?
+  processedRegistrations PreRegistration[]
+  refreshTokens          RefreshToken[]
+  student                Student?
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revoked   Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+model PreRegistration {
+  id               Int       @id @default(autoincrement())
+  childFirstName   String
+  childLastName    String
+  childDateOfBirth DateTime
+  gender           String
+  childEmail       String?
+  previousSchool   String?
+  desiredGrade     String
+  parentFirstName  String
+  parentFullName   String
+  parentEmail      String
+  parentPhone      String
+  parentAddress    String?
+  fileNumber       String    @unique
+  receiptNumber    String?   @unique
+  receiptImageUrl  String?
+  documentUrls     String[]
+  status           Status    @default(PENDING)
+  adminComment     String?
+  processedBy      Int?
+  processedAt      DateTime?
+  studentId        Int?      @unique
+  submittedAt      DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  processedByUser  User?     @relation(fields: [processedBy], references: [id])
+  student          Student?  @relation(fields: [studentId], references: [id])
+
+  @@map("pre_registrations")
+}
+
+model Student {
+  id              Int              @id @default(autoincrement())
+  userId          Int              @unique
+  classId         Int?
+  status          StudentStatus    @default(ACTIVE)
+  schoolYear      String
+  birthDate       DateTime
+  address         String?
+  parentId        Int?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  absences        Absence[]
+  marks           Mark[]
+  payments        Payment[]
+  preRegistration PreRegistration?
+  class           Class?           @relation(fields: [classId], references: [id])
+  parent          Parent?          @relation(fields: [parentId], references: [id])
+  user            User             @relation(fields: [userId], references: [id])
+
+  @@map("students")
+}
+
+model Parent {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  phone     String
+  address   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id])
+  students  Student[]
+
+  @@map("parents")
+}
+
+model Class {
+  id        Int       @id @default(autoincrement())
+  name      String
+  level     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  students  Student[]
+
+  @@map("classes")
+}
+
+model Mark {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  subject     String
+  value       Float
+  coefficient Float    @default(1.0)
+  term        String
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  student     Student  @relation(fields: [studentId], references: [id])
+
+  @@map("marks")
+}
+
+model Absence {
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  date      DateTime
+  reason    String?
+  justified Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  @@map("absences")
+}
+
+model Payment {
+  id          Int           @id @default(autoincrement())
+  studentId   Int
+  amount      Float
+  dueDate     DateTime
+  status      PaymentStatus @default(PENDING)
+  paymentDate DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  student     Student       @relation(fields: [studentId], references: [id])
+
+  @@map("payments")
+}
+
+model Grade {
+  id    Int    @id @default(autoincrement())
+  value String @unique
+  label String
 }
 
 /// Rôle utilisateur dans le système Skolara
@@ -37,175 +189,3 @@ enum PaymentStatus {
   PAID
   LATE
 }
-
-model User {
-  id                Int              @id @default(autoincrement())
-  firstName         String
-  name              String
-  email             String           @unique
-  passwordHash      String
-  role              Role             @default(ELEVE)
-  active            Boolean          @default(true)
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  
-  refreshTokens     RefreshToken[]
-  processedRegistrations PreRegistration[]
-  student           Student?
-  parent            Parent?
-
-  @@map("users")
-}
-
-model RefreshToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  revoked   Boolean  @default(false)
-
-  @@index([userId])
-  @@index([token])
-  @@map("refresh_tokens")
-}
-
-model PreRegistration {
-  id                Int       @id @default(autoincrement())
-  childFirstName    String
-  childLastName     String
-  childDateOfBirth  DateTime
-  gender            String    // "M" | "F"
-  childEmail        String?
-  previousSchool    String?
-  desiredGrade      String
-  
-  parentFirstName   String
-  parentFullName    String
-  parentEmail       String
-  parentPhone       String
-  parentAddress     String?
-  
-  fileNumber        String    @unique
-  receiptNumber     String?   @unique
-  receiptImageUrl   String?
-  documentUrls      String[]
-  
-  status            Status    @default(PENDING)
-  adminComment      String?
-  processedBy       Int?
-  processedByUser   User?     @relation(fields: [processedBy], references: [id])
-  processedAt       DateTime?
-  studentId         Int?      @unique
-  student           Student?  @relation(fields: [studentId], references: [id])
-  
-  submittedAt       DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-
-  @@map("pre_registrations")
-}
-
-model Student {
-  id                Int              @id @default(autoincrement())
-  userId            Int              @unique
-  user              User             @relation(fields: [userId], references: [id])
-  classId           Int?
-  class             Class?           @relation(fields: [classId], references: [id])
-  status            StudentStatus    @default(ACTIVE)
-  schoolYear        String
-  birthDate         DateTime
-  address           String?
-  
-  parentId          Int?
-  parent            Parent?          @relation(fields: [parentId], references: [id])
-  
-  marks             Mark[]
-  absences          Absence[]
-  payments          Payment[]
-  preRegistration   PreRegistration?
-
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-
-  @@map("students")
-}
-
-model Parent {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @unique
-  user      User      @relation(fields: [userId], references: [id])
-  phone     String
-  address   String?
-  students  Student[]
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@map("parents")
-}
-
-model Class {
-  id        Int       @id @default(autoincrement())
-  name      String
-  level     String    // e.g., "6eme", "CM2"
-  students  Student[]
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@map("classes")
-}
-
-model Mark {
-  id        Int      @id @default(autoincrement())
-  studentId Int
-  student   Student  @relation(fields: [studentId], references: [id])
-  subject   String
-  value     Float
-  coefficient Float  @default(1.0)
-  term      String   // e.g., "Trimestre 1"
-  date      DateTime @default(now())
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@map("marks")
-}
-
-model Absence {
-  id        Int      @id @default(autoincrement())
-  studentId Int
-  student   Student  @relation(fields: [studentId], references: [id])
-  date      DateTime
-  reason    String?
-  justified Boolean  @default(false)
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@map("absences")
-}
-
-model Payment {
-  id        Int      @id @default(autoincrement())
-  studentId Int
-  student   Student  @relation(fields: [studentId], references: [id])
-  amount    Float
-  dueDate   DateTime
-  status    PaymentStatus @default(PENDING)
-  paymentDate DateTime?
-  
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@map("payments")
-}
-
-model Grade {
-  id    Int    @id @default(autoincrement())
-  value String @unique
-  label String
-}
-
-
