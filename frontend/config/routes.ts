@@ -12,7 +12,6 @@ export const ROUTES = {
     ADMIN: {
         DASHBOARD: "/admin/dashboard",
         STUDENTS: "/admin/students",
-        STUDENTS_NEW: "/admin/students/new",
         STUDENTS_EDIT: (id: string | number) => `/admin/students/${id}/edit`,
         STUDENTS_DETAIL: (id: string | number) => `/admin/students/${id}`,
         PRE_REGISTRATIONS: "/admin/pre-registrations",
