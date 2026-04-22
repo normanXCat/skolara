@@ -1743,13 +1743,13 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    refreshTokens: number
     processedRegistrations: number
+    refreshTokens: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
     processedRegistrations?: boolean | UserCountOutputTypeCountProcessedRegistrationsArgs
+    refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   }
 
   // Custom InputTypes
@@ -1766,15 +1766,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: RefreshTokenWhereInput
+  export type UserCountOutputTypeCountProcessedRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreRegistrationWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountProcessedRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PreRegistrationWhereInput
+  export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RefreshTokenWhereInput
   }
 
 
@@ -1783,14 +1783,14 @@ export namespace Prisma {
    */
 
   export type StudentCountOutputType = {
-    marks: number
     absences: number
+    marks: number
     payments: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    marks?: boolean | StudentCountOutputTypeCountMarksArgs
     absences?: boolean | StudentCountOutputTypeCountAbsencesArgs
+    marks?: boolean | StudentCountOutputTypeCountMarksArgs
     payments?: boolean | StudentCountOutputTypeCountPaymentsArgs
   }
 
@@ -1808,15 +1808,15 @@ export namespace Prisma {
   /**
    * StudentCountOutputType without action
    */
-  export type StudentCountOutputTypeCountMarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MarkWhereInput
+  export type StudentCountOutputTypeCountAbsencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AbsenceWhereInput
   }
 
   /**
    * StudentCountOutputType without action
    */
-  export type StudentCountOutputTypeCountAbsencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AbsenceWhereInput
+  export type StudentCountOutputTypeCountMarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MarkWhereInput
   }
 
   /**
@@ -2123,10 +2123,10 @@ export namespace Prisma {
     active?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
-    processedRegistrations?: boolean | User$processedRegistrationsArgs<ExtArgs>
-    student?: boolean | User$studentArgs<ExtArgs>
     parent?: boolean | User$parentArgs<ExtArgs>
+    processedRegistrations?: boolean | User$processedRegistrationsArgs<ExtArgs>
+    refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
+    student?: boolean | User$studentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2168,10 +2168,10 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "name" | "email" | "passwordHash" | "role" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
-    processedRegistrations?: boolean | User$processedRegistrationsArgs<ExtArgs>
-    student?: boolean | User$studentArgs<ExtArgs>
     parent?: boolean | User$parentArgs<ExtArgs>
+    processedRegistrations?: boolean | User$processedRegistrationsArgs<ExtArgs>
+    refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
+    student?: boolean | User$studentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2180,10 +2180,10 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
-      processedRegistrations: Prisma.$PreRegistrationPayload<ExtArgs>[]
-      student: Prisma.$StudentPayload<ExtArgs> | null
       parent: Prisma.$ParentPayload<ExtArgs> | null
+      processedRegistrations: Prisma.$PreRegistrationPayload<ExtArgs>[]
+      refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+      student: Prisma.$StudentPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2589,10 +2589,10 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    refreshTokens<T extends User$refreshTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    processedRegistrations<T extends User$processedRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$processedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    student<T extends User$studentArgs<ExtArgs> = {}>(args?: Subset<T, User$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     parent<T extends User$parentArgs<ExtArgs> = {}>(args?: Subset<T, User$parentArgs<ExtArgs>>): Prisma__ParentClient<$Result.GetResult<Prisma.$ParentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    processedRegistrations<T extends User$processedRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$processedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    refreshTokens<T extends User$refreshTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    student<T extends User$studentArgs<ExtArgs> = {}>(args?: Subset<T, User$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3024,27 +3024,22 @@ export namespace Prisma {
   }
 
   /**
-   * User.refreshTokens
+   * User.parent
    */
-  export type User$refreshTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the RefreshToken
+     * Select specific fields to fetch from the Parent
      */
-    select?: RefreshTokenSelect<ExtArgs> | null
+    select?: ParentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the RefreshToken
+     * Omit specific fields from the Parent
      */
-    omit?: RefreshTokenOmit<ExtArgs> | null
+    omit?: ParentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RefreshTokenInclude<ExtArgs> | null
-    where?: RefreshTokenWhereInput
-    orderBy?: RefreshTokenOrderByWithRelationInput | RefreshTokenOrderByWithRelationInput[]
-    cursor?: RefreshTokenWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: RefreshTokenScalarFieldEnum | RefreshTokenScalarFieldEnum[]
+    include?: ParentInclude<ExtArgs> | null
+    where?: ParentWhereInput
   }
 
   /**
@@ -3072,6 +3067,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.refreshTokens
+   */
+  export type User$refreshTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RefreshToken
+     */
+    select?: RefreshTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RefreshToken
+     */
+    omit?: RefreshTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RefreshTokenInclude<ExtArgs> | null
+    where?: RefreshTokenWhereInput
+    orderBy?: RefreshTokenOrderByWithRelationInput | RefreshTokenOrderByWithRelationInput[]
+    cursor?: RefreshTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RefreshTokenScalarFieldEnum | RefreshTokenScalarFieldEnum[]
+  }
+
+  /**
    * User.student
    */
   export type User$studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3088,25 +3107,6 @@ export namespace Prisma {
      */
     include?: StudentInclude<ExtArgs> | null
     where?: StudentWhereInput
-  }
-
-  /**
-   * User.parent
-   */
-  export type User$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Parent
-     */
-    select?: ParentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Parent
-     */
-    omit?: ParentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ParentInclude<ExtArgs> | null
-    where?: ParentWhereInput
   }
 
   /**
@@ -5886,13 +5886,13 @@ export namespace Prisma {
     parentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    class?: boolean | Student$classArgs<ExtArgs>
-    parent?: boolean | Student$parentArgs<ExtArgs>
-    marks?: boolean | Student$marksArgs<ExtArgs>
     absences?: boolean | Student$absencesArgs<ExtArgs>
+    marks?: boolean | Student$marksArgs<ExtArgs>
     payments?: boolean | Student$paymentsArgs<ExtArgs>
     preRegistration?: boolean | Student$preRegistrationArgs<ExtArgs>
+    class?: boolean | Student$classArgs<ExtArgs>
+    parent?: boolean | Student$parentArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -5907,9 +5907,9 @@ export namespace Prisma {
     parentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     class?: boolean | Student$classArgs<ExtArgs>
     parent?: boolean | Student$parentArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
   export type StudentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5923,9 +5923,9 @@ export namespace Prisma {
     parentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     class?: boolean | Student$classArgs<ExtArgs>
     parent?: boolean | Student$parentArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
   export type StudentSelectScalar = {
@@ -5943,36 +5943,36 @@ export namespace Prisma {
 
   export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "classId" | "status" | "schoolYear" | "birthDate" | "address" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    class?: boolean | Student$classArgs<ExtArgs>
-    parent?: boolean | Student$parentArgs<ExtArgs>
-    marks?: boolean | Student$marksArgs<ExtArgs>
     absences?: boolean | Student$absencesArgs<ExtArgs>
+    marks?: boolean | Student$marksArgs<ExtArgs>
     payments?: boolean | Student$paymentsArgs<ExtArgs>
     preRegistration?: boolean | Student$preRegistrationArgs<ExtArgs>
+    class?: boolean | Student$classArgs<ExtArgs>
+    parent?: boolean | Student$parentArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     class?: boolean | Student$classArgs<ExtArgs>
     parent?: boolean | Student$parentArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type StudentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     class?: boolean | Student$classArgs<ExtArgs>
     parent?: boolean | Student$parentArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $StudentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Student"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      class: Prisma.$ClassPayload<ExtArgs> | null
-      parent: Prisma.$ParentPayload<ExtArgs> | null
-      marks: Prisma.$MarkPayload<ExtArgs>[]
       absences: Prisma.$AbsencePayload<ExtArgs>[]
+      marks: Prisma.$MarkPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
       preRegistration: Prisma.$PreRegistrationPayload<ExtArgs> | null
+      class: Prisma.$ClassPayload<ExtArgs> | null
+      parent: Prisma.$ParentPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6379,13 +6379,13 @@ export namespace Prisma {
    */
   export interface Prisma__StudentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    class<T extends Student$classArgs<ExtArgs> = {}>(args?: Subset<T, Student$classArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    parent<T extends Student$parentArgs<ExtArgs> = {}>(args?: Subset<T, Student$parentArgs<ExtArgs>>): Prisma__ParentClient<$Result.GetResult<Prisma.$ParentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    marks<T extends Student$marksArgs<ExtArgs> = {}>(args?: Subset<T, Student$marksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     absences<T extends Student$absencesArgs<ExtArgs> = {}>(args?: Subset<T, Student$absencesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AbsencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    marks<T extends Student$marksArgs<ExtArgs> = {}>(args?: Subset<T, Student$marksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Student$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Student$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     preRegistration<T extends Student$preRegistrationArgs<ExtArgs> = {}>(args?: Subset<T, Student$preRegistrationArgs<ExtArgs>>): Prisma__PreRegistrationClient<$Result.GetResult<Prisma.$PreRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    class<T extends Student$classArgs<ExtArgs> = {}>(args?: Subset<T, Student$classArgs<ExtArgs>>): Prisma__ClassClient<$Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    parent<T extends Student$parentArgs<ExtArgs> = {}>(args?: Subset<T, Student$parentArgs<ExtArgs>>): Prisma__ParentClient<$Result.GetResult<Prisma.$ParentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6826,41 +6826,27 @@ export namespace Prisma {
   }
 
   /**
-   * Student.class
+   * Student.absences
    */
-  export type Student$classArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Student$absencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Class
+     * Select specific fields to fetch from the Absence
      */
-    select?: ClassSelect<ExtArgs> | null
+    select?: AbsenceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Class
+     * Omit specific fields from the Absence
      */
-    omit?: ClassOmit<ExtArgs> | null
+    omit?: AbsenceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ClassInclude<ExtArgs> | null
-    where?: ClassWhereInput
-  }
-
-  /**
-   * Student.parent
-   */
-  export type Student$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Parent
-     */
-    select?: ParentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Parent
-     */
-    omit?: ParentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ParentInclude<ExtArgs> | null
-    where?: ParentWhereInput
+    include?: AbsenceInclude<ExtArgs> | null
+    where?: AbsenceWhereInput
+    orderBy?: AbsenceOrderByWithRelationInput | AbsenceOrderByWithRelationInput[]
+    cursor?: AbsenceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AbsenceScalarFieldEnum | AbsenceScalarFieldEnum[]
   }
 
   /**
@@ -6885,30 +6871,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MarkScalarFieldEnum | MarkScalarFieldEnum[]
-  }
-
-  /**
-   * Student.absences
-   */
-  export type Student$absencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Absence
-     */
-    select?: AbsenceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Absence
-     */
-    omit?: AbsenceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AbsenceInclude<ExtArgs> | null
-    where?: AbsenceWhereInput
-    orderBy?: AbsenceOrderByWithRelationInput | AbsenceOrderByWithRelationInput[]
-    cursor?: AbsenceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AbsenceScalarFieldEnum | AbsenceScalarFieldEnum[]
   }
 
   /**
@@ -6952,6 +6914,44 @@ export namespace Prisma {
      */
     include?: PreRegistrationInclude<ExtArgs> | null
     where?: PreRegistrationWhereInput
+  }
+
+  /**
+   * Student.class
+   */
+  export type Student$classArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Class
+     */
+    select?: ClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Class
+     */
+    omit?: ClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassInclude<ExtArgs> | null
+    where?: ClassWhereInput
+  }
+
+  /**
+   * Student.parent
+   */
+  export type Student$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Parent
+     */
+    select?: ParentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Parent
+     */
+    omit?: ParentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentInclude<ExtArgs> | null
+    where?: ParentWhereInput
   }
 
   /**
@@ -13991,10 +13991,10 @@ export namespace Prisma {
     active?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    refreshTokens?: RefreshTokenListRelationFilter
-    processedRegistrations?: PreRegistrationListRelationFilter
-    student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     parent?: XOR<ParentNullableScalarRelationFilter, ParentWhereInput> | null
+    processedRegistrations?: PreRegistrationListRelationFilter
+    refreshTokens?: RefreshTokenListRelationFilter
+    student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14007,10 +14007,10 @@ export namespace Prisma {
     active?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    refreshTokens?: RefreshTokenOrderByRelationAggregateInput
-    processedRegistrations?: PreRegistrationOrderByRelationAggregateInput
-    student?: StudentOrderByWithRelationInput
     parent?: ParentOrderByWithRelationInput
+    processedRegistrations?: PreRegistrationOrderByRelationAggregateInput
+    refreshTokens?: RefreshTokenOrderByRelationAggregateInput
+    student?: StudentOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14026,10 +14026,10 @@ export namespace Prisma {
     active?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    refreshTokens?: RefreshTokenListRelationFilter
-    processedRegistrations?: PreRegistrationListRelationFilter
-    student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     parent?: XOR<ParentNullableScalarRelationFilter, ParentWhereInput> | null
+    processedRegistrations?: PreRegistrationListRelationFilter
+    refreshTokens?: RefreshTokenListRelationFilter
+    student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14295,13 +14295,13 @@ export namespace Prisma {
     parentId?: IntNullableFilter<"Student"> | number | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
-    parent?: XOR<ParentNullableScalarRelationFilter, ParentWhereInput> | null
-    marks?: MarkListRelationFilter
     absences?: AbsenceListRelationFilter
+    marks?: MarkListRelationFilter
     payments?: PaymentListRelationFilter
     preRegistration?: XOR<PreRegistrationNullableScalarRelationFilter, PreRegistrationWhereInput> | null
+    class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
+    parent?: XOR<ParentNullableScalarRelationFilter, ParentWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -14315,13 +14315,13 @@ export namespace Prisma {
     parentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    user?: UserOrderByWithRelationInput
-    class?: ClassOrderByWithRelationInput
-    parent?: ParentOrderByWithRelationInput
-    marks?: MarkOrderByRelationAggregateInput
     absences?: AbsenceOrderByRelationAggregateInput
+    marks?: MarkOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
     preRegistration?: PreRegistrationOrderByWithRelationInput
+    class?: ClassOrderByWithRelationInput
+    parent?: ParentOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -14338,13 +14338,13 @@ export namespace Prisma {
     parentId?: IntNullableFilter<"Student"> | number | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
-    parent?: XOR<ParentNullableScalarRelationFilter, ParentWhereInput> | null
-    marks?: MarkListRelationFilter
     absences?: AbsenceListRelationFilter
+    marks?: MarkListRelationFilter
     payments?: PaymentListRelationFilter
     preRegistration?: XOR<PreRegistrationNullableScalarRelationFilter, PreRegistrationWhereInput> | null
+    class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
+    parent?: XOR<ParentNullableScalarRelationFilter, ParentWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
   export type StudentOrderByWithAggregationInput = {
@@ -14772,10 +14772,10 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
-    processedRegistrations?: PreRegistrationCreateNestedManyWithoutProcessedByUserInput
-    student?: StudentCreateNestedOneWithoutUserInput
     parent?: ParentCreateNestedOneWithoutUserInput
+    processedRegistrations?: PreRegistrationCreateNestedManyWithoutProcessedByUserInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -14788,10 +14788,10 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-    processedRegistrations?: PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput
-    student?: StudentUncheckedCreateNestedOneWithoutUserInput
     parent?: ParentUncheckedCreateNestedOneWithoutUserInput
+    processedRegistrations?: PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -14803,10 +14803,10 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
-    processedRegistrations?: PreRegistrationUpdateManyWithoutProcessedByUserNestedInput
-    student?: StudentUpdateOneWithoutUserNestedInput
     parent?: ParentUpdateOneWithoutUserNestedInput
+    processedRegistrations?: PreRegistrationUpdateManyWithoutProcessedByUserNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -14819,10 +14819,10 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-    processedRegistrations?: PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput
-    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
+    processedRegistrations?: PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15110,13 +15110,13 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
-    class?: ClassCreateNestedOneWithoutStudentsInput
-    parent?: ParentCreateNestedOneWithoutStudentsInput
-    marks?: MarkCreateNestedManyWithoutStudentInput
     absences?: AbsenceCreateNestedManyWithoutStudentInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
     payments?: PaymentCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    class?: ClassCreateNestedOneWithoutStudentsInput
+    parent?: ParentCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -15130,8 +15130,8 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     absences?: AbsenceUncheckedCreateNestedManyWithoutStudentInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     payments?: PaymentUncheckedCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -15143,13 +15143,13 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
-    class?: ClassUpdateOneWithoutStudentsNestedInput
-    parent?: ParentUpdateOneWithoutStudentsNestedInput
-    marks?: MarkUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUpdateManyWithoutStudentNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
     payments?: PaymentUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    class?: ClassUpdateOneWithoutStudentsNestedInput
+    parent?: ParentUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -15163,8 +15163,8 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUncheckedUpdateManyWithoutStudentNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -15631,10 +15631,9 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type RefreshTokenListRelationFilter = {
-    every?: RefreshTokenWhereInput
-    some?: RefreshTokenWhereInput
-    none?: RefreshTokenWhereInput
+  export type ParentNullableScalarRelationFilter = {
+    is?: ParentWhereInput | null
+    isNot?: ParentWhereInput | null
   }
 
   export type PreRegistrationListRelationFilter = {
@@ -15643,21 +15642,22 @@ export namespace Prisma {
     none?: PreRegistrationWhereInput
   }
 
+  export type RefreshTokenListRelationFilter = {
+    every?: RefreshTokenWhereInput
+    some?: RefreshTokenWhereInput
+    none?: RefreshTokenWhereInput
+  }
+
   export type StudentNullableScalarRelationFilter = {
     is?: StudentWhereInput | null
     isNot?: StudentWhereInput | null
   }
 
-  export type ParentNullableScalarRelationFilter = {
-    is?: ParentWhereInput | null
-    isNot?: ParentWhereInput | null
-  }
-
-  export type RefreshTokenOrderByRelationAggregateInput = {
+  export type PreRegistrationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type PreRegistrationOrderByRelationAggregateInput = {
+  export type RefreshTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16031,21 +16031,16 @@ export namespace Prisma {
     not?: NestedEnumStudentStatusFilter<$PrismaModel> | $Enums.StudentStatus
   }
 
-  export type ClassNullableScalarRelationFilter = {
-    is?: ClassWhereInput | null
-    isNot?: ClassWhereInput | null
+  export type AbsenceListRelationFilter = {
+    every?: AbsenceWhereInput
+    some?: AbsenceWhereInput
+    none?: AbsenceWhereInput
   }
 
   export type MarkListRelationFilter = {
     every?: MarkWhereInput
     some?: MarkWhereInput
     none?: MarkWhereInput
-  }
-
-  export type AbsenceListRelationFilter = {
-    every?: AbsenceWhereInput
-    some?: AbsenceWhereInput
-    none?: AbsenceWhereInput
   }
 
   export type PaymentListRelationFilter = {
@@ -16059,11 +16054,16 @@ export namespace Prisma {
     isNot?: PreRegistrationWhereInput | null
   }
 
-  export type MarkOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type ClassNullableScalarRelationFilter = {
+    is?: ClassWhereInput | null
+    isNot?: ClassWhereInput | null
   }
 
   export type AbsenceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MarkOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16423,11 +16423,10 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type RefreshTokenCreateNestedManyWithoutUserInput = {
-    create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
-    createMany?: RefreshTokenCreateManyUserInputEnvelope
-    connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+  export type ParentCreateNestedOneWithoutUserInput = {
+    create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ParentCreateOrConnectWithoutUserInput
+    connect?: ParentWhereUniqueInput
   }
 
   export type PreRegistrationCreateNestedManyWithoutProcessedByUserInput = {
@@ -16437,33 +16436,14 @@ export namespace Prisma {
     connect?: PreRegistrationWhereUniqueInput | PreRegistrationWhereUniqueInput[]
   }
 
-  export type StudentCreateNestedOneWithoutUserInput = {
-    create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
-    connectOrCreate?: StudentCreateOrConnectWithoutUserInput
-    connect?: StudentWhereUniqueInput
-  }
-
-  export type ParentCreateNestedOneWithoutUserInput = {
-    create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ParentCreateOrConnectWithoutUserInput
-    connect?: ParentWhereUniqueInput
-  }
-
-  export type RefreshTokenUncheckedCreateNestedManyWithoutUserInput = {
+  export type RefreshTokenCreateNestedManyWithoutUserInput = {
     create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
     createMany?: RefreshTokenCreateManyUserInputEnvelope
     connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
   }
 
-  export type PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput = {
-    create?: XOR<PreRegistrationCreateWithoutProcessedByUserInput, PreRegistrationUncheckedCreateWithoutProcessedByUserInput> | PreRegistrationCreateWithoutProcessedByUserInput[] | PreRegistrationUncheckedCreateWithoutProcessedByUserInput[]
-    connectOrCreate?: PreRegistrationCreateOrConnectWithoutProcessedByUserInput | PreRegistrationCreateOrConnectWithoutProcessedByUserInput[]
-    createMany?: PreRegistrationCreateManyProcessedByUserInputEnvelope
-    connect?: PreRegistrationWhereUniqueInput | PreRegistrationWhereUniqueInput[]
-  }
-
-  export type StudentUncheckedCreateNestedOneWithoutUserInput = {
+  export type StudentCreateNestedOneWithoutUserInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
     connect?: StudentWhereUniqueInput
@@ -16473,6 +16453,26 @@ export namespace Prisma {
     create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
     connectOrCreate?: ParentCreateOrConnectWithoutUserInput
     connect?: ParentWhereUniqueInput
+  }
+
+  export type PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput = {
+    create?: XOR<PreRegistrationCreateWithoutProcessedByUserInput, PreRegistrationUncheckedCreateWithoutProcessedByUserInput> | PreRegistrationCreateWithoutProcessedByUserInput[] | PreRegistrationUncheckedCreateWithoutProcessedByUserInput[]
+    connectOrCreate?: PreRegistrationCreateOrConnectWithoutProcessedByUserInput | PreRegistrationCreateOrConnectWithoutProcessedByUserInput[]
+    createMany?: PreRegistrationCreateManyProcessedByUserInputEnvelope
+    connect?: PreRegistrationWhereUniqueInput | PreRegistrationWhereUniqueInput[]
+  }
+
+  export type RefreshTokenUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
+    createMany?: RefreshTokenCreateManyUserInputEnvelope
+    connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+  }
+
+  export type StudentUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutUserInput
+    connect?: StudentWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -16491,18 +16491,14 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type RefreshTokenUpdateManyWithoutUserNestedInput = {
-    create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
-    upsert?: RefreshTokenUpsertWithWhereUniqueWithoutUserInput | RefreshTokenUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: RefreshTokenCreateManyUserInputEnvelope
-    set?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
-    disconnect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
-    delete?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
-    connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
-    update?: RefreshTokenUpdateWithWhereUniqueWithoutUserInput | RefreshTokenUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: RefreshTokenUpdateManyWithWhereWithoutUserInput | RefreshTokenUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+  export type ParentUpdateOneWithoutUserNestedInput = {
+    create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ParentCreateOrConnectWithoutUserInput
+    upsert?: ParentUpsertWithoutUserInput
+    disconnect?: ParentWhereInput | boolean
+    delete?: ParentWhereInput | boolean
+    connect?: ParentWhereUniqueInput
+    update?: XOR<XOR<ParentUpdateToOneWithWhereWithoutUserInput, ParentUpdateWithoutUserInput>, ParentUncheckedUpdateWithoutUserInput>
   }
 
   export type PreRegistrationUpdateManyWithoutProcessedByUserNestedInput = {
@@ -16519,35 +16515,7 @@ export namespace Prisma {
     deleteMany?: PreRegistrationScalarWhereInput | PreRegistrationScalarWhereInput[]
   }
 
-  export type StudentUpdateOneWithoutUserNestedInput = {
-    create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
-    connectOrCreate?: StudentCreateOrConnectWithoutUserInput
-    upsert?: StudentUpsertWithoutUserInput
-    disconnect?: StudentWhereInput | boolean
-    delete?: StudentWhereInput | boolean
-    connect?: StudentWhereUniqueInput
-    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutUserInput, StudentUpdateWithoutUserInput>, StudentUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ParentUpdateOneWithoutUserNestedInput = {
-    create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ParentCreateOrConnectWithoutUserInput
-    upsert?: ParentUpsertWithoutUserInput
-    disconnect?: ParentWhereInput | boolean
-    delete?: ParentWhereInput | boolean
-    connect?: ParentWhereUniqueInput
-    update?: XOR<XOR<ParentUpdateToOneWithWhereWithoutUserInput, ParentUpdateWithoutUserInput>, ParentUncheckedUpdateWithoutUserInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type RefreshTokenUncheckedUpdateManyWithoutUserNestedInput = {
+  export type RefreshTokenUpdateManyWithoutUserNestedInput = {
     create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
     upsert?: RefreshTokenUpsertWithWhereUniqueWithoutUserInput | RefreshTokenUpsertWithWhereUniqueWithoutUserInput[]
@@ -16559,6 +16527,34 @@ export namespace Prisma {
     update?: RefreshTokenUpdateWithWhereUniqueWithoutUserInput | RefreshTokenUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RefreshTokenUpdateManyWithWhereWithoutUserInput | RefreshTokenUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+  }
+
+  export type StudentUpdateOneWithoutUserNestedInput = {
+    create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutUserInput
+    upsert?: StudentUpsertWithoutUserInput
+    disconnect?: StudentWhereInput | boolean
+    delete?: StudentWhereInput | boolean
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutUserInput, StudentUpdateWithoutUserInput>, StudentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ParentUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ParentCreateOrConnectWithoutUserInput
+    upsert?: ParentUpsertWithoutUserInput
+    disconnect?: ParentWhereInput | boolean
+    delete?: ParentWhereInput | boolean
+    connect?: ParentWhereUniqueInput
+    update?: XOR<XOR<ParentUpdateToOneWithWhereWithoutUserInput, ParentUpdateWithoutUserInput>, ParentUncheckedUpdateWithoutUserInput>
   }
 
   export type PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput = {
@@ -16575,6 +16571,20 @@ export namespace Prisma {
     deleteMany?: PreRegistrationScalarWhereInput | PreRegistrationScalarWhereInput[]
   }
 
+  export type RefreshTokenUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
+    upsert?: RefreshTokenUpsertWithWhereUniqueWithoutUserInput | RefreshTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RefreshTokenCreateManyUserInputEnvelope
+    set?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+    disconnect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+    delete?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+    connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+    update?: RefreshTokenUpdateWithWhereUniqueWithoutUserInput | RefreshTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RefreshTokenUpdateManyWithWhereWithoutUserInput | RefreshTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+  }
+
   export type StudentUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -16583,16 +16593,6 @@ export namespace Prisma {
     delete?: StudentWhereInput | boolean
     connect?: StudentWhereUniqueInput
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutUserInput, StudentUpdateWithoutUserInput>, StudentUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ParentUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ParentCreateOrConnectWithoutUserInput
-    upsert?: ParentUpsertWithoutUserInput
-    disconnect?: ParentWhereInput | boolean
-    delete?: ParentWhereInput | boolean
-    connect?: ParentWhereUniqueInput
-    update?: XOR<XOR<ParentUpdateToOneWithWhereWithoutUserInput, ParentUpdateWithoutUserInput>, ParentUncheckedUpdateWithoutUserInput>
   }
 
   export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -16670,22 +16670,11 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type UserCreateNestedOneWithoutStudentInput = {
-    create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: UserCreateOrConnectWithoutStudentInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type ClassCreateNestedOneWithoutStudentsInput = {
-    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
-    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput
-    connect?: ClassWhereUniqueInput
-  }
-
-  export type ParentCreateNestedOneWithoutStudentsInput = {
-    create?: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
-    connectOrCreate?: ParentCreateOrConnectWithoutStudentsInput
-    connect?: ParentWhereUniqueInput
+  export type AbsenceCreateNestedManyWithoutStudentInput = {
+    create?: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput> | AbsenceCreateWithoutStudentInput[] | AbsenceUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: AbsenceCreateOrConnectWithoutStudentInput | AbsenceCreateOrConnectWithoutStudentInput[]
+    createMany?: AbsenceCreateManyStudentInputEnvelope
+    connect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
   }
 
   export type MarkCreateNestedManyWithoutStudentInput = {
@@ -16693,13 +16682,6 @@ export namespace Prisma {
     connectOrCreate?: MarkCreateOrConnectWithoutStudentInput | MarkCreateOrConnectWithoutStudentInput[]
     createMany?: MarkCreateManyStudentInputEnvelope
     connect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
-  }
-
-  export type AbsenceCreateNestedManyWithoutStudentInput = {
-    create?: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput> | AbsenceCreateWithoutStudentInput[] | AbsenceUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: AbsenceCreateOrConnectWithoutStudentInput | AbsenceCreateOrConnectWithoutStudentInput[]
-    createMany?: AbsenceCreateManyStudentInputEnvelope
-    connect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
   }
 
   export type PaymentCreateNestedManyWithoutStudentInput = {
@@ -16715,11 +16697,22 @@ export namespace Prisma {
     connect?: PreRegistrationWhereUniqueInput
   }
 
-  export type MarkUncheckedCreateNestedManyWithoutStudentInput = {
-    create?: XOR<MarkCreateWithoutStudentInput, MarkUncheckedCreateWithoutStudentInput> | MarkCreateWithoutStudentInput[] | MarkUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: MarkCreateOrConnectWithoutStudentInput | MarkCreateOrConnectWithoutStudentInput[]
-    createMany?: MarkCreateManyStudentInputEnvelope
-    connect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
+  export type ClassCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput
+    connect?: ClassWhereUniqueInput
+  }
+
+  export type ParentCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: ParentCreateOrConnectWithoutStudentsInput
+    connect?: ParentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutStudentInput = {
+    create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutStudentInput
+    connect?: UserWhereUniqueInput
   }
 
   export type AbsenceUncheckedCreateNestedManyWithoutStudentInput = {
@@ -16727,6 +16720,13 @@ export namespace Prisma {
     connectOrCreate?: AbsenceCreateOrConnectWithoutStudentInput | AbsenceCreateOrConnectWithoutStudentInput[]
     createMany?: AbsenceCreateManyStudentInputEnvelope
     connect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
+  }
+
+  export type MarkUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<MarkCreateWithoutStudentInput, MarkUncheckedCreateWithoutStudentInput> | MarkCreateWithoutStudentInput[] | MarkUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: MarkCreateOrConnectWithoutStudentInput | MarkCreateOrConnectWithoutStudentInput[]
+    createMany?: MarkCreateManyStudentInputEnvelope
+    connect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
   }
 
   export type PaymentUncheckedCreateNestedManyWithoutStudentInput = {
@@ -16746,32 +16746,18 @@ export namespace Prisma {
     set?: $Enums.StudentStatus
   }
 
-  export type UserUpdateOneRequiredWithoutStudentNestedInput = {
-    create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: UserCreateOrConnectWithoutStudentInput
-    upsert?: UserUpsertWithoutStudentInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudentInput, UserUpdateWithoutStudentInput>, UserUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type ClassUpdateOneWithoutStudentsNestedInput = {
-    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
-    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput
-    upsert?: ClassUpsertWithoutStudentsInput
-    disconnect?: ClassWhereInput | boolean
-    delete?: ClassWhereInput | boolean
-    connect?: ClassWhereUniqueInput
-    update?: XOR<XOR<ClassUpdateToOneWithWhereWithoutStudentsInput, ClassUpdateWithoutStudentsInput>, ClassUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type ParentUpdateOneWithoutStudentsNestedInput = {
-    create?: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
-    connectOrCreate?: ParentCreateOrConnectWithoutStudentsInput
-    upsert?: ParentUpsertWithoutStudentsInput
-    disconnect?: ParentWhereInput | boolean
-    delete?: ParentWhereInput | boolean
-    connect?: ParentWhereUniqueInput
-    update?: XOR<XOR<ParentUpdateToOneWithWhereWithoutStudentsInput, ParentUpdateWithoutStudentsInput>, ParentUncheckedUpdateWithoutStudentsInput>
+  export type AbsenceUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput> | AbsenceCreateWithoutStudentInput[] | AbsenceUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: AbsenceCreateOrConnectWithoutStudentInput | AbsenceCreateOrConnectWithoutStudentInput[]
+    upsert?: AbsenceUpsertWithWhereUniqueWithoutStudentInput | AbsenceUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: AbsenceCreateManyStudentInputEnvelope
+    set?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
+    disconnect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
+    delete?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
+    connect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
+    update?: AbsenceUpdateWithWhereUniqueWithoutStudentInput | AbsenceUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: AbsenceUpdateManyWithWhereWithoutStudentInput | AbsenceUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
   }
 
   export type MarkUpdateManyWithoutStudentNestedInput = {
@@ -16786,20 +16772,6 @@ export namespace Prisma {
     update?: MarkUpdateWithWhereUniqueWithoutStudentInput | MarkUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: MarkUpdateManyWithWhereWithoutStudentInput | MarkUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: MarkScalarWhereInput | MarkScalarWhereInput[]
-  }
-
-  export type AbsenceUpdateManyWithoutStudentNestedInput = {
-    create?: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput> | AbsenceCreateWithoutStudentInput[] | AbsenceUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: AbsenceCreateOrConnectWithoutStudentInput | AbsenceCreateOrConnectWithoutStudentInput[]
-    upsert?: AbsenceUpsertWithWhereUniqueWithoutStudentInput | AbsenceUpsertWithWhereUniqueWithoutStudentInput[]
-    createMany?: AbsenceCreateManyStudentInputEnvelope
-    set?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
-    disconnect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
-    delete?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
-    connect?: AbsenceWhereUniqueInput | AbsenceWhereUniqueInput[]
-    update?: AbsenceUpdateWithWhereUniqueWithoutStudentInput | AbsenceUpdateWithWhereUniqueWithoutStudentInput[]
-    updateMany?: AbsenceUpdateManyWithWhereWithoutStudentInput | AbsenceUpdateManyWithWhereWithoutStudentInput[]
-    deleteMany?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
   }
 
   export type PaymentUpdateManyWithoutStudentNestedInput = {
@@ -16826,18 +16798,32 @@ export namespace Prisma {
     update?: XOR<XOR<PreRegistrationUpdateToOneWithWhereWithoutStudentInput, PreRegistrationUpdateWithoutStudentInput>, PreRegistrationUncheckedUpdateWithoutStudentInput>
   }
 
-  export type MarkUncheckedUpdateManyWithoutStudentNestedInput = {
-    create?: XOR<MarkCreateWithoutStudentInput, MarkUncheckedCreateWithoutStudentInput> | MarkCreateWithoutStudentInput[] | MarkUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: MarkCreateOrConnectWithoutStudentInput | MarkCreateOrConnectWithoutStudentInput[]
-    upsert?: MarkUpsertWithWhereUniqueWithoutStudentInput | MarkUpsertWithWhereUniqueWithoutStudentInput[]
-    createMany?: MarkCreateManyStudentInputEnvelope
-    set?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
-    disconnect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
-    delete?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
-    connect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
-    update?: MarkUpdateWithWhereUniqueWithoutStudentInput | MarkUpdateWithWhereUniqueWithoutStudentInput[]
-    updateMany?: MarkUpdateManyWithWhereWithoutStudentInput | MarkUpdateManyWithWhereWithoutStudentInput[]
-    deleteMany?: MarkScalarWhereInput | MarkScalarWhereInput[]
+  export type ClassUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: ClassCreateOrConnectWithoutStudentsInput
+    upsert?: ClassUpsertWithoutStudentsInput
+    disconnect?: ClassWhereInput | boolean
+    delete?: ClassWhereInput | boolean
+    connect?: ClassWhereUniqueInput
+    update?: XOR<XOR<ClassUpdateToOneWithWhereWithoutStudentsInput, ClassUpdateWithoutStudentsInput>, ClassUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type ParentUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: ParentCreateOrConnectWithoutStudentsInput
+    upsert?: ParentUpsertWithoutStudentsInput
+    disconnect?: ParentWhereInput | boolean
+    delete?: ParentWhereInput | boolean
+    connect?: ParentWhereUniqueInput
+    update?: XOR<XOR<ParentUpdateToOneWithWhereWithoutStudentsInput, ParentUpdateWithoutStudentsInput>, ParentUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutStudentNestedInput = {
+    create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutStudentInput
+    upsert?: UserUpsertWithoutStudentInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudentInput, UserUpdateWithoutStudentInput>, UserUncheckedUpdateWithoutStudentInput>
   }
 
   export type AbsenceUncheckedUpdateManyWithoutStudentNestedInput = {
@@ -16852,6 +16838,20 @@ export namespace Prisma {
     update?: AbsenceUpdateWithWhereUniqueWithoutStudentInput | AbsenceUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: AbsenceUpdateManyWithWhereWithoutStudentInput | AbsenceUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
+  }
+
+  export type MarkUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<MarkCreateWithoutStudentInput, MarkUncheckedCreateWithoutStudentInput> | MarkCreateWithoutStudentInput[] | MarkUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: MarkCreateOrConnectWithoutStudentInput | MarkCreateOrConnectWithoutStudentInput[]
+    upsert?: MarkUpsertWithWhereUniqueWithoutStudentInput | MarkUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: MarkCreateManyStudentInputEnvelope
+    set?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
+    disconnect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
+    delete?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
+    connect?: MarkWhereUniqueInput | MarkWhereUniqueInput[]
+    update?: MarkUpdateWithWhereUniqueWithoutStudentInput | MarkUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: MarkUpdateManyWithWhereWithoutStudentInput | MarkUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: MarkScalarWhereInput | MarkScalarWhereInput[]
   }
 
   export type PaymentUncheckedUpdateManyWithoutStudentNestedInput = {
@@ -17315,29 +17315,26 @@ export namespace Prisma {
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
-  export type RefreshTokenCreateWithoutUserInput = {
-    token: string
-    expiresAt: Date | string
+  export type ParentCreateWithoutUserInput = {
+    phone: string
+    address?: string | null
     createdAt?: Date | string
-    revoked?: boolean
+    updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutParentInput
   }
 
-  export type RefreshTokenUncheckedCreateWithoutUserInput = {
+  export type ParentUncheckedCreateWithoutUserInput = {
     id?: number
-    token: string
-    expiresAt: Date | string
+    phone: string
+    address?: string | null
     createdAt?: Date | string
-    revoked?: boolean
+    updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutParentInput
   }
 
-  export type RefreshTokenCreateOrConnectWithoutUserInput = {
-    where: RefreshTokenWhereUniqueInput
-    create: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput>
-  }
-
-  export type RefreshTokenCreateManyUserInputEnvelope = {
-    data: RefreshTokenCreateManyUserInput | RefreshTokenCreateManyUserInput[]
-    skipDuplicates?: boolean
+  export type ParentCreateOrConnectWithoutUserInput = {
+    where: ParentWhereUniqueInput
+    create: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
   }
 
   export type PreRegistrationCreateWithoutProcessedByUserInput = {
@@ -17401,6 +17398,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RefreshTokenCreateWithoutUserInput = {
+    token: string
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revoked?: boolean
+  }
+
+  export type RefreshTokenUncheckedCreateWithoutUserInput = {
+    id?: number
+    token: string
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revoked?: boolean
+  }
+
+  export type RefreshTokenCreateOrConnectWithoutUserInput = {
+    where: RefreshTokenWhereUniqueInput
+    create: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput>
+  }
+
+  export type RefreshTokenCreateManyUserInputEnvelope = {
+    data: RefreshTokenCreateManyUserInput | RefreshTokenCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type StudentCreateWithoutUserInput = {
     status?: $Enums.StudentStatus
     schoolYear: string
@@ -17408,12 +17430,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    class?: ClassCreateNestedOneWithoutStudentsInput
-    parent?: ParentCreateNestedOneWithoutStudentsInput
-    marks?: MarkCreateNestedManyWithoutStudentInput
     absences?: AbsenceCreateNestedManyWithoutStudentInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
     payments?: PaymentCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    class?: ClassCreateNestedOneWithoutStudentsInput
+    parent?: ParentCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
@@ -17426,8 +17448,8 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     absences?: AbsenceUncheckedCreateNestedManyWithoutStudentInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     payments?: PaymentUncheckedCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -17437,54 +17459,32 @@ export namespace Prisma {
     create: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
   }
 
-  export type ParentCreateWithoutUserInput = {
-    phone: string
-    address?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    students?: StudentCreateNestedManyWithoutParentInput
-  }
-
-  export type ParentUncheckedCreateWithoutUserInput = {
-    id?: number
-    phone: string
-    address?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    students?: StudentUncheckedCreateNestedManyWithoutParentInput
-  }
-
-  export type ParentCreateOrConnectWithoutUserInput = {
-    where: ParentWhereUniqueInput
+  export type ParentUpsertWithoutUserInput = {
+    update: XOR<ParentUpdateWithoutUserInput, ParentUncheckedUpdateWithoutUserInput>
     create: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
+    where?: ParentWhereInput
   }
 
-  export type RefreshTokenUpsertWithWhereUniqueWithoutUserInput = {
-    where: RefreshTokenWhereUniqueInput
-    update: XOR<RefreshTokenUpdateWithoutUserInput, RefreshTokenUncheckedUpdateWithoutUserInput>
-    create: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput>
+  export type ParentUpdateToOneWithWhereWithoutUserInput = {
+    where?: ParentWhereInput
+    data: XOR<ParentUpdateWithoutUserInput, ParentUncheckedUpdateWithoutUserInput>
   }
 
-  export type RefreshTokenUpdateWithWhereUniqueWithoutUserInput = {
-    where: RefreshTokenWhereUniqueInput
-    data: XOR<RefreshTokenUpdateWithoutUserInput, RefreshTokenUncheckedUpdateWithoutUserInput>
+  export type ParentUpdateWithoutUserInput = {
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutParentNestedInput
   }
 
-  export type RefreshTokenUpdateManyWithWhereWithoutUserInput = {
-    where: RefreshTokenScalarWhereInput
-    data: XOR<RefreshTokenUpdateManyMutationInput, RefreshTokenUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type RefreshTokenScalarWhereInput = {
-    AND?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
-    OR?: RefreshTokenScalarWhereInput[]
-    NOT?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
-    id?: IntFilter<"RefreshToken"> | number
-    token?: StringFilter<"RefreshToken"> | string
-    userId?: IntFilter<"RefreshToken"> | number
-    expiresAt?: DateTimeFilter<"RefreshToken"> | Date | string
-    createdAt?: DateTimeFilter<"RefreshToken"> | Date | string
-    revoked?: BoolFilter<"RefreshToken"> | boolean
+  export type ParentUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutParentNestedInput
   }
 
   export type PreRegistrationUpsertWithWhereUniqueWithoutProcessedByUserInput = {
@@ -17533,6 +17533,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PreRegistration"> | Date | string
   }
 
+  export type RefreshTokenUpsertWithWhereUniqueWithoutUserInput = {
+    where: RefreshTokenWhereUniqueInput
+    update: XOR<RefreshTokenUpdateWithoutUserInput, RefreshTokenUncheckedUpdateWithoutUserInput>
+    create: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput>
+  }
+
+  export type RefreshTokenUpdateWithWhereUniqueWithoutUserInput = {
+    where: RefreshTokenWhereUniqueInput
+    data: XOR<RefreshTokenUpdateWithoutUserInput, RefreshTokenUncheckedUpdateWithoutUserInput>
+  }
+
+  export type RefreshTokenUpdateManyWithWhereWithoutUserInput = {
+    where: RefreshTokenScalarWhereInput
+    data: XOR<RefreshTokenUpdateManyMutationInput, RefreshTokenUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type RefreshTokenScalarWhereInput = {
+    AND?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+    OR?: RefreshTokenScalarWhereInput[]
+    NOT?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+    id?: IntFilter<"RefreshToken"> | number
+    token?: StringFilter<"RefreshToken"> | string
+    userId?: IntFilter<"RefreshToken"> | number
+    expiresAt?: DateTimeFilter<"RefreshToken"> | Date | string
+    createdAt?: DateTimeFilter<"RefreshToken"> | Date | string
+    revoked?: BoolFilter<"RefreshToken"> | boolean
+  }
+
   export type StudentUpsertWithoutUserInput = {
     update: XOR<StudentUpdateWithoutUserInput, StudentUncheckedUpdateWithoutUserInput>
     create: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
@@ -17551,12 +17579,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    class?: ClassUpdateOneWithoutStudentsNestedInput
-    parent?: ParentUpdateOneWithoutStudentsNestedInput
-    marks?: MarkUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUpdateManyWithoutStudentNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
     payments?: PaymentUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    class?: ClassUpdateOneWithoutStudentsNestedInput
+    parent?: ParentUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
@@ -17569,38 +17597,10 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUncheckedUpdateManyWithoutStudentNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUncheckedUpdateOneWithoutStudentNestedInput
-  }
-
-  export type ParentUpsertWithoutUserInput = {
-    update: XOR<ParentUpdateWithoutUserInput, ParentUncheckedUpdateWithoutUserInput>
-    create: XOR<ParentCreateWithoutUserInput, ParentUncheckedCreateWithoutUserInput>
-    where?: ParentWhereInput
-  }
-
-  export type ParentUpdateToOneWithWhereWithoutUserInput = {
-    where?: ParentWhereInput
-    data: XOR<ParentUpdateWithoutUserInput, ParentUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ParentUpdateWithoutUserInput = {
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    students?: StudentUpdateManyWithoutParentNestedInput
-  }
-
-  export type ParentUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    students?: StudentUncheckedUpdateManyWithoutParentNestedInput
   }
 
   export type UserCreateWithoutRefreshTokensInput = {
@@ -17612,9 +17612,9 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    parent?: ParentCreateNestedOneWithoutUserInput
     processedRegistrations?: PreRegistrationCreateNestedManyWithoutProcessedByUserInput
     student?: StudentCreateNestedOneWithoutUserInput
-    parent?: ParentCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -17627,9 +17627,9 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    parent?: ParentUncheckedCreateNestedOneWithoutUserInput
     processedRegistrations?: PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
-    parent?: ParentUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -17657,9 +17657,9 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ParentUpdateOneWithoutUserNestedInput
     processedRegistrations?: PreRegistrationUpdateManyWithoutProcessedByUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
-    parent?: ParentUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -17672,9 +17672,9 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
     processedRegistrations?: PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
-    parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutProcessedRegistrationsInput = {
@@ -17686,9 +17686,9 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    parent?: ParentCreateNestedOneWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
-    parent?: ParentCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProcessedRegistrationsInput = {
@@ -17701,9 +17701,9 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    parent?: ParentUncheckedCreateNestedOneWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
-    parent?: ParentUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProcessedRegistrationsInput = {
@@ -17718,12 +17718,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
+    absences?: AbsenceCreateNestedManyWithoutStudentInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
+    payments?: PaymentCreateNestedManyWithoutStudentInput
     class?: ClassCreateNestedOneWithoutStudentsInput
     parent?: ParentCreateNestedOneWithoutStudentsInput
-    marks?: MarkCreateNestedManyWithoutStudentInput
-    absences?: AbsenceCreateNestedManyWithoutStudentInput
-    payments?: PaymentCreateNestedManyWithoutStudentInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPreRegistrationInput = {
@@ -17737,8 +17737,8 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     absences?: AbsenceUncheckedCreateNestedManyWithoutStudentInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     payments?: PaymentUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -17767,9 +17767,9 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ParentUpdateOneWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
-    parent?: ParentUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedRegistrationsInput = {
@@ -17782,9 +17782,9 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
-    parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type StudentUpsertWithoutPreRegistrationInput = {
@@ -17805,12 +17805,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+    absences?: AbsenceUpdateManyWithoutStudentNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
+    payments?: PaymentUpdateManyWithoutStudentNestedInput
     class?: ClassUpdateOneWithoutStudentsNestedInput
     parent?: ParentUpdateOneWithoutStudentsNestedInput
-    marks?: MarkUpdateManyWithoutStudentNestedInput
-    absences?: AbsenceUpdateManyWithoutStudentNestedInput
-    payments?: PaymentUpdateManyWithoutStudentNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPreRegistrationInput = {
@@ -17824,85 +17824,36 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUncheckedUpdateManyWithoutStudentNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
-  export type UserCreateWithoutStudentInput = {
-    firstName: string
-    name: string
-    email: string
-    passwordHash: string
-    role?: $Enums.Role
-    active?: boolean
+  export type AbsenceCreateWithoutStudentInput = {
+    date: Date | string
+    reason?: string | null
+    justified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
-    processedRegistrations?: PreRegistrationCreateNestedManyWithoutProcessedByUserInput
-    parent?: ParentCreateNestedOneWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutStudentInput = {
+  export type AbsenceUncheckedCreateWithoutStudentInput = {
     id?: number
-    firstName: string
-    name: string
-    email: string
-    passwordHash: string
-    role?: $Enums.Role
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-    processedRegistrations?: PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput
-    parent?: ParentUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutStudentInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
-  }
-
-  export type ClassCreateWithoutStudentsInput = {
-    name: string
-    level: string
+    date: Date | string
+    reason?: string | null
+    justified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ClassUncheckedCreateWithoutStudentsInput = {
-    id?: number
-    name: string
-    level: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type AbsenceCreateOrConnectWithoutStudentInput = {
+    where: AbsenceWhereUniqueInput
+    create: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput>
   }
 
-  export type ClassCreateOrConnectWithoutStudentsInput = {
-    where: ClassWhereUniqueInput
-    create: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type ParentCreateWithoutStudentsInput = {
-    phone: string
-    address?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutParentInput
-  }
-
-  export type ParentUncheckedCreateWithoutStudentsInput = {
-    id?: number
-    userId: number
-    phone: string
-    address?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ParentCreateOrConnectWithoutStudentsInput = {
-    where: ParentWhereUniqueInput
-    create: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
+  export type AbsenceCreateManyStudentInputEnvelope = {
+    data: AbsenceCreateManyStudentInput | AbsenceCreateManyStudentInput[]
+    skipDuplicates?: boolean
   }
 
   export type MarkCreateWithoutStudentInput = {
@@ -17933,33 +17884,6 @@ export namespace Prisma {
 
   export type MarkCreateManyStudentInputEnvelope = {
     data: MarkCreateManyStudentInput | MarkCreateManyStudentInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AbsenceCreateWithoutStudentInput = {
-    date: Date | string
-    reason?: string | null
-    justified?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AbsenceUncheckedCreateWithoutStudentInput = {
-    id?: number
-    date: Date | string
-    reason?: string | null
-    justified?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AbsenceCreateOrConnectWithoutStudentInput = {
-    where: AbsenceWhereUniqueInput
-    create: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput>
-  }
-
-  export type AbsenceCreateManyStudentInputEnvelope = {
-    data: AbsenceCreateManyStudentInput | AbsenceCreateManyStudentInput[]
     skipDuplicates?: boolean
   }
 
@@ -18048,98 +17972,109 @@ export namespace Prisma {
     create: XOR<PreRegistrationCreateWithoutStudentInput, PreRegistrationUncheckedCreateWithoutStudentInput>
   }
 
-  export type UserUpsertWithoutStudentInput = {
-    update: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
-    create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
-    where?: UserWhereInput
+  export type ClassCreateWithoutStudentsInput = {
+    name: string
+    level: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type UserUpdateToOneWithWhereWithoutStudentInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
+  export type ClassUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    name: string
+    level: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type UserUpdateWithoutStudentInput = {
-    firstName?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
-    processedRegistrations?: PreRegistrationUpdateManyWithoutProcessedByUserNestedInput
-    parent?: ParentUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutStudentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    firstName?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    passwordHash?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-    processedRegistrations?: PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput
-    parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type ClassUpsertWithoutStudentsInput = {
-    update: XOR<ClassUpdateWithoutStudentsInput, ClassUncheckedUpdateWithoutStudentsInput>
+  export type ClassCreateOrConnectWithoutStudentsInput = {
+    where: ClassWhereUniqueInput
     create: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
-    where?: ClassWhereInput
   }
 
-  export type ClassUpdateToOneWithWhereWithoutStudentsInput = {
-    where?: ClassWhereInput
-    data: XOR<ClassUpdateWithoutStudentsInput, ClassUncheckedUpdateWithoutStudentsInput>
+  export type ParentCreateWithoutStudentsInput = {
+    phone: string
+    address?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutParentInput
   }
 
-  export type ClassUpdateWithoutStudentsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    level?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type ParentUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    userId: number
+    phone: string
+    address?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ClassUncheckedUpdateWithoutStudentsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    level?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ParentUpsertWithoutStudentsInput = {
-    update: XOR<ParentUpdateWithoutStudentsInput, ParentUncheckedUpdateWithoutStudentsInput>
+  export type ParentCreateOrConnectWithoutStudentsInput = {
+    where: ParentWhereUniqueInput
     create: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
-    where?: ParentWhereInput
   }
 
-  export type ParentUpdateToOneWithWhereWithoutStudentsInput = {
-    where?: ParentWhereInput
-    data: XOR<ParentUpdateWithoutStudentsInput, ParentUncheckedUpdateWithoutStudentsInput>
+  export type UserCreateWithoutStudentInput = {
+    firstName: string
+    name: string
+    email: string
+    passwordHash: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: ParentCreateNestedOneWithoutUserInput
+    processedRegistrations?: PreRegistrationCreateNestedManyWithoutProcessedByUserInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
   }
 
-  export type ParentUpdateWithoutStudentsInput = {
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutParentNestedInput
+  export type UserUncheckedCreateWithoutStudentInput = {
+    id?: number
+    firstName: string
+    name: string
+    email: string
+    passwordHash: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: ParentUncheckedCreateNestedOneWithoutUserInput
+    processedRegistrations?: PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type ParentUncheckedUpdateWithoutStudentsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type UserCreateOrConnectWithoutStudentInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+  }
+
+  export type AbsenceUpsertWithWhereUniqueWithoutStudentInput = {
+    where: AbsenceWhereUniqueInput
+    update: XOR<AbsenceUpdateWithoutStudentInput, AbsenceUncheckedUpdateWithoutStudentInput>
+    create: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput>
+  }
+
+  export type AbsenceUpdateWithWhereUniqueWithoutStudentInput = {
+    where: AbsenceWhereUniqueInput
+    data: XOR<AbsenceUpdateWithoutStudentInput, AbsenceUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type AbsenceUpdateManyWithWhereWithoutStudentInput = {
+    where: AbsenceScalarWhereInput
+    data: XOR<AbsenceUpdateManyMutationInput, AbsenceUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type AbsenceScalarWhereInput = {
+    AND?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
+    OR?: AbsenceScalarWhereInput[]
+    NOT?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
+    id?: IntFilter<"Absence"> | number
+    studentId?: IntFilter<"Absence"> | number
+    date?: DateTimeFilter<"Absence"> | Date | string
+    reason?: StringNullableFilter<"Absence"> | string | null
+    justified?: BoolFilter<"Absence"> | boolean
+    createdAt?: DateTimeFilter<"Absence"> | Date | string
+    updatedAt?: DateTimeFilter<"Absence"> | Date | string
   }
 
   export type MarkUpsertWithWhereUniqueWithoutStudentInput = {
@@ -18171,35 +18106,6 @@ export namespace Prisma {
     date?: DateTimeFilter<"Mark"> | Date | string
     createdAt?: DateTimeFilter<"Mark"> | Date | string
     updatedAt?: DateTimeFilter<"Mark"> | Date | string
-  }
-
-  export type AbsenceUpsertWithWhereUniqueWithoutStudentInput = {
-    where: AbsenceWhereUniqueInput
-    update: XOR<AbsenceUpdateWithoutStudentInput, AbsenceUncheckedUpdateWithoutStudentInput>
-    create: XOR<AbsenceCreateWithoutStudentInput, AbsenceUncheckedCreateWithoutStudentInput>
-  }
-
-  export type AbsenceUpdateWithWhereUniqueWithoutStudentInput = {
-    where: AbsenceWhereUniqueInput
-    data: XOR<AbsenceUpdateWithoutStudentInput, AbsenceUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type AbsenceUpdateManyWithWhereWithoutStudentInput = {
-    where: AbsenceScalarWhereInput
-    data: XOR<AbsenceUpdateManyMutationInput, AbsenceUncheckedUpdateManyWithoutStudentInput>
-  }
-
-  export type AbsenceScalarWhereInput = {
-    AND?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
-    OR?: AbsenceScalarWhereInput[]
-    NOT?: AbsenceScalarWhereInput | AbsenceScalarWhereInput[]
-    id?: IntFilter<"Absence"> | number
-    studentId?: IntFilter<"Absence"> | number
-    date?: DateTimeFilter<"Absence"> | Date | string
-    reason?: StringNullableFilter<"Absence"> | string | null
-    justified?: BoolFilter<"Absence"> | boolean
-    createdAt?: DateTimeFilter<"Absence"> | Date | string
-    updatedAt?: DateTimeFilter<"Absence"> | Date | string
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutStudentInput = {
@@ -18294,6 +18200,100 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ClassUpsertWithoutStudentsInput = {
+    update: XOR<ClassUpdateWithoutStudentsInput, ClassUncheckedUpdateWithoutStudentsInput>
+    create: XOR<ClassCreateWithoutStudentsInput, ClassUncheckedCreateWithoutStudentsInput>
+    where?: ClassWhereInput
+  }
+
+  export type ClassUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: ClassWhereInput
+    data: XOR<ClassUpdateWithoutStudentsInput, ClassUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type ClassUpdateWithoutStudentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParentUpsertWithoutStudentsInput = {
+    update: XOR<ParentUpdateWithoutStudentsInput, ParentUncheckedUpdateWithoutStudentsInput>
+    create: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
+    where?: ParentWhereInput
+  }
+
+  export type ParentUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: ParentWhereInput
+    data: XOR<ParentUpdateWithoutStudentsInput, ParentUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type ParentUpdateWithoutStudentsInput = {
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutParentNestedInput
+  }
+
+  export type ParentUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutStudentInput = {
+    update: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
+    create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutStudentInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type UserUpdateWithoutStudentInput = {
+    firstName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ParentUpdateOneWithoutUserNestedInput
+    processedRegistrations?: PreRegistrationUpdateManyWithoutProcessedByUserNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    firstName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: ParentUncheckedUpdateOneWithoutUserNestedInput
+    processedRegistrations?: PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutParentInput = {
     firstName: string
     name: string
@@ -18303,8 +18303,8 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     processedRegistrations?: PreRegistrationCreateNestedManyWithoutProcessedByUserInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
   }
 
@@ -18318,8 +18318,8 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     processedRegistrations?: PreRegistrationUncheckedCreateNestedManyWithoutProcessedByUserInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -18335,12 +18335,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
-    class?: ClassCreateNestedOneWithoutStudentsInput
-    marks?: MarkCreateNestedManyWithoutStudentInput
     absences?: AbsenceCreateNestedManyWithoutStudentInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
     payments?: PaymentCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    class?: ClassCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutParentInput = {
@@ -18353,8 +18353,8 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     absences?: AbsenceUncheckedCreateNestedManyWithoutStudentInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     payments?: PaymentUncheckedCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -18389,8 +18389,8 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     processedRegistrations?: PreRegistrationUpdateManyWithoutProcessedByUserNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
   }
 
@@ -18404,8 +18404,8 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     processedRegistrations?: PreRegistrationUncheckedUpdateManyWithoutProcessedByUserNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -18448,12 +18448,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
-    parent?: ParentCreateNestedOneWithoutStudentsInput
-    marks?: MarkCreateNestedManyWithoutStudentInput
     absences?: AbsenceCreateNestedManyWithoutStudentInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
     payments?: PaymentCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    parent?: ParentCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutClassInput = {
@@ -18466,8 +18466,8 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     absences?: AbsenceUncheckedCreateNestedManyWithoutStudentInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     payments?: PaymentUncheckedCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -18505,12 +18505,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
-    class?: ClassCreateNestedOneWithoutStudentsInput
-    parent?: ParentCreateNestedOneWithoutStudentsInput
     absences?: AbsenceCreateNestedManyWithoutStudentInput
     payments?: PaymentCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    class?: ClassCreateNestedOneWithoutStudentsInput
+    parent?: ParentCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutMarksInput = {
@@ -18552,12 +18552,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
-    class?: ClassUpdateOneWithoutStudentsNestedInput
-    parent?: ParentUpdateOneWithoutStudentsNestedInput
     absences?: AbsenceUpdateManyWithoutStudentNestedInput
     payments?: PaymentUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    class?: ClassUpdateOneWithoutStudentsNestedInput
+    parent?: ParentUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutMarksInput = {
@@ -18583,12 +18583,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
-    class?: ClassCreateNestedOneWithoutStudentsInput
-    parent?: ParentCreateNestedOneWithoutStudentsInput
     marks?: MarkCreateNestedManyWithoutStudentInput
     payments?: PaymentCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    class?: ClassCreateNestedOneWithoutStudentsInput
+    parent?: ParentCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAbsencesInput = {
@@ -18630,12 +18630,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
-    class?: ClassUpdateOneWithoutStudentsNestedInput
-    parent?: ParentUpdateOneWithoutStudentsNestedInput
     marks?: MarkUpdateManyWithoutStudentNestedInput
     payments?: PaymentUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    class?: ClassUpdateOneWithoutStudentsNestedInput
+    parent?: ParentUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAbsencesInput = {
@@ -18661,12 +18661,12 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutStudentInput
+    absences?: AbsenceCreateNestedManyWithoutStudentInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
+    preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
     class?: ClassCreateNestedOneWithoutStudentsInput
     parent?: ParentCreateNestedOneWithoutStudentsInput
-    marks?: MarkCreateNestedManyWithoutStudentInput
-    absences?: AbsenceCreateNestedManyWithoutStudentInput
-    preRegistration?: PreRegistrationCreateNestedOneWithoutStudentInput
+    user: UserCreateNestedOneWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPaymentsInput = {
@@ -18680,8 +18680,8 @@ export namespace Prisma {
     parentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     absences?: AbsenceUncheckedCreateNestedManyWithoutStudentInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
     preRegistration?: PreRegistrationUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -18708,12 +18708,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+    absences?: AbsenceUpdateManyWithoutStudentNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
+    preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
     class?: ClassUpdateOneWithoutStudentsNestedInput
     parent?: ParentUpdateOneWithoutStudentsNestedInput
-    marks?: MarkUpdateManyWithoutStudentNestedInput
-    absences?: AbsenceUpdateManyWithoutStudentNestedInput
-    preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPaymentsInput = {
@@ -18727,17 +18727,9 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUncheckedUpdateManyWithoutStudentNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUncheckedUpdateOneWithoutStudentNestedInput
-  }
-
-  export type RefreshTokenCreateManyUserInput = {
-    id?: number
-    token: string
-    expiresAt: Date | string
-    createdAt?: Date | string
-    revoked?: boolean
   }
 
   export type PreRegistrationCreateManyProcessedByUserInput = {
@@ -18766,27 +18758,12 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type RefreshTokenUpdateWithoutUserInput = {
-    token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type RefreshTokenUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type RefreshTokenUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
+  export type RefreshTokenCreateManyUserInput = {
+    id?: number
+    token: string
+    expiresAt: Date | string
+    createdAt?: Date | string
+    revoked?: boolean
   }
 
   export type PreRegistrationUpdateWithoutProcessedByUserInput = {
@@ -18866,15 +18843,27 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MarkCreateManyStudentInput = {
-    id?: number
-    subject: string
-    value: number
-    coefficient?: number
-    term: string
-    date?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type RefreshTokenUpdateWithoutUserInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type RefreshTokenUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type RefreshTokenUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AbsenceCreateManyStudentInput = {
@@ -18882,6 +18871,17 @@ export namespace Prisma {
     date: Date | string
     reason?: string | null
     justified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MarkCreateManyStudentInput = {
+    id?: number
+    subject: string
+    value: number
+    coefficient?: number
+    term: string
+    date?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18894,6 +18894,32 @@ export namespace Prisma {
     paymentDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type AbsenceUpdateWithoutStudentInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    justified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsenceUncheckedUpdateWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    justified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsenceUncheckedUpdateManyWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    justified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MarkUpdateWithoutStudentInput = {
@@ -18924,32 +18950,6 @@ export namespace Prisma {
     coefficient?: FloatFieldUpdateOperationsInput | number
     term?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AbsenceUpdateWithoutStudentInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    justified?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AbsenceUncheckedUpdateWithoutStudentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    justified?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AbsenceUncheckedUpdateManyWithoutStudentInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    justified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19002,12 +19002,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
-    class?: ClassUpdateOneWithoutStudentsNestedInput
-    marks?: MarkUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUpdateManyWithoutStudentNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
     payments?: PaymentUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    class?: ClassUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutParentInput = {
@@ -19020,8 +19020,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUncheckedUpdateManyWithoutStudentNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -19057,12 +19057,12 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutStudentNestedInput
-    parent?: ParentUpdateOneWithoutStudentsNestedInput
-    marks?: MarkUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUpdateManyWithoutStudentNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
     payments?: PaymentUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUpdateOneWithoutStudentNestedInput
+    parent?: ParentUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutClassInput = {
@@ -19075,8 +19075,8 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     absences?: AbsenceUncheckedUpdateManyWithoutStudentNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutStudentNestedInput
     preRegistration?: PreRegistrationUncheckedUpdateOneWithoutStudentNestedInput
   }

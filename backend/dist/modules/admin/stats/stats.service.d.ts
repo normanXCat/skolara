@@ -35,19 +35,19 @@ export declare class StatsService {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
+            updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
             parentAddress: string | null;
+            fileNumber: string;
             receiptNumber: string | null;
             receiptImageUrl: string | null;
             documentUrls: string[];
-            fileNumber: string;
             adminComment: string | null;
-            processedAt: Date | null;
-            submittedAt: Date;
-            updatedAt: Date;
             processedBy: number | null;
+            processedAt: Date | null;
             studentId: number | null;
+            submittedAt: Date;
         }[];
     }>;
 }
