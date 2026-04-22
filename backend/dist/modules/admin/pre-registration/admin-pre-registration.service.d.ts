@@ -19,19 +19,19 @@ export declare class AdminPreRegistrationService {
             desiredGrade: string;
             parentFirstName: string;
             parentFullName: string;
-            updatedAt: Date;
             childEmail: string | null;
             previousSchool: string | null;
             parentAddress: string | null;
-            fileNumber: string;
             receiptNumber: string | null;
             receiptImageUrl: string | null;
             documentUrls: string[];
+            fileNumber: string;
             adminComment: string | null;
-            processedBy: number | null;
             processedAt: Date | null;
-            studentId: number | null;
             submittedAt: Date;
+            updatedAt: Date;
+            processedBy: number | null;
+            studentId: number | null;
         }[];
         total: number;
         totalPages: number;
@@ -40,17 +40,28 @@ export declare class AdminPreRegistrationService {
      * Récupère le détail d'un dossier.
      */
     findById(id: number): Promise<{
+        processedByUser: {
+            id: number;
+            firstName: string;
+            email: string;
+            updatedAt: Date;
+            name: string;
+            passwordHash: string;
+            role: import("../../../generated/prisma").$Enums.Role;
+            active: boolean;
+            createdAt: Date;
+        } | null;
         student: ({
             user: {
                 id: number;
                 firstName: string;
                 email: string;
+                updatedAt: Date;
                 name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
                 createdAt: Date;
-                updatedAt: Date;
             };
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
@@ -58,23 +69,12 @@ export declare class AdminPreRegistrationService {
             birthDate: Date;
             address: string | null;
             schoolYear: string;
-            createdAt: Date;
             updatedAt: Date;
+            createdAt: Date;
             userId: number;
             classId: number | null;
             parentId: number | null;
         }) | null;
-        processedByUser: {
-            id: number;
-            firstName: string;
-            email: string;
-            name: string;
-            passwordHash: string;
-            role: import("../../../generated/prisma").$Enums.Role;
-            active: boolean;
-            createdAt: Date;
-            updatedAt: Date;
-        } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.Status;
         id: number;
@@ -87,19 +87,19 @@ export declare class AdminPreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
-        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
+        fileNumber: string;
         adminComment: string | null;
-        processedBy: number | null;
         processedAt: Date | null;
-        studentId: number | null;
         submittedAt: Date;
+        updatedAt: Date;
+        processedBy: number | null;
+        studentId: number | null;
     }>;
     /**
      * Met à jour le statut d'un dossier.
@@ -116,19 +116,19 @@ export declare class AdminPreRegistrationService {
         desiredGrade: string;
         parentFirstName: string;
         parentFullName: string;
-        updatedAt: Date;
         childEmail: string | null;
         previousSchool: string | null;
         parentAddress: string | null;
-        fileNumber: string;
         receiptNumber: string | null;
         receiptImageUrl: string | null;
         documentUrls: string[];
+        fileNumber: string;
         adminComment: string | null;
-        processedBy: number | null;
         processedAt: Date | null;
-        studentId: number | null;
         submittedAt: Date;
+        updatedAt: Date;
+        processedBy: number | null;
+        studentId: number | null;
     }>;
     /**
      * Convertit une pré-inscription acceptée en élève réel.
@@ -143,8 +143,8 @@ export declare class AdminPreRegistrationService {
         birthDate: Date;
         address: string | null;
         schoolYear: string;
-        createdAt: Date;
         updatedAt: Date;
+        createdAt: Date;
         userId: number;
         classId: number | null;
         parentId: number | null;

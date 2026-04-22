@@ -5,7 +5,7 @@
 export declare const env: {
     DATABASE_URL: string;
     PORT: number;
-    NODE_ENV: "production" | "development" | "test";
+    NODE_ENV: "development" | "production" | "test";
     FRONTEND_URL: string;
     API_URL: string;
     JWT_SECRET: string;
