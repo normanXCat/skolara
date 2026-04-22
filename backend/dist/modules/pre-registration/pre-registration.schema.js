@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listQuerySchema = exports.idParamSchema = exports.updatePreRegistrationSchema = exports.createPreRegistrationSchema = exports.StatusEnum = void 0;
+exports.validateEmailSchema = exports.listQuerySchema = exports.idParamSchema = exports.updatePreRegistrationSchema = exports.createPreRegistrationSchema = exports.StatusEnum = void 0;
 const zod_1 = require("zod");
+const email_validation_1 = require("../../utils/email-validation");
 /**
  * Valeurs autorisées pour le statut d'une pré-inscription.
  */
@@ -56,6 +57,27 @@ exports.createPreRegistrationSchema = zod_1.z.object({
         .or(zod_1.z.literal("")),
     /** URLs des documents joints (optionnel) */
     documentUrls: zod_1.z.array(zod_1.z.string().url()).optional().default([]),
+}).superRefine(async (data, ctx) => {
+    // Toujours vérifier l'email du parent (obligatoire)
+    const parentEmailValid = await (0, email_validation_1.checkMxRecord)(data.parentEmail);
+    if (!parentEmailValid) {
+        ctx.addIssue({
+            code: zod_1.z.ZodIssueCode.custom,
+            path: ["parentEmail"],
+            message: "Cette adresse email ne semble pas valide (domaine invalide). Veuillez vérifier.",
+        });
+    }
+    // Vérifier l'email de l'enfant uniquement s'il est renseigné
+    if (data.childEmail && data.childEmail.trim() !== "") {
+        const childEmailValid = await (0, email_validation_1.checkMxRecord)(data.childEmail);
+        if (!childEmailValid) {
+            ctx.addIssue({
+                code: zod_1.z.ZodIssueCode.custom,
+                path: ["childEmail"],
+                message: "Cette adresse email ne semble pas valide (domaine invalide). Veuillez vérifier.",
+            });
+        }
+    }
 });
 /**
  * Schéma Zod pour la mise à jour du statut d'une pré-inscription.
@@ -83,5 +105,11 @@ exports.listQuerySchema = zod_1.z.object({
     limit: zod_1.z.coerce.number().int().positive().max(100).optional().default(10),
     /** Filtre optionnel par statut */
     status: exports.StatusEnum.optional(),
+});
+/**
+ * Schéma Zod pour la vérification rapide d'un email (route légère).
+ */
+exports.validateEmailSchema = zod_1.z.object({
+    email: zod_1.z.string().email("Format d'email invalide"),
 });
 //# sourceMappingURL=pre-registration.schema.js.map

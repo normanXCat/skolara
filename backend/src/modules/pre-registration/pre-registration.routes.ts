@@ -6,6 +6,7 @@ import {
     updatePreRegistrationSchema,
     idParamSchema,
     listQuerySchema,
+    validateEmailSchema,
 } from "./pre-registration.schema";
 
 /**
@@ -13,6 +14,16 @@ import {
  * Définit les endpoints CRUD avec validation Zod en amont.
  */
 const router = Router();
+
+/**
+ * GET /api/pre-registrations/validate-email
+ * Vérifie si un email a un domaine valide (MX record).
+ */
+router.get(
+    "/validate-email",
+    validate({ query: validateEmailSchema }),
+    PreRegistrationController.checkEmail,
+);
 
 /**
  * POST /api/pre-registrations

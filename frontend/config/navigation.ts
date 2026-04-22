@@ -23,10 +23,6 @@ export const ADMIN_NAVIGATION_LINKS = [
         href: ROUTES.ADMIN.STUDENTS,
         icon: "IconSchool",
         disabled: false,
-        subLinks: [
-            { label: "Liste des élèves", href: ROUTES.ADMIN.STUDENTS },
-            { label: "Ajouter un élève", href: ROUTES.ADMIN.STUDENTS_NEW },
-        ],
     },
     {
         label: "Enseignants",

@@ -21,6 +21,8 @@ export interface InputReusableProps extends React.InputHTMLAttributes<HTMLInputE
     showPasswordToggle?: boolean;
     disabled?: boolean;
     autoFocus?: boolean;
+    success?: boolean;
+    isLoading?: boolean;
 }
 
 /**
@@ -45,6 +47,8 @@ export default function InputReusable({
     showPasswordToggle = true,
     disabled = false,
     autoFocus = false,
+    success = false,
+    isLoading = false,
     value,
     onChange,
     ...props
@@ -69,6 +73,7 @@ export default function InputReusable({
                                     ? "text-primary"
                                     : "text-foreground/70",
                                 error && "text-destructive",
+                                success && "text-emerald-500",
                                 disabled && "opacity-50 cursor-not-allowed",
                             )}
                         >
@@ -97,6 +102,7 @@ export default function InputReusable({
                         isFocused &&
                             "bg-background border-primary/30 ring-4 ring-primary/5",
                         error && "border-destructive/50 bg-destructive/5",
+                        success && !error && "border-emerald-500/50 bg-emerald-500/5 ring-4 ring-emerald-500/5",
                         disabled &&
                             "opacity-50 grayscale-[0.5] cursor-not-allowed",
                     )}
@@ -130,10 +136,21 @@ export default function InputReusable({
                 <div
                     className={cn(
                         "absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within:text-primary transition-colors",
+                        error && "text-destructive/80",
+                        success && !error && "text-emerald-500/80",
                         disabled && "opacity-50",
                     )}
                 >
-                    <Icon size={iconSize} stroke={1.5} />
+                    {isLoading ? (
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        >
+                            <Icon size={iconSize} stroke={1.5} className="opacity-40" />
+                        </motion.div>
+                    ) : (
+                        <Icon size={iconSize} stroke={1.5} />
+                    )}
                 </div>
 
                 {/* Base Input Component */}

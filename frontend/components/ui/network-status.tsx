@@ -179,8 +179,8 @@ export function NetworkStatus() {
 
                                 <ButtonReusable
                                     onClick={handleRetry}
-                                    variant="destructive"
-                                    className="w-full max-w-[240px]"
+                                    variant="outline"
+                                    className="w-full max-w-[240px] text-red-500"
                                     isLoading={isRetrying}
                                     loadingText="Vérification..."
                                     leftIcon={

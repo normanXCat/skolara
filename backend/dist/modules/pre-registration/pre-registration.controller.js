@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PreRegistrationController = void 0;
 const pre_registration_service_1 = require("./pre-registration.service");
 const pre_registration_repository_1 = require("./pre-registration.repository");
+const email_validation_1 = require("../../utils/email-validation");
 /** Instance partagée du service */
 const service = new pre_registration_service_1.PreRegistrationService(new pre_registration_repository_1.PreRegistrationRepository());
 /**
@@ -63,7 +64,13 @@ class PreRegistrationController {
      */
     static async findById(req, res, next) {
         try {
-            const record = await service.findById(Number(req.params.id));
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isInteger(id)) {
+                return res
+                    .status(400)
+                    .json({ success: false, error: "Identifiant invalide" });
+            }
+            const record = await service.findById(id);
             res.json({
                 success: true,
                 data: record,
@@ -108,6 +115,30 @@ class PreRegistrationController {
                 success: true,
                 data: null,
                 message: "Pré-inscription supprimée avec succès",
+            });
+        }
+        catch (err) {
+            next(err);
+        }
+    }
+    /**
+     * Vérifie la validité d'une adresse email (DNS MX).
+     * Route légère pour le feedback visuel frontend.
+     *
+     * @param req - Requête Express avec email en query
+     * @param res - Réponse Express
+     * @param next - Fonction next
+     */
+    static async checkEmail(req, res, next) {
+        try {
+            const email = req.query.email;
+            const isValid = await (0, email_validation_1.checkMxRecord)(email);
+            res.json({
+                success: true,
+                data: { isValid },
+                message: isValid
+                    ? "L'adresse email semble valide"
+                    : "L'adresse email ne possède pas de serveurs de messagerie valides",
             });
         }
         catch (err) {

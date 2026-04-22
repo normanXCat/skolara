@@ -30,7 +30,7 @@ export declare class PreRegistrationController {
      * @param res - Réponse Express
      * @param next - Fonction next pour la propagation des erreurs
      */
-    static findById(req: Request, res: Response, next: NextFunction): Promise<void>;
+    static findById(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
     /**
      * Met à jour le statut d'une pré-inscription.
      *
@@ -47,5 +47,14 @@ export declare class PreRegistrationController {
      * @param next - Fonction next pour la propagation des erreurs
      */
     static delete(req: Request, res: Response, next: NextFunction): Promise<void>;
+    /**
+     * Vérifie la validité d'une adresse email (DNS MX).
+     * Route légère pour le feedback visuel frontend.
+     *
+     * @param req - Requête Express avec email en query
+     * @param res - Réponse Express
+     * @param next - Fonction next
+     */
+    static checkEmail(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 //# sourceMappingURL=pre-registration.controller.d.ts.map

@@ -240,6 +240,48 @@ export default function PreregistrationForm() {
     const [gradesLoading, setGradesLoading] = React.useState(true);
     const uploadIdRef = React.useRef(0);
 
+    // États pour la validation MX des emails
+    const [checkedEmails, setCheckedEmails] = React.useState<
+        Record<string, boolean>
+    >({});
+    const [checkingEmails, setCheckingEmails] = React.useState<
+        Record<string, boolean>
+    >({});
+
+    const checkEmailValidity = async (
+        field: keyof Preregistration,
+        email: string,
+    ) => {
+        // Validation basique avant l'appel API
+        if (!email || !email.includes("@") || errors[field]) return;
+
+        // Éviter de re-vérifier si déjà marqué comme valide
+        if (checkedEmails[email]) return;
+
+        setCheckingEmails((prev) => ({ ...prev, [field]: true }));
+        try {
+            const response = await api.get<{ isValid: boolean }>(
+                `/pre-registrations/validate-email?email=${encodeURIComponent(email)}`,
+            );
+            if (response.success) {
+                setCheckedEmails((prev) => ({
+                    ...prev,
+                    [email]: response.data.isValid,
+                }));
+                if (!response.data.isValid) {
+                    setError(field, {
+                        message: "Ce domaine d'email semble invalide.",
+                    });
+                }
+            }
+        } catch (error) {
+            // Fail open en cas d'erreur API
+            console.warn("MX Check failed, failing open", error);
+        } finally {
+            setCheckingEmails((prev) => ({ ...prev, [field]: false }));
+        }
+    };
+
     // Récupérer les grades depuis la base de données
     React.useEffect(() => {
         const fetchGrades = async () => {
@@ -719,6 +761,14 @@ export default function PreregistrationForm() {
                                         register={register("childEmail")}
                                         error={errors.childEmail?.message}
                                         disabled={loading}
+                                        isLoading={checkingEmails["childEmail"]}
+                                        success={checkedEmails[watchedValues.childEmail || ""]}
+                                        onBlur={(e) =>
+                                            checkEmailValidity(
+                                                "childEmail",
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                 </div>
 
@@ -803,6 +853,14 @@ export default function PreregistrationForm() {
                                         register={register("parentEmail")}
                                         error={errors.parentEmail?.message}
                                         disabled={loading}
+                                        isLoading={checkingEmails["parentEmail"]}
+                                        success={checkedEmails[watchedValues.parentEmail || ""]}
+                                        onBlur={(e) =>
+                                            checkEmailValidity(
+                                                "parentEmail",
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                     <InputReusable
                                         label="Numéro de téléphone"
