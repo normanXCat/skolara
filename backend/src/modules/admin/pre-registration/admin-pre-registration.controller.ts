@@ -101,4 +101,17 @@ export class AdminPreRegistrationController {
             next(error);
         }
     }
+
+    /**
+     * POST /api/admin/pre-registrations/:id/resend-emails
+     */
+    async resendEmails(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = parseInt(req.params.id as string, 10);
+            const result = await this.service.resendWelcomeEmails(id);
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

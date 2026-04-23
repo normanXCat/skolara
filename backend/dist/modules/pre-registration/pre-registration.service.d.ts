@@ -46,7 +46,13 @@ export declare class PreRegistrationService {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
+    /**
+     * Envoie les emails de confirmation au parent et à l'enfant (si email fourni).
+     */
+    private sendConfirmationEmails;
     /**
      * Génère un numéro de dossier unique formaté : PRE-YYYY-XXXX.
      * @returns Le numéro de dossier généré
@@ -84,6 +90,8 @@ export declare class PreRegistrationService {
             processedAt: Date | null;
             studentId: number | null;
             submittedAt: Date;
+            parentEmailSentAt: Date | null;
+            studentEmailSentAt: Date | null;
         }[];
         meta: {
             total: number;
@@ -125,6 +133,8 @@ export declare class PreRegistrationService {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
     /**
      * Met à jour le statut d'une pré-inscription existante.
@@ -160,6 +170,8 @@ export declare class PreRegistrationService {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
     /**
      * Supprime une pré-inscription.
@@ -194,6 +206,8 @@ export declare class PreRegistrationService {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
 }
 //# sourceMappingURL=pre-registration.service.d.ts.map

@@ -64,13 +64,7 @@ class PreRegistrationController {
      */
     static async findById(req, res, next) {
         try {
-            const id = parseInt(req.params.id, 10);
-            if (!Number.isInteger(id)) {
-                return res
-                    .status(400)
-                    .json({ success: false, error: "Identifiant invalide" });
-            }
-            const record = await service.findById(id);
+            const record = await service.findById(Number(req.params.id));
             res.json({
                 success: true,
                 data: record,

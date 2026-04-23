@@ -7,7 +7,7 @@ class GradeRepository {
      * Récupère tous les grades de la base de données.
      */
     async findAll() {
-        return client_1.prisma.grade.findMany({
+        return client_1.prisma.schoolLevel.findMany({
             orderBy: { id: "asc" },
         });
     }
@@ -15,7 +15,7 @@ class GradeRepository {
      * Récupère un grade par sa valeur.
      */
     async findByValue(value) {
-        return client_1.prisma.grade.findUnique({
+        return client_1.prisma.schoolLevel.findUnique({
             where: { value },
         });
     }

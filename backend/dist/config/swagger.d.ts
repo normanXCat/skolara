@@ -438,6 +438,36 @@ export declare const swaggerDocument: {
                 };
             };
         };
+        "/admin/pre-registrations/{id}/resend-emails": {
+            post: {
+                tags: string[];
+                summary: string;
+                description: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
         "/upload/single": {
             post: {
                 tags: string[];
@@ -509,9 +539,217 @@ export declare const swaggerDocument: {
                 };
             };
         };
+        "/admin/classes": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                        };
+                                        data: {
+                                            type: string;
+                                            items: {
+                                                $ref: string;
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: string;
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "201": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/teachers": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: string;
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "201": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/subjects": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                        };
+                                        data: {
+                                            type: string;
+                                            items: {
+                                                $ref: string;
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: string;
+                                required: string[];
+                                properties: {
+                                    name: {
+                                        type: string;
+                                    };
+                                    code: {
+                                        type: string;
+                                    };
+                                    description: {
+                                        type: string;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "201": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
     };
     components: {
         schemas: {
+            Subject: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                    };
+                    name: {
+                        type: string;
+                    };
+                    code: {
+                        type: string;
+                    };
+                    description: {
+                        type: string;
+                    };
+                };
+            };
             AdminStats: {
                 type: string;
                 properties: {
@@ -1044,6 +1282,124 @@ export declare const swaggerDocument: {
                     createdAt: {
                         type: string;
                         format: string;
+                    };
+                };
+            };
+            Class: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                    };
+                    name: {
+                        type: string;
+                    };
+                    level: {
+                        type: string;
+                    };
+                    schoolYear: {
+                        type: string;
+                    };
+                    maxCapacity: {
+                        type: string;
+                    };
+                    headTeacher: {
+                        $ref: string;
+                    };
+                };
+            };
+            CreateClassInput: {
+                type: string;
+                required: string[];
+                properties: {
+                    name: {
+                        type: string;
+                    };
+                    level: {
+                        type: string;
+                    };
+                    schoolYear: {
+                        type: string;
+                    };
+                    maxCapacity: {
+                        type: string;
+                    };
+                    headTeacherId: {
+                        type: string;
+                        nullable: boolean;
+                    };
+                };
+            };
+            Teacher: {
+                type: string;
+                properties: {
+                    id: {
+                        type: string;
+                    };
+                    userId: {
+                        type: string;
+                    };
+                    speciality: {
+                        type: string;
+                    };
+                    phone: {
+                        type: string;
+                    };
+                    user: {
+                        $ref: string;
+                    };
+                };
+            };
+            TeacherPaginatedResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                    };
+                    data: {
+                        type: string;
+                        items: {
+                            $ref: string;
+                        };
+                    };
+                    meta: {
+                        type: string;
+                        properties: {
+                            total: {
+                                type: string;
+                            };
+                            page: {
+                                type: string;
+                            };
+                            limit: {
+                                type: string;
+                            };
+                            totalPages: {
+                                type: string;
+                            };
+                        };
+                    };
+                };
+            };
+            CreateTeacherInput: {
+                type: string;
+                required: string[];
+                properties: {
+                    firstName: {
+                        type: string;
+                    };
+                    lastName: {
+                        type: string;
+                    };
+                    email: {
+                        type: string;
+                        format: string;
+                    };
+                    speciality: {
+                        type: string;
+                    };
+                    phone: {
+                        type: string;
                     };
                 };
             };

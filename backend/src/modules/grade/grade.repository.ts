@@ -1,12 +1,12 @@
 import { prisma } from "../../prisma/client";
-import { Grade } from "../../generated/prisma";
+import { SchoolLevel } from "../../generated/prisma";
 
 export class GradeRepository {
     /**
      * Récupère tous les grades de la base de données.
      */
-    async findAll(): Promise<Grade[]> {
-        return prisma.grade.findMany({
+    async findAll(): Promise<SchoolLevel[]> {
+        return prisma.schoolLevel.findMany({
             orderBy: { id: "asc" },
         });
     }
@@ -14,8 +14,8 @@ export class GradeRepository {
     /**
      * Récupère un grade par sa valeur.
      */
-    async findByValue(value: string): Promise<Grade | null> {
-        return prisma.grade.findUnique({
+    async findByValue(value: string): Promise<SchoolLevel | null> {
+        return prisma.schoolLevel.findUnique({
             where: { value },
         });
     }

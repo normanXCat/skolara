@@ -12,9 +12,9 @@ export declare class StudentsService {
     create(data: CreateStudentInput): Promise<{
         user: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -24,9 +24,9 @@ export declare class StudentsService {
         parent: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
@@ -44,9 +44,12 @@ export declare class StudentsService {
         class: {
             id: number;
             name: string;
+            schoolYear: string;
+            level: string;
             createdAt: Date;
             updatedAt: Date;
-            level: string;
+            maxCapacity: number;
+            headTeacherId: number | null;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
@@ -67,17 +70,20 @@ export declare class StudentsService {
         students: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 active: boolean;
             };
             class: {
                 id: number;
                 name: string;
+                schoolYear: string;
+                level: string;
                 createdAt: Date;
                 updatedAt: Date;
-                level: string;
+                maxCapacity: number;
+                headTeacherId: number | null;
             } | null;
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
@@ -104,9 +110,9 @@ export declare class StudentsService {
     findById(id: number): Promise<{
         user: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -116,9 +122,9 @@ export declare class StudentsService {
         parent: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
@@ -134,23 +140,32 @@ export declare class StudentsService {
             phone: string;
         }) | null;
         absences: {
+            status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             id: number;
             date: Date;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
+            classId: number | null;
+            teacherId: number | null;
             reason: string | null;
             justified: boolean;
+            parentNotifiedAt: Date | null;
         }[];
         marks: {
+            value: number;
             id: number;
             date: Date;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
+            classId: number | null;
             subject: string;
-            value: number;
+            teacherId: number | null;
+            subjectId: number | null;
             coefficient: number;
+            semester: number | null;
+            comment: string | null;
             term: string;
         }[];
         payments: {
@@ -166,9 +181,12 @@ export declare class StudentsService {
         class: {
             id: number;
             name: string;
+            schoolYear: string;
+            level: string;
             createdAt: Date;
             updatedAt: Date;
-            level: string;
+            maxCapacity: number;
+            headTeacherId: number | null;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
@@ -188,9 +206,9 @@ export declare class StudentsService {
     update(id: number, data: UpdateStudentInput): Promise<{
         user: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -200,9 +218,12 @@ export declare class StudentsService {
         class: {
             id: number;
             name: string;
+            schoolYear: string;
+            level: string;
             createdAt: Date;
             updatedAt: Date;
-            level: string;
+            maxCapacity: number;
+            headTeacherId: number | null;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;

@@ -36,6 +36,8 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
     /**
      * Recherche un premier enregistrement correspondant aux critères.
@@ -67,6 +69,8 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     } | null>;
     /**
      * Récupère une liste paginée de pré-inscriptions avec filtre optionnel par statut.
@@ -102,6 +106,8 @@ export declare class PreRegistrationRepository {
             processedAt: Date | null;
             studentId: number | null;
             submittedAt: Date;
+            parentEmailSentAt: Date | null;
+            studentEmailSentAt: Date | null;
         }[];
         total: number;
     }>;
@@ -136,6 +142,8 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     } | null>;
     /**
      * Met à jour une pré-inscription existante.
@@ -169,6 +177,8 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
     /**
      * Supprime une pré-inscription par son identifiant.
@@ -201,6 +211,8 @@ export declare class PreRegistrationRepository {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
 }
 //# sourceMappingURL=pre-registration.repository.d.ts.map

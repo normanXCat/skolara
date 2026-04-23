@@ -30,13 +30,14 @@ export const errorHandler = (
 ): void => {
     const status = "status" in err ? ((err as AppError).status ?? 500) : 500;
     const message = err.message || "Erreur interne du serveur";
-    const details = "details" in err ? (err as AppError).details : undefined;
+    const { details, status: _s, message: _m, ...rest } = err as any;
 
     console.error(`[ERROR] ${status} – ${message}`, details ?? "");
 
     res.status(status).json({
         success: false,
         error: message,
-        ...(details ? { details } : {}),
+        details,
+        ...rest
     });
 };

@@ -30,7 +30,7 @@ export declare class PreRegistrationController {
      * @param res - Réponse Express
      * @param next - Fonction next pour la propagation des erreurs
      */
-    static findById(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
+    static findById(req: Request, res: Response, next: NextFunction): Promise<void>;
     /**
      * Met à jour le statut d'une pré-inscription.
      *

@@ -1,3 +1,4 @@
+import { env } from "./config/env";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -11,7 +12,7 @@ import gradeRoutes from "./modules/grade/grade.routes";
 import uploadRoutes from "./modules/upload/upload.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import adminRoutes from "./modules/admin/admin.routes";
-import { env } from "./config/env";
+import teacherRoutes from "./modules/teacher/teacher.routes";
 
 /**
  * Application Express principale.
@@ -60,6 +61,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /* --- Routes API --- */
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/teacher", teacherRoutes);
 app.use("/api/pre-registrations", preRegistrationRoutes);
 app.use("/api/grades", gradeRoutes);
 app.use("/api/upload", uploadRoutes);

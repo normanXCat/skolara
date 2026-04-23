@@ -7,6 +7,15 @@ import { StudentsService } from "./students/students.service";
 import { StudentsRepository } from "./students/students.repository";
 import { AdminPreRegistrationController } from "./pre-registration/admin-pre-registration.controller";
 import { AdminPreRegistrationService } from "./pre-registration/admin-pre-registration.service";
+import { ClassesController } from "./classes/classes.controller";
+import { ClassesService } from "./classes/classes.service";
+import { ClassesRepository } from "./classes/classes.repository";
+import { TeachersController } from "./teachers/teachers.controller";
+import { TeachersService } from "./teachers/teachers.service";
+import { TeachersRepository } from "./teachers/teachers.repository";
+import { SubjectsController } from "./subjects/subjects.controller";
+import { SubjectsService } from "./subjects/subjects.service";
+import { SubjectsRepository } from "./subjects/subjects.repository";
 
 const router = Router();
 
@@ -25,6 +34,18 @@ const studentsController = new StudentsController(studentsService);
 
 const preRegService = new AdminPreRegistrationService();
 const preRegController = new AdminPreRegistrationController(preRegService);
+
+const classesRepo = new ClassesRepository();
+const classesService = new ClassesService(classesRepo);
+const classesController = new ClassesController(classesService);
+
+const teachersRepo = new TeachersRepository();
+const teachersService = new TeachersService(teachersRepo);
+const teachersController = new TeachersController(teachersService);
+
+const subjectsRepo = new SubjectsRepository();
+const subjectsService = new SubjectsService(subjectsRepo);
+const subjectsController = new SubjectsController(subjectsService);
 
 // 1. Statistiques du Tableau de bord
 router.get("/stats", authenticate, authorize("ADMIN"), (req, res, next) =>
@@ -89,4 +110,87 @@ router.post(
     (req, res, next) => preRegController.convert(req, res, next),
 );
 
+router.post(
+    "/pre-registrations/:id/resend-emails",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => preRegController.resendEmails(req, res, next),
+);
+
+// 4. Gestion des classes
+router.get("/classes", authenticate, authorize("ADMIN"), (req, res, next) =>
+    classesController.findAll(req, res, next),
+);
+router.post("/classes", authenticate, authorize("ADMIN"), (req, res, next) =>
+    classesController.create(req, res, next),
+);
+router.get("/classes/:id", authenticate, authorize("ADMIN"), (req, res, next) =>
+    classesController.findById(req, res, next),
+);
+router.put("/classes/:id", authenticate, authorize("ADMIN"), (req, res, next) =>
+    classesController.update(req, res, next),
+);
+router.delete(
+    "/classes/:id",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => classesController.delete(req, res, next),
+);
+
+// 5. Gestion des enseignants
+router.get("/teachers", authenticate, authorize("ADMIN"), (req, res, next) =>
+    teachersController.findAll(req, res, next),
+);
+router.post("/teachers", authenticate, authorize("ADMIN"), (req, res, next) =>
+    teachersController.create(req, res, next),
+);
+router.get(
+    "/teachers/:id",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => teachersController.findById(req, res, next),
+);
+router.put(
+    "/teachers/:id",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => teachersController.update(req, res, next),
+);
+router.patch(
+    "/teachers/:id/status",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => teachersController.updateStatus(req, res, next),
+);
+router.post(
+    "/teachers/:id/assignments",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => teachersController.addAssignment(req, res, next),
+);
+router.delete(
+    "/teachers/:id/assignments",
+    authenticate,
+    authorize("ADMIN"),
+    (req, res, next) => teachersController.removeAssignment(req, res, next),
+);
+
+// 6. Gestion des matières (Subjects)
+router.get("/subjects", authenticate, authorize("ADMIN"), (req, res, next) =>
+    subjectsController.findAll(req, res, next),
+);
+router.get("/subjects/paginated", authenticate, authorize("ADMIN"), (req, res, next) =>
+    subjectsController.findPaginated(req, res, next),
+);
+router.post("/subjects", authenticate, authorize("ADMIN"), (req, res, next) =>
+    subjectsController.create(req, res, next),
+);
+router.put("/subjects/:id", authenticate, authorize("ADMIN"), (req, res, next) =>
+    subjectsController.update(req, res, next),
+);
+router.delete("/subjects/:id", authenticate, authorize("ADMIN"), (req, res, next) =>
+    subjectsController.delete(req, res, next),
+);
+
 export default router;
+

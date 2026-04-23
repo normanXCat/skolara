@@ -16,7 +16,8 @@ async function main() {
     });
 
     try {
-        const grades = [
+        // 1. School Levels (niveaux scolaires)
+        const schoolLevels = [
             { value: "petite-section", label: "Petite Section (3-4 ans)" },
             { value: "moyenne-section", label: "Moyenne Section (4-5 ans)" },
             { value: "grande-section", label: "Grande Section (5-6 ans)" },
@@ -34,15 +35,16 @@ async function main() {
             { value: "terminale", label: "Terminale" },
         ];
 
-        console.log("🌱 Seeding grades...");
-        for (const grade of grades) {
-            await prisma.grade.upsert({
-                where: { value: grade.value },
-                update: { label: grade.label },
-                create: { value: grade.value, label: grade.label },
+        console.log("🌱 Seeding school levels...");
+        for (const level of schoolLevels) {
+            await prisma.schoolLevel.upsert({
+                where: { value: level.value },
+                update: { label: level.label },
+                create: { value: level.value, label: level.label },
             });
         }
 
+        // 2. Admin user
         console.log("🌱 Seeding admin user...");
         const adminEmail = "admin@skolara.com";
         const adminPassword = "Admin123!";
@@ -68,6 +70,46 @@ async function main() {
         });
 
         console.log(`✅ Admin créé : ${adminEmail} / ${adminPassword}`);
+
+        // 3. Subjects (matières)
+        const subjects = [
+            { name: "Mathématiques", code: "MATH", coefficient: 4 },
+            { name: "Français", code: "FR", coefficient: 4 },
+            { name: "Anglais", code: "ANG", coefficient: 3 },
+            { name: "Sciences Physiques", code: "PHYS", coefficient: 3 },
+            { name: "Sciences de la Vie et de la Terre", code: "SVT", coefficient: 2 },
+            { name: "Histoire-Géographie", code: "HG", coefficient: 2 },
+            { name: "Éducation Physique et Sportive", code: "EPS", coefficient: 2 },
+            { name: "Arts Plastiques", code: "ART", coefficient: 1 },
+            { name: "Musique", code: "MUS", coefficient: 1 },
+            { name: "Technologie", code: "TECH", coefficient: 2 },
+        ];
+
+        console.log("🌱 Seeding subjects...");
+        for (const subject of subjects) {
+            await prisma.subject.upsert({
+                where: { code: subject.code },
+                update: { name: subject.name, coefficient: subject.coefficient },
+                create: subject,
+            });
+        }
+
+        // 4. Sample Classes
+        console.log("🌱 Seeding sample classes...");
+        const sampleClasses = [
+            { name: "6ème A", level: "6ème", schoolYear: "2024-2025" },
+            { name: "3ème B", level: "3ème", schoolYear: "2024-2025" },
+            { name: "Terminale S1", level: "Terminale", schoolYear: "2024-2025" },
+        ];
+
+        for (const cls of sampleClasses) {
+            await prisma.class.upsert({
+                where: { id: sampleClasses.indexOf(cls) + 1 }, // Simpler for seed
+                update: {},
+                create: cls,
+            });
+        }
+
         console.log("✅ Seeding finished successfully.");
     } catch (error) {
         console.error("❌ Fatal error:", error);
@@ -81,3 +123,4 @@ main().catch((err) => {
     console.error("❌ Fatal initialization error:", err);
     process.exit(1);
 });
+

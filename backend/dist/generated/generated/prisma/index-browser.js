@@ -165,7 +165,9 @@ exports.Prisma.PreRegistrationScalarFieldEnum = {
   processedAt: 'processedAt',
   studentId: 'studentId',
   submittedAt: 'submittedAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  parentEmailSentAt: 'parentEmailSentAt',
+  studentEmailSentAt: 'studentEmailSentAt'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -194,16 +196,50 @@ exports.Prisma.ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
   level: 'level',
+  schoolYear: 'schoolYear',
+  maxCapacity: 'maxCapacity',
+  headTeacherId: 'headTeacherId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  coefficient: 'coefficient',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TeacherScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  speciality: 'speciality',
+  phone: 'phone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TeacherSubjectClassScalarFieldEnum = {
+  teacherId: 'teacherId',
+  subjectId: 'subjectId',
+  classId: 'classId',
+  schoolYear: 'schoolYear'
 };
 
 exports.Prisma.MarkScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
+  subjectId: 'subjectId',
+  teacherId: 'teacherId',
+  classId: 'classId',
   subject: 'subject',
   value: 'value',
   coefficient: 'coefficient',
+  semester: 'semester',
+  comment: 'comment',
   term: 'term',
   date: 'date',
   createdAt: 'createdAt',
@@ -213,9 +249,13 @@ exports.Prisma.MarkScalarFieldEnum = {
 exports.Prisma.AbsenceScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
+  teacherId: 'teacherId',
+  classId: 'classId',
   date: 'date',
+  status: 'status',
   reason: 'reason',
   justified: 'justified',
+  parentNotifiedAt: 'parentNotifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -231,7 +271,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.GradeScalarFieldEnum = {
+exports.Prisma.SchoolLevelScalarFieldEnum = {
   id: 'id',
   value: 'value',
   label: 'label'
@@ -270,6 +310,12 @@ exports.StudentStatus = exports.$Enums.StudentStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.AbsenceStatus = exports.$Enums.AbsenceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE'
+};
+
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PENDING: 'PENDING',
   PAID: 'PAID',
@@ -283,10 +329,13 @@ exports.Prisma.ModelName = {
   Student: 'Student',
   Parent: 'Parent',
   Class: 'Class',
+  Subject: 'Subject',
+  Teacher: 'Teacher',
+  TeacherSubjectClass: 'TeacherSubjectClass',
   Mark: 'Mark',
   Absence: 'Absence',
   Payment: 'Payment',
-  Grade: 'Grade'
+  SchoolLevel: 'SchoolLevel'
 };
 
 /**

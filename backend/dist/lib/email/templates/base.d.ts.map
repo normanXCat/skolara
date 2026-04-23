@@ -1,0 +1,1 @@
+{"version":3,"file":"base.d.ts","sourceRoot":"","sources":["../../../../src/lib/email/templates/base.ts"],"names":[],"mappings":"AAAA,UAAU,mBAAmB;IACzB,KAAK,EAAE,MAAM,CAAC;IACd,OAAO,EAAE,MAAM,CAAC;IAChB,SAAS,CAAC,EAAE,MAAM,CAAC;CACtB;AAED;;;GAGG;AACH,wBAAgB,eAAe,CAAC,EAAE,KAAK,EAAE,OAAO,EAAE,SAAS,EAAE,EAAE,mBAAmB,GAAG,MAAM,CAgF1F"}

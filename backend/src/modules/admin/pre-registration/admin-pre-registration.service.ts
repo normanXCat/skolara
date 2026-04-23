@@ -1,6 +1,11 @@
 import { prisma } from "../../../prisma/client";
 import { Role, Status, StudentStatus } from "../../../generated/prisma";
 import authService from "../../auth/auth.service";
+import { generateRandomPassword } from "../../../utils/password";
+import { sendEmail } from "../../../lib/email/send";
+import { ParentWelcomeEmail } from "../../../lib/email/templates/ParentWelcome";
+import { StudentWelcomeEmail } from "../../../lib/email/templates/StudentWelcome";
+import { getCurrentSchoolYear } from "../../../utils/date";
 
 /**
  * Service pour le traitement des pré-inscriptions par l'admin.
@@ -80,7 +85,7 @@ export class AdminPreRegistrationService {
         adminId: number,
         options: { classId?: number; createParentAccount: boolean },
     ) {
-        return prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx) => {
             // 1. Vérifier si déjà converti ou existe
             const preReg = await tx.preRegistration.findUnique({
                 where: { id },
@@ -108,19 +113,26 @@ export class AdminPreRegistrationService {
                 counter++;
             }
 
+            const studentTempPass = generateRandomPassword(12);
+            const studentPasswordHash = await authService.hashPassword(studentTempPass);
+
             const studentUser = await tx.user.create({
                 data: {
                     email: studentEmail,
                     firstName: preReg.childFirstName,
                     name: preReg.childLastName,
-                    passwordHash: await authService.hashPassword("Welcome123!"), // MDP temporaire
+                    passwordHash: studentPasswordHash,
                     role: Role.ELEVE,
                 },
             });
 
             // 3. Gérer le parent
             let parentId = null;
+            let parentTempPass = null;
             if (options.createParentAccount) {
+                parentTempPass = generateRandomPassword(12);
+                const parentPasswordHash = await authService.hashPassword(parentTempPass);
+
                 let parentUser = await tx.user.findUnique({
                     where: { email: preReg.parentEmail },
                 });
@@ -136,8 +148,7 @@ export class AdminPreRegistrationService {
                                     .split(" ")
                                     .slice(1)
                                     .join(" ") || preReg.parentFullName,
-                            passwordHash:
-                                await authService.hashPassword("Parent123!"),
+                            passwordHash: parentPasswordHash,
                             role: Role.PARENT,
                         },
                     });
@@ -158,15 +169,46 @@ export class AdminPreRegistrationService {
                 parentId = parent.id;
             }
 
+            // 3.5 Trouver une classe automatique si classId non fourni
+            let assignedClassId = options.classId;
+            if (!assignedClassId) {
+                const currentYear = getCurrentSchoolYear();
+                const availableClasses = await tx.class.findMany({
+                    where: {
+                        level: preReg.desiredGrade,
+                        schoolYear: currentYear,
+                    },
+                    include: {
+                        _count: { select: { students: true } }
+                    }
+                });
+
+                const eligibleClasses = availableClasses.filter(c => c._count.students < c.maxCapacity);
+
+                if (eligibleClasses.length > 0) {
+                    // Random pick
+                    const randomIndex = Math.floor(Math.random() * eligibleClasses.length);
+                    assignedClassId = eligibleClasses[randomIndex].id;
+                } else {
+                    // No class available -> UI must handle redirect
+                    throw { 
+                        status: 428, 
+                        message: `Aucune classe disponible pour le niveau ${preReg.desiredGrade}. Veuillez en créer une pour l'année ${currentYear}.`,
+                        code: "NO_CLASS_AVAILABLE",
+                        grade: preReg.desiredGrade
+                    };
+                }
+            }
+
             // 4. Créer l'élève
             const student = await tx.student.create({
                 data: {
                     userId: studentUser.id,
                     parentId,
-                    classId: options.classId,
+                    classId: assignedClassId,
                     birthDate: preReg.childDateOfBirth,
                     address: preReg.parentAddress,
-                    schoolYear: "2024-2025",
+                    schoolYear: getCurrentSchoolYear(),
                     status: StudentStatus.ACTIVE,
                 },
             });
@@ -182,10 +224,124 @@ export class AdminPreRegistrationService {
                 },
             });
 
-            // TODO: Envoyer l'email de bienvenue via le mailer
-            // console.log(`Email de bienvenue envoyé à ${preReg.parentEmail}`);
-
-            return student;
+            return { 
+                student, 
+                studentEmail, 
+                studentTempPass, 
+                parentEmail: preReg.parentEmail, 
+                parentTempPass,
+                parentName: preReg.parentFullName,
+                childName: `${preReg.childFirstName} ${preReg.childLastName}`,
+                childFirstName: preReg.childFirstName
+            };
         });
+
+        // 6. Envoi des emails de bienvenue (post-transaction)
+        this.sendWelcomeEmails(id, result).catch(err => 
+            console.error("[CONVERSION] Failed to send welcome emails:", err)
+        );
+
+        return result.student;
+    }
+
+    /**
+     * Envoie les emails de bienvenue après conversion.
+     */
+    private async sendWelcomeEmails(preRegId: number, data: any) {
+        const updateData: any = {};
+
+        // Email au parent
+        if (data.parentTempPass) {
+            const parentHtml = ParentWelcomeEmail({
+                parentName: data.parentName,
+                childName: data.childName,
+                email: data.parentEmail,
+                password: data.parentTempPass
+            });
+
+            const res = await sendEmail({
+                to: data.parentEmail,
+                subject: `Skolara — Identifiants de connexion (Dossier ${data.childName})`,
+                html: parentHtml
+            });
+
+            if (res.success) updateData.parentEmailSentAt = new Date();
+        }
+
+        // Email à l'élève
+        const studentHtml = StudentWelcomeEmail({
+            firstName: data.childFirstName,
+            email: data.studentEmail,
+            password: data.studentTempPass
+        });
+
+        const resStudent = await sendEmail({
+            to: data.studentEmail,
+            subject: 'Bienvenue sur Skolara — Ton compte élève est prêt',
+            html: studentHtml
+        });
+
+        if (resStudent.success) updateData.studentEmailSentAt = new Date();
+
+        if (Object.keys(updateData).length > 0) {
+            await prisma.preRegistration.update({
+                where: { id: preRegId },
+                data: updateData
+            });
+        }
+    }
+
+    /**
+     * Renvoie les emails de bienvenue manuellement.
+     */
+    async resendWelcomeEmails(id: number) {
+        const preReg = await prisma.preRegistration.findUnique({
+            where: { id },
+            include: {
+                student: { include: { user: true } },
+            }
+        });
+
+        if (!preReg || !preReg.student) {
+            throw { status: 404, message: "Dossier ou élève non trouvé" };
+        }
+
+        // Pour un renvoi, on ne connaît plus le mot de passe temporaire initial.
+        // On va en générer un nouveau et mettre à jour le hash.
+        const newStudentPass = generateRandomPassword(12);
+        await prisma.user.update({
+            where: { id: preReg.student.userId },
+            data: { passwordHash: await authService.hashPassword(newStudentPass) }
+        });
+
+        let parentTempPass = null;
+        if (preReg.student.parentId) {
+            const parent = await prisma.parent.findUnique({
+                where: { id: preReg.student.parentId },
+                include: { user: true }
+            });
+            if (parent) {
+                parentTempPass = generateRandomPassword(12);
+                await prisma.user.update({
+                    where: { id: parent.userId },
+                    data: { passwordHash: await authService.hashPassword(parentTempPass) }
+                });
+            }
+        }
+
+        const resultData = {
+            studentEmail: preReg.student.user.email,
+            studentTempPass: newStudentPass,
+            parentEmail: preReg.parentEmail,
+            parentTempPass,
+            parentName: preReg.parentFullName,
+            childName: `${preReg.childFirstName} ${preReg.childLastName}`,
+            childFirstName: preReg.childFirstName
+        };
+
+        await this.sendWelcomeEmails(id, resultData);
+        
+        return { success: true, message: "Emails de bienvenue renvoyés (mots de passe réinitialisés)" };
     }
 }
+
