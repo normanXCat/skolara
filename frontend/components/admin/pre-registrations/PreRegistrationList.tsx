@@ -19,6 +19,7 @@ import api from "@/lib/api-client";
 import { toast } from "@/lib/toast-store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Typography } from "@/components/ui/typography";
+import { ButtonReusable } from "@/components/ui/button-reusable";
 
 export interface PreRegistration {
     id: number;
@@ -121,20 +122,21 @@ export function PreRegistrationList() {
                 const item = row.original;
                 return (
                     <div
-                        className="text-right"
+                        className="flex items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button
-                                    className="h-8 w-8 rounded-xl hover:bg-muted flex items-center justify-center transition-colors"
+                                <ButtonReusable
+                                    variant="outline"
+                                    size="icon"
                                     aria-label="Options"
                                 >
                                     <IconDotsVertical
                                         size={18}
                                         className="text-muted-foreground"
                                     />
-                                </button>
+                                </ButtonReusable>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 align="end"

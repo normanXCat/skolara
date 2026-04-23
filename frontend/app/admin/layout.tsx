@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { ADMIN_NAVIGATION_LINKS } from "@/config/navigation";
 import InputReusable from "@/components/ui/input-reusable";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { Sidebar } from "@/components/common/Sidebar";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconUserCircle, IconSearch } from "@tabler/icons-react";
 import SectionDivider from "@/components/ui/section-divider";
@@ -12,6 +12,7 @@ import { SkeletonReusable } from "@/components/ui/skeleton-reusable";
 import { useAuthStore } from "@/stores/auth-store";
 import { translateRole } from "@/lib/roles";
 import UserAvatar from "@/components/common/user-avatar";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -30,11 +31,20 @@ export default function AdminRootLayout({ children }: AdminLayoutProps) {
         fetchUser();
     }, [fetchUser]);
 
-    // Trouver le titre de la page courante
-    const currentLink = ADMIN_NAVIGATION_LINKS.find(
-        (link) => link.href === pathname,
-    );
-    const pageTitle = currentLink ? currentLink.label : "Tableau de bord";
+    // Trouver le titre de la page courante (gère les sous-liens)
+    let pageTitle = "Tableau de bord";
+    for (const link of ADMIN_NAVIGATION_LINKS) {
+        if (link.href === pathname) {
+            pageTitle = link.label;
+            break;
+        }
+        const sl = "subLinks" in link ? link.subLinks : undefined;
+        const subLink = sl?.find((sub) => sub.href === pathname);
+        if (subLink) {
+            pageTitle = subLink.label;
+            break;
+        }
+    }
 
     return (
         <div className="flex h-screen w-full overflow-hidden bg-background p-4 gap-4 relative">

@@ -20,12 +20,21 @@ export const ROUTES = {
         TEACHERS: "/admin/teachers",
         CLASSES: "/admin/classes",
         TIMETABLES: "/admin/timetables",
+        SUBJECTS: "/admin/subjects",
         GRADES: "/admin/grades",
         ABSENCES: "/admin/absences",
         REPORTS: "/admin/reports",
         PAYMENTS: "/admin/payments",
         MESSAGES: "/admin/messages",
         SETTINGS: "/admin/settings",
+    },
+    TEACHER: {
+        DASHBOARD: "/teacher/dashboard",
+        GRADES: "/teacher/grades",
+        ABSENCES: "/teacher/absences",
+        MY_CLASSES: "/teacher/classes",
+        PLANNING: "/teacher/planning",
+        SETTINGS: "/teacher/settings",
     },
 } as const;
 

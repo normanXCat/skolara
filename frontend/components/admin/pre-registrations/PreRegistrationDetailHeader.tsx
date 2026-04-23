@@ -4,6 +4,7 @@ import {
     IconUserCheck,
     IconUserX,
     IconClock,
+    IconMailForward,
 } from "@tabler/icons-react";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ButtonReusable } from "@/components/ui/button-reusable";
@@ -15,6 +16,7 @@ interface Props {
     processing: boolean;
     onUpdateStatus: (status: string) => void;
     onOpenConvertDialog: () => void;
+    onResendEmails: () => void;
 }
 
 export function PreRegistrationDetailHeader({
@@ -22,6 +24,7 @@ export function PreRegistrationDetailHeader({
     processing,
     onUpdateStatus,
     onOpenConvertDialog,
+    onResendEmails,
 }: Props) {
 
     return (
@@ -62,12 +65,22 @@ export function PreRegistrationDetailHeader({
                     )}
                     <div className="flex items-center gap-3">
                         {data.status === "ACCEPTED" && (
-                            <ButtonReusable
-                                href={`${ROUTES.ADMIN.STUDENTS}/${data.studentId}`}
-                                variant="outline"
-                            >
-                                Voir la fiche élève
-                            </ButtonReusable>
+                            <>
+                                <ButtonReusable
+                                    variant="outline"
+                                    onClick={onResendEmails}
+                                    isLoading={processing}
+                                    leftIcon={<IconMailForward size={20} />}
+                                >
+                                    Renvoyer identifiants
+                                </ButtonReusable>
+                                <ButtonReusable
+                                    href={`${ROUTES.ADMIN.STUDENTS}/${data.studentId}`}
+                                    variant="default"
+                                >
+                                    Voir la fiche élève
+                                </ButtonReusable>
+                            </>
                         )}
 
                         {data.status !== "ACCEPTED" &&

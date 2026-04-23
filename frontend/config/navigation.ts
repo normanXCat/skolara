@@ -28,13 +28,39 @@ export const ADMIN_NAVIGATION_LINKS = [
         label: "Enseignants",
         href: ROUTES.ADMIN.TEACHERS,
         icon: "IconUsers",
-        disabled: true,
+        disabled: false,
+        subLinks: [
+            {
+                label: "Liste des enseignants",
+                href: ROUTES.ADMIN.TEACHERS,
+            },
+            {
+                label: "Nouveau profil",
+                href: ROUTES.ADMIN.TEACHERS + "/new",
+            },
+        ],
     },
     {
         label: "Classes",
         href: ROUTES.ADMIN.CLASSES,
         icon: "IconDoor",
-        disabled: true,
+        disabled: false,
+        subLinks: [
+            {
+                label: "Liste des classes",
+                href: ROUTES.ADMIN.CLASSES,
+            },
+            {
+                label: "Nouvelle classe",
+                href: ROUTES.ADMIN.CLASSES + "/new",
+            },
+        ],
+    },
+    {
+        label: "Matières",
+        href: ROUTES.ADMIN.SUBJECTS,
+        icon: "IconBook",
+        disabled: false,
     },
     {
         label: "Emplois du temps",
@@ -102,5 +128,37 @@ export const ADMIN_NAVIGATION_LINKS = [
             },
             { label: "Facturation", href: ROUTES.ADMIN.SETTINGS + "/billing" },
         ],
+    },
+] as const;
+export const TEACHER_NAVIGATION_LINKS = [
+    {
+        label: "Tableau de bord",
+        href: ROUTES.TEACHER.DASHBOARD,
+        icon: "IconDashboard",
+    },
+    {
+        label: "Mes Classes",
+        href: ROUTES.TEACHER.MY_CLASSES,
+        icon: "IconDoor",
+    },
+    {
+        label: "Notes",
+        href: ROUTES.TEACHER.GRADES,
+        icon: "IconFileCertificate",
+    },
+    {
+        label: "Absences",
+        href: ROUTES.TEACHER.ABSENCES,
+        icon: "IconUserX",
+    },
+    {
+        label: "Planning",
+        href: ROUTES.TEACHER.PLANNING,
+        icon: "IconCalendarTime",
+    },
+    {
+        label: "Paramètres",
+        href: ROUTES.TEACHER.SETTINGS,
+        icon: "IconSettings",
     },
 ] as const;

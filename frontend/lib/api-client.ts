@@ -197,6 +197,7 @@ class ApiClient {
                     success: false,
                     error: result.error || "Une erreur est survenue",
                     details: result.details,
+                    ...result
                 };
             }
 

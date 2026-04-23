@@ -28,6 +28,7 @@ import {
     IconPlus,
     IconMinus,
     IconChevronRight,
+    IconBook,
 } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -58,6 +59,7 @@ const ICON_MAP: Record<string, any> = {
     IconClipboardList: IconClipboardList,
     IconMessages: IconMessages,
     IconSettings: IconSettings,
+    IconBook: IconBook,
 };
 
 export const AdminSidebar = () => {

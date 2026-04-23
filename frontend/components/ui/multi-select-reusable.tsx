@@ -3,65 +3,60 @@
 import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { IconLoader2, IconSearch } from "@tabler/icons-react";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuCheckboxItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { IconLoader2, IconSearch, IconChevronDown } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
-export interface SelectOption {
+export interface MultiSelectOption {
     value: string | number;
     label: string;
 }
 
-export interface SelectReusableProps {
+export interface MultiSelectReusableProps {
     label: string;
     id: string;
     placeholder?: string;
     error?: string;
-    options: SelectOption[];
-    value: string;
-    onValueChange: (value: string) => void;
+    options: MultiSelectOption[];
+    value: string[];
+    onValueChange: (value: string[]) => void;
     icon?: React.ElementType;
     iconSize?: number;
     className?: string;
     onSearchChange?: (search: string) => void;
     searchTerm?: string;
-    onLoadMore?: () => void;
-    hasMore?: boolean;
-    isLoadingMore?: boolean;
     isLoading?: boolean;
     disabled?: boolean;
     name?: string;
 }
 
 /**
- * Composant Select réutilisable avec un design Premium (UI/UX Pro Max).
+ * Composant Multi-Select réutilisable avec un design Premium (UI/UX Pro Max).
+ * Calqué sur le design de SelectReusable.
  */
-export const SelectReusable = React.forwardRef<
+export const MultiSelectReusable = React.forwardRef<
     HTMLButtonElement,
-    SelectReusableProps
->(function SelectReusable(props, ref) {
+    MultiSelectReusableProps
+>(function MultiSelectReusable(props, ref) {
     const {
         label,
         id,
-        placeholder,
+        placeholder = "Sélectionner...",
         error,
         options,
-        value,
+        value = [],
         onValueChange,
         icon: IconProp,
         iconSize = 20,
         className,
         onSearchChange,
         searchTerm,
-        onLoadMore,
-        hasMore,
-        isLoadingMore,
         isLoading,
         disabled = false,
         name,
@@ -70,6 +65,17 @@ export const SelectReusable = React.forwardRef<
 
     const [isOpen, setIsOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+
+    const toggleValue = (val: string) => {
+        const newValues = value.includes(val)
+            ? value.filter((v) => v !== val)
+            : [...value, val];
+        onValueChange(newValues);
+    };
+
+    const selectedOptions = options.filter((opt) => 
+        value.includes(opt.value.toString())
+    );
 
     return (
         <div className={cn("flex flex-col gap-2 w-full", className)}>
@@ -131,56 +137,64 @@ export const SelectReusable = React.forwardRef<
                     </div>
                 )}
 
-                <Select
-                    value={value}
-                    onValueChange={(val) => {
-                        if (val === "CLEAR_SELECTION") {
-                            onValueChange("");
-                        } else {
-                            onValueChange(val);
-                        }
-                    }}
-                    onOpenChange={setIsOpen}
-                    disabled={disabled || isLoading}
-                >
+                <DropdownMenu onOpenChange={setIsOpen}>
                     <motion.div
                         animate={error ? { x: [-2, 2, -2, 2, 0] } : {}}
                         transition={{ duration: 0.4 }}
                     >
-                        <SelectTrigger
-                            id={id}
-                            name={name || id}
-                            ref={ref}
-                            onFocus={() => setIsFocused(true)}
-                            onBlur={() => setIsFocused(false)}
-                            className={cn(
-                                "!h-14 w-full bg-transparent border-none focus:ring-0 focus:ring-offset-0 rounded-full !py-0",
-                                "text-base font-medium transition-all shadow-none outline-none",
-                                IconProp || isLoading ? "pl-12" : "pl-6",
-                                error && "text-destructive",
-                                !value && "text-muted-foreground/40",
-                            )}
-                            {...rest}
-                        >
-                            <div className="flex items-center gap-3">
-                                {isLoading && (
-                                    <IconLoader2
-                                        size={iconSize}
-                                        className="animate-spin text-primary shrink-0"
-                                    />
+                        <DropdownMenuTrigger asChild>
+                            <button
+                                id={id}
+                                name={name || id}
+                                ref={ref}
+                                disabled={disabled || isLoading}
+                                onFocus={() => setIsFocused(true)}
+                                onBlur={() => setIsFocused(false)}
+                                className={cn(
+                                    "flex items-center justify-between w-full min-h-14 px-4 py-2.5",
+                                    "bg-transparent border-none outline-none focus:ring-0",
+                                    "text-base font-medium transition-all shadow-none",
+                                    IconProp || isLoading ? "pl-12" : "pl-6",
+                                    error && "text-destructive",
+                                    !value.length && "text-muted-foreground/40"
                                 )}
-                                <SelectValue
-                                    placeholder={
-                                        isLoading
-                                            ? "Chargement..."
-                                            : placeholder
-                                    }
-                                />
-                            </div>
-                        </SelectTrigger>
+                                {...rest}
+                            >
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    {isLoading && (
+                                        <IconLoader2
+                                            size={iconSize}
+                                            className="animate-spin text-primary shrink-0"
+                                        />
+                                    )}
+                                    
+                                    <div className="flex flex-wrap gap-1.5 overflow-hidden pointer-events-none pr-4 capitalize">
+                                        {selectedOptions.length > 0 ? (
+                                            selectedOptions.map((opt) => (
+                                                <Badge 
+                                                    key={opt.value} 
+                                                    variant="secondary" 
+                                                    className="rounded-full bg-primary/10 text-primary border-none font-bold text-[10px] uppercase px-2 py-0.5"
+                                                >
+                                                    {opt.label}
+                                                </Badge>
+                                            ))
+                                        ) : (
+                                            <span className="truncate text-sm opacity-60">
+                                                {isLoading ? "Chargement..." : placeholder}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <IconChevronDown size={20} className={cn("text-muted-foreground/40 shrink-0 transition-transform duration-300", isOpen && "rotate-180")} />
+                            </button>
+                        </DropdownMenuTrigger>
                     </motion.div>
 
-                    <SelectContent className="rounded-3xl border-border/40 bg-background/91 backdrop-blur-3xl shadow-2xl p-1">
+                    <DropdownMenuContent 
+                        align="start" 
+                        className="w-[300px] max-h-80 overflow-y-auto rounded-3xl p-2 bg-background/91 backdrop-blur-3xl border-border/40 shadow-2xl custom-scrollbar"
+                    >
                         {onSearchChange && (
                             <div className="relative mb-1 p-2">
                                 <IconSearch className="absolute left-6 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/50" />
@@ -192,63 +206,30 @@ export const SelectReusable = React.forwardRef<
                                         onSearchChange(e.target.value)
                                     }
                                     onClick={(e) => e.stopPropagation()}
-                                    onKeyDown={(e) => e.stopPropagation()}
                                 />
                             </div>
                         )}
 
-                        <div className="max-h-60 overflow-y-auto custom-scrollbar">
-                            {value && (
-                                <SelectItem
-                                    value="CLEAR_SELECTION"
-                                    className="rounded-xl py-3 px-4 text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors cursor-pointer font-bold border-b border-border/20 mb-1"
-                                >
-                                    Effacer la sélection
-                                </SelectItem>
-                            )}
-                            
+                        <div className="space-y-0.5">
                             {options.map((option) => (
-                                <SelectItem
+                                <DropdownMenuCheckboxItem
                                     key={option.value}
-                                    value={option.value.toString()}
-                                    className="rounded-xl py-3 pl-10 pr-4 focus:bg-primary/10 focus:text-primary transition-colors cursor-pointer font-semibold"
+                                    checked={value.includes(option.value.toString())}
+                                    onCheckedChange={() => toggleValue(option.value.toString())}
+                                    className="rounded-xl py-3 pl-10 pr-4 cursor-pointer focus:bg-primary/10 focus:text-primary transition-colors transition-all"
+                                    onSelect={(e) => e.preventDefault()}
                                 >
-                                    {option.label}
-                                </SelectItem>
+                                    <span className="font-semibold truncate">{option.label}</span>
+                                </DropdownMenuCheckboxItem>
                             ))}
-                            {options.length === 0 && (
+                            {options.length === 0 && !isLoading && (
                                 <div className="py-8 text-center text-sm text-muted-foreground italic">
                                     Aucun résultat trouvé
                                 </div>
                             )}
                         </div>
-
-                        {hasMore && onLoadMore && (
-                            <button
-                                type="button"
-                                className={cn(
-                                    "flex w-[calc(100%-8px)] m-1 items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-border/60 text-xs font-bold text-primary hover:bg-primary/5 transition-all",
-                                    isLoadingMore && "opacity-70 cursor-wait",
-                                )}
-                                disabled={isLoadingMore}
-                                onPointerDown={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    if (!isLoadingMore) onLoadMore();
-                                }}
-                            >
-                                {isLoadingMore ? (
-                                    <>
-                                        <IconLoader2 className="h-4 w-4 animate-spin" />
-                                        <span>Chargement...</span>
-                                    </>
-                                ) : (
-                                    <span>Charger plus</span>
-                                )}
-                            </button>
-                        )}
-                    </SelectContent>
-                </Select>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
 
             <AnimatePresence>
@@ -267,6 +248,6 @@ export const SelectReusable = React.forwardRef<
     );
 });
 
-SelectReusable.displayName = "SelectReusable";
+MultiSelectReusable.displayName = "MultiSelectReusable";
 
-export default SelectReusable;
+export default MultiSelectReusable;
