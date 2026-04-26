@@ -22,36 +22,59 @@
 - **Backend** : Node.js, Express, Prisma, PostgreSQL.
 - **Runtime** : Bun pour une exécution ultra-rapide.
 
-## 🚀 Structure du Projet
+## 🏠 Homepage Sections
+- **Hero Section**: Entrée immersive avec grille dynamique et call-to-action.
+- **School Presentation**: Mise en avant des atouts et galerie interactive.
+- **Key Figures**: Indicateurs de performance avec compteurs animés.
+- **School Levels**: Présentation des cycles (Maternelle, Primaire, Collège, Lycée).
+- **School Values**: Nos piliers fondamentaux avec layout alterné.
+- **Recent News**: Les 3 derniers articles du mag, synchronisés en temps réel.
+- **Testimonials**: Retours d'expérience via un carousel premium.
+- **Photo Gallery**: Immersion visuelle style bento-grid.
+- **Partners**: Logos des partenaires avec défilement infini.
+- **Call To Action**: Conversion finale vers la pré-inscription.
 
-```bash
-.
-├── frontend/   # Application Next.js (Interface utilisateur)
-├── backend/    # Service API (Base de données & Logique métier)
-└── docs/       # Cahier des charges et documentation technique
+## 🛠️ Tech Stack & Librairies
+- **Core**: Next.js 15 (App Router), React 19, TypeScript
+- **Styling**: Tailwind CSS 4, shadcn/ui, Radix UI
+- **Animations**: Framer Motion, GSAP (optionnel)
+- **Charts**: Recharts
+- **Icons**: Tabler Icons (@tabler/icons-react), Lucide React
+- **Utils**: zod, clsx, tailwind-merge, date-fns, lodash
+- **Backend-only**: Express, Prisma ORM, Swagger-JSDoc
+
+## 📄 Environment Variables
+
+### Frontend (`frontend/.env.local`)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+BACKEND_URL=http://localhost:8000
 ```
 
-## 🛠️ Installation & Démarrage
-
-### Prérequis
-
-- [Bun](https://bun.sh/) (recommandé) ou Node.js (v20+)
-
-### Frontend
-
-```bash
-cd frontend
-bun install
-bun run dev
+### Backend (`backend/.env`)
+```env
+PORT=8000
+DATABASE_URL="postgresql://user:password@localhost:5432/skolara"
+JWT_SECRET="votre_secret_jwt"
+JWT_REFRESH_SECRET="votre_secret_refresh"
+EMAIL_FROM="contact@skolara.com"
+EMAIL_PASSWORD="votre_mot_de_passe_email"
+FRONTEND_URL="http://localhost:3000"
 ```
 
-### Backend
+## 🚀 Scripts Disponibles
 
-```bash
-cd backend
-bun install
-bun run dev
-```
+| Script | Description |
+| :-- | :-- |
+| `bun dev` | Lancement du serveur de développement |
+| `bun build` | Compilation pour la production |
+| `bun start` | Lancement de l'application compilée |
+| `bun lint` | Analyse statique du code (ESLint) |
+
+## 📚 Documentation API
+La documentation interactive de l'API (Swagger UI) est disponible sur :
+`http://localhost:3000/api-docs`
 
 ---
 
