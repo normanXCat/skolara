@@ -33,9 +33,7 @@ const footerLinks = {
     ressources: {
         title: "Ressources",
         links: [
-            { label: "Inscription", href: ROUTES.PRE_REGISTRATION },
             { label: "Programme Scolaire", href: "/programme" },
-            { label: "Vie Scolaire", href: "/vie-scolaire" },
             { label: "FAQ", href: ROUTES.FAQ },
             { label: "Plan du Site", href: "/sitemap" },
         ],
