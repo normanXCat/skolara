@@ -1,1 +1,1 @@
-{"version":3,"file":"stats.service.d.ts","sourceRoot":"","sources":["../../../../src/modules/admin/stats/stats.service.ts"],"names":[],"mappings":"AAQA;;GAEG;AACH,qBAAa,YAAY;IACrB;;OAEG;IACG,aAAa;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CAgItB"}
+{"version":3,"file":"stats.service.d.ts","sourceRoot":"","sources":["../../../../src/modules/admin/stats/stats.service.ts"],"names":[],"mappings":"AAQA;;GAEG;AACH,qBAAa,YAAY;IACrB;;OAEG;IACG,aAAa;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CAgItB"}

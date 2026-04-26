@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PreRegistrationService = void 0;
+const send_1 = require("../../lib/email/send");
+const PreRegistrationConfirmation_1 = require("../../lib/email/templates/PreRegistrationConfirmation");
 /**
  * Service de logique métier pour les pré-inscriptions.
  * Orchestre les appels au repository et applique les règles métier.
@@ -60,9 +62,32 @@ class PreRegistrationService {
         // 3. Générer un fileNumber unique
         const fileNumber = await this.generateFileNumber();
         // 4. Créer l'enregistrement
-        return this.repository.create({
+        const record = await this.repository.create({
             ...data,
             fileNumber,
+        });
+        // 5. Envoi des emails de confirmation (asynchrone, ne bloque pas la réponse)
+        this.sendConfirmationEmails(record).catch(err => console.error("[PRE-REGISTRATION] Failed to send confirmation emails:", err));
+        return record;
+    }
+    /**
+     * Envoie les emails de confirmation au parent et à l'enfant (si email fourni).
+     */
+    async sendConfirmationEmails(record) {
+        const emailHtml = (0, PreRegistrationConfirmation_1.PreRegistrationConfirmationEmail)({
+            parentName: record.parentFullName,
+            childName: `${record.childFirstName} ${record.childLastName}`,
+            desiredGrade: record.desiredGrade,
+            submissionDate: new Date(record.submittedAt).toLocaleDateString('fr-FR')
+        });
+        const recipients = [record.parentEmail];
+        if (record.childEmail && record.childEmail.trim() !== "") {
+            recipients.push(record.childEmail);
+        }
+        return (0, send_1.sendEmail)({
+            to: recipients,
+            subject: `Dossier de pré-inscription reçu — ${record.childFirstName} ${record.childLastName}`,
+            html: emailHtml
         });
     }
     /**

@@ -23,6 +23,9 @@ export interface InputReusableProps extends React.InputHTMLAttributes<HTMLInputE
     autoFocus?: boolean;
     success?: boolean;
     isLoading?: boolean;
+    hideIcon?: boolean;
+    compact?: boolean;
+    inputClassName?: string;
 }
 
 /**
@@ -49,6 +52,9 @@ export default function InputReusable({
     autoFocus = false,
     success = false,
     isLoading = false,
+    hideIcon = false,
+    compact = false,
+    inputClassName,
     value,
     onChange,
     ...props
@@ -97,7 +103,8 @@ export default function InputReusable({
                 {/* Background & Glass effect */}
                 <div
                     className={cn(
-                        "absolute inset-0 rounded-full transition-all duration-300 -z-10",
+                        "absolute inset-0 transition-all duration-300 -z-10",
+                        compact ? "rounded-full" : "rounded-full",
                         "bg-muted/30 border border-border/40 backdrop-blur-sm",
                         isFocused &&
                             "bg-background border-primary/30 ring-4 ring-primary/5",
@@ -115,7 +122,10 @@ export default function InputReusable({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute -inset-[1px] -z-10 rounded-full overflow-hidden pointer-events-none"
+                            className={cn(
+                                "absolute -inset-[1px] -z-10 overflow-hidden pointer-events-none",
+                                compact ? "rounded-full" : "rounded-full"
+                            )}
                         >
                             <motion.div
                                 className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0deg,var(--primary)_40deg,transparent_80deg)]"
@@ -127,31 +137,35 @@ export default function InputReusable({
                                 }}
                             />
                             {/* Mask to keep only the border */}
-                            <div className="absolute inset-[1.5px] bg-background rounded-full" />
+                            <div className={cn(
+                                "absolute inset-[1.5px] bg-background",
+                                compact ? "rounded-full" : "rounded-full"
+                            )} />
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                {/* Left Icon */}
-                <div
-                    className={cn(
-                        "absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within:text-primary transition-colors",
-                        error && "text-destructive/80",
-                        success && !error && "text-emerald-500/80",
-                        disabled && "opacity-50",
-                    )}
-                >
-                    {isLoading ? (
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        >
-                            <Icon size={iconSize} stroke={1.5} className="opacity-40" />
-                        </motion.div>
-                    ) : (
-                        <Icon size={iconSize} stroke={1.5} />
-                    )}
-                </div>
+                {!hideIcon && (
+                    <div
+                        className={cn(
+                            "absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within:text-primary transition-colors",
+                            error && "text-destructive/80",
+                            success && !error && "text-emerald-500/80",
+                            disabled && "opacity-50",
+                        )}
+                    >
+                        {isLoading ? (
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            >
+                                <Icon size={iconSize} stroke={1.5} className="opacity-40" />
+                            </motion.div>
+                        ) : (
+                            <Icon size={iconSize} stroke={1.5} />
+                        )}
+                    </div>
+                )}
 
                 {/* Base Input Component */}
                 <motion.div
@@ -185,9 +199,14 @@ export default function InputReusable({
                             if (props.onBlur) props.onBlur(e);
                         }}
                         className={cn(
-                            "pl-12 pr-12 !h-14 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full !py-0",
-                            "text-base placeholder:text-muted-foreground/40 font-medium",
+                            !hideIcon ? (compact ? "pl-10" : "pl-12") : (compact ? "pl-4" : "pl-6"),
+                            compact ? "pr-4" : "pr-12",
+                            compact ? "!h-10 text-sm" : "!h-14 text-base",
+                            "bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 !py-0",
+                            compact ? "rounded-full" : "rounded-full",
+                            "placeholder:text-muted-foreground/40 font-medium",
                             error && "text-destructive",
+                            inputClassName
                         )}
                     />
                 </motion.div>

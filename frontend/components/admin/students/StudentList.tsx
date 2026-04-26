@@ -14,6 +14,7 @@ import {
     IconArchive,
     IconUser,
 } from "@tabler/icons-react";
+import UserAvatar from "@/components/common/user-avatar";
 import { ButtonReusable } from "@/components/ui/button-reusable";
 import {
     DropdownMenu,
@@ -127,10 +128,11 @@ export function StudentList() {
                 const student = row.original;
                 return (
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black border border-primary/20 shrink-0 capitalize">
-                            {student.user.firstName[0]}
-                            {student.user.name[0]}
-                        </div>
+                        <UserAvatar 
+                            firstName={student.user.firstName} 
+                            lastName={student.user.name} 
+                            size={40}
+                        />
                         <div className="min-w-0">
                             <div className="font-bold text-foreground text-sm tracking-tight truncate">
                                 {student.user.firstName} {student.user.name}
@@ -192,20 +194,21 @@ export function StudentList() {
                 const student = row.original;
                 return (
                     <div
-                        className="text-right"
+                        className="flex items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button
-                                    className="h-8 w-8 rounded-xl hover:bg-muted flex items-center justify-center transition-colors"
+                                <ButtonReusable
+                                    variant="outline"
+                                    size="icon"
                                     aria-label="Options"
                                 >
                                     <IconDotsVertical
                                         size={18}
                                         className="text-muted-foreground"
                                     />
-                                </button>
+                                </ButtonReusable>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 align="end"

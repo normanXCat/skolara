@@ -32,6 +32,8 @@ export declare class AdminPreRegistrationService {
             processedAt: Date | null;
             studentId: number | null;
             submittedAt: Date;
+            parentEmailSentAt: Date | null;
+            studentEmailSentAt: Date | null;
         }[];
         total: number;
         totalPages: number;
@@ -43,9 +45,9 @@ export declare class AdminPreRegistrationService {
         student: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
@@ -55,20 +57,20 @@ export declare class AdminPreRegistrationService {
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            classId: number | null;
             birthDate: Date;
             address: string | null;
             schoolYear: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number;
-            classId: number | null;
             parentId: number | null;
         }) | null;
         processedByUser: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -100,6 +102,8 @@ export declare class AdminPreRegistrationService {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
     /**
      * Met à jour le statut d'un dossier.
@@ -129,6 +133,8 @@ export declare class AdminPreRegistrationService {
         processedAt: Date | null;
         studentId: number | null;
         submittedAt: Date;
+        parentEmailSentAt: Date | null;
+        studentEmailSentAt: Date | null;
     }>;
     /**
      * Convertit une pré-inscription acceptée en élève réel.
@@ -140,14 +146,25 @@ export declare class AdminPreRegistrationService {
     }): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
+    }>;
+    /**
+     * Envoie les emails de bienvenue après conversion.
+     */
+    private sendWelcomeEmails;
+    /**
+     * Renvoie les emails de bienvenue manuellement.
+     */
+    resendWelcomeEmails(id: number): Promise<{
+        success: boolean;
+        message: string;
     }>;
 }
 //# sourceMappingURL=admin-pre-registration.service.d.ts.map

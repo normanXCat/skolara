@@ -75,9 +75,6 @@ export class AuthController {
      */
     static async refresh(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log("[DEBUG] Cookies:", req.cookies);
-            console.log("[DEBUG] Cookie Header:", req.headers.cookie);
-
             // 1. Extraire TOUS les refresh tokens potentiels du header Cookie
             // (Utile si plusieurs cookies du même nom existent à cause de trajets/domaines différents)
             const allTokens: string[] = [];
@@ -102,8 +99,6 @@ export class AuthController {
                     message: "Token de rafraîchissement manquant",
                 });
             }
-
-            console.log("[DEBUG] Tokens à tester:", allTokens);
 
             // 2. Tester les tokens un par un jusqu'à en trouver un valide
             let result = null;

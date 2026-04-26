@@ -11,28 +11,31 @@ export declare class StudentsRepository {
         data: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 active: boolean;
             };
             class: {
                 id: number;
                 name: string;
+                schoolYear: string;
+                level: string;
                 createdAt: Date;
                 updatedAt: Date;
-                level: string;
+                headTeacherId: number | null;
+                maxCapacity: number;
             } | null;
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            classId: number | null;
             birthDate: Date;
             address: string | null;
             schoolYear: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number;
-            classId: number | null;
             parentId: number | null;
         })[];
         total: number;
@@ -43,9 +46,9 @@ export declare class StudentsRepository {
     findById(id: number): Promise<({
         user: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -55,9 +58,9 @@ export declare class StudentsRepository {
         parent: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
@@ -72,25 +75,41 @@ export declare class StudentsRepository {
             userId: number;
             phone: string;
         }) | null;
+        class: {
+            id: number;
+            name: string;
+            schoolYear: string;
+            level: string;
+            createdAt: Date;
+            updatedAt: Date;
+            headTeacherId: number | null;
+            maxCapacity: number;
+        } | null;
         absences: {
+            status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             id: number;
-            date: Date;
-            createdAt: Date;
-            updatedAt: Date;
-            studentId: number;
+            classId: number;
+            isJustified: boolean;
             reason: string | null;
-            justified: boolean;
-        }[];
-        marks: {
-            id: number;
             date: Date;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
-            subject: string;
+            parentNotifiedAt: Date | null;
+            teacherId: number;
+        }[];
+        grades: {
             value: number;
-            coefficient: number;
-            term: string;
+            id: number;
+            classId: number;
+            subjectId: number;
+            semester: number;
+            createdAt: Date;
+            updatedAt: Date;
+            studentId: number;
+            teacherId: number;
+            comment: string | null;
+            gradedAt: Date;
         }[];
         payments: {
             status: import("../../../generated/prisma").$Enums.PaymentStatus;
@@ -102,23 +121,16 @@ export declare class StudentsRepository {
             dueDate: Date;
             paymentDate: Date | null;
         }[];
-        class: {
-            id: number;
-            name: string;
-            createdAt: Date;
-            updatedAt: Date;
-            level: string;
-        } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }) | null>;
     /**
@@ -127,13 +139,13 @@ export declare class StudentsRepository {
     findByUserEmail(email: string): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     } | null>;
     /**
@@ -142,13 +154,13 @@ export declare class StudentsRepository {
     create(data: Prisma.StudentCreateInput, tx?: Prisma.TransactionClient): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -157,9 +169,9 @@ export declare class StudentsRepository {
     update(id: number, data: Prisma.StudentUpdateInput): Promise<{
         user: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -169,20 +181,23 @@ export declare class StudentsRepository {
         class: {
             id: number;
             name: string;
+            schoolYear: string;
+            level: string;
             createdAt: Date;
             updatedAt: Date;
-            level: string;
+            headTeacherId: number | null;
+            maxCapacity: number;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -192,13 +207,13 @@ export declare class StudentsRepository {
     setStatus(id: number, status: StudentStatus): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -207,9 +222,9 @@ export declare class StudentsRepository {
     findAllForExport(filters: Omit<StudentFiltersInput, "page" | "limit">): Promise<({
         user: {
             id: number;
+            name: string;
             firstName: string;
             email: string;
-            name: string;
             passwordHash: string;
             role: import("../../../generated/prisma").$Enums.Role;
             active: boolean;
@@ -219,9 +234,9 @@ export declare class StudentsRepository {
         parent: ({
             user: {
                 id: number;
+                name: string;
                 firstName: string;
                 email: string;
-                name: string;
                 passwordHash: string;
                 role: import("../../../generated/prisma").$Enums.Role;
                 active: boolean;
@@ -239,20 +254,23 @@ export declare class StudentsRepository {
         class: {
             id: number;
             name: string;
+            schoolYear: string;
+            level: string;
             createdAt: Date;
             updatedAt: Date;
-            level: string;
+            headTeacherId: number | null;
+            maxCapacity: number;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     })[]>;
 }

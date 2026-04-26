@@ -7,7 +7,7 @@ exports.GradeService = void 0;
 const grade_repository_1 = __importDefault(require("./grade.repository"));
 class GradeService {
     /**
-     * Récupère la liste de tous les grades.
+     * Récupère la liste de tous les niveaux scolaires.
      */
     async getAllGrades() {
         return grade_repository_1.default.findAll();

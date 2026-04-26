@@ -49,6 +49,7 @@ interface DataTableProps<TData, TValue> {
     onRowClick?: (row: TData) => void;
     searchKey?: string;
     searchPlaceholder?: string;
+    getRowId?: (row: TData) => string;
 }
 
 export function DataTable<TData, TValue>({
@@ -58,6 +59,7 @@ export function DataTable<TData, TValue>({
     onRowClick,
     searchKey,
     searchPlaceholder,
+    getRowId,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -68,6 +70,7 @@ export function DataTable<TData, TValue>({
     const table = useReactTable({
         data,
         columns,
+        getRowId,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,

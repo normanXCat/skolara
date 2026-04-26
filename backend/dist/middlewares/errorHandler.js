@@ -14,12 +14,13 @@ exports.errorHandler = void 0;
 const errorHandler = (err, _req, res, _next) => {
     const status = "status" in err ? (err.status ?? 500) : 500;
     const message = err.message || "Erreur interne du serveur";
-    const details = "details" in err ? err.details : undefined;
+    const { details, status: _s, message: _m, ...rest } = err;
     console.error(`[ERROR] ${status} – ${message}`, details ?? "");
     res.status(status).json({
         success: false,
         error: message,
-        ...(details ? { details } : {}),
+        details,
+        ...rest
     });
 };
 exports.errorHandler = errorHandler;

@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 
-interface InputUploadProps {
+export interface InputUploadProps {
     label: string;
     name: string;
     accept?: string; // ex: "image/*,.pdf"
@@ -27,6 +27,7 @@ interface InputUploadProps {
 
 /**
  * Composant InputUpload réutilisable avec aperçu et validation de taille.
+ * Nommé également UploadReusable pour la cohérence.
  */
 export default function InputUpload({
     label,
@@ -254,3 +255,5 @@ export default function InputUpload({
         </div>
     );
 }
+
+export { InputUpload as UploadReusable };

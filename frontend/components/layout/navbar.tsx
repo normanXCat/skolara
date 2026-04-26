@@ -16,6 +16,7 @@ import {
     IconLogin2,
     IconLayoutDashboard,
     IconLogout,
+    IconSchool,
 } from "@tabler/icons-react";
 import { useAuthStore } from "@/stores/auth-store";
 import api from "@/lib/api-client";
@@ -325,7 +326,7 @@ export default function Navbar() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent
                                                 align="end"
-                                                className="w-48 bg-background/95 backdrop-blur-xl rounded-2xl border-border/40 shadow-2xl p-2"
+                                                className="w-48 bg-background/95 backdrop-blur-xl rounded-3xl border-border/40 shadow-2xl p-2"
                                             >
                                                 <div className="px-2 py-1.5 text-sm font-bold truncate">
                                                     {user.firstName} {user.name}
@@ -341,10 +342,27 @@ export default function Navbar() {
                                                                 ROUTES.ADMIN
                                                                     .DASHBOARD
                                                             }
-                                                            className="w-full flex items-center text-foreground/80 hover:text-primary"
+                                                            className="w-full flex items-center text-foreground/80 hover:text-primary pb-1.5"
                                                         >
                                                             <IconLayoutDashboard className="mr-2 h-4 w-4" />
                                                             Tableau de bord
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                )}
+                                                {user.role === "ENSEIGNANT" && (
+                                                    <DropdownMenuItem
+                                                        asChild
+                                                        className="rounded-xl cursor-pointer"
+                                                    >
+                                                        <Link
+                                                            href={
+                                                                ROUTES.TEACHER
+                                                                    .DASHBOARD
+                                                            }
+                                                            className="w-full flex items-center text-foreground/80 hover:text-primary pb-1.5"
+                                                        >
+                                                            <IconSchool className="mr-2 h-4 w-4" />
+                                                            Espace Enseignant
                                                         </Link>
                                                     </DropdownMenuItem>
                                                 )}
@@ -557,10 +575,27 @@ export default function Navbar() {
                                                                     ROUTES.ADMIN
                                                                         .DASHBOARD
                                                                 }
-                                                                className="w-full flex items-center text-foreground/80 hover:text-primary"
+                                                                className="w-full flex items-center text-foreground/80 hover:text-primary pb-1.5"
                                                             >
                                                                 <IconLayoutDashboard className="mr-2 h-4 w-4" />
                                                                 Tableau de bord
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    {user.role === "ENSEIGNANT" && (
+                                                        <DropdownMenuItem
+                                                            asChild
+                                                            className="rounded-xl cursor-pointer"
+                                                        >
+                                                            <Link
+                                                                href={
+                                                                    ROUTES.TEACHER
+                                                                        .DASHBOARD
+                                                                }
+                                                                className="w-full flex items-center text-foreground/80 hover:text-primary pb-1.5"
+                                                            >
+                                                                <IconSchool className="mr-2 h-4 w-4" />
+                                                                Espace Enseignant
                                                             </Link>
                                                         </DropdownMenuItem>
                                                     )}
@@ -711,6 +746,8 @@ export default function Navbar() {
                                                     <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
                                                         {user.role === "ADMIN"
                                                             ? "Administrateur"
+                                                            : user.role === "ENSEIGNANT"
+                                                            ? "Enseignant"
                                                             : "Utilisateur"}
                                                     </span>
                                                 </div>
@@ -728,6 +765,21 @@ export default function Navbar() {
                                                     className="w-full justify-center mb-1"
                                                 >
                                                     Tableau de bord
+                                                </ButtonReusable>
+                                            )}
+                                            {user.role === "ENSEIGNANT" && (
+                                                <ButtonReusable
+                                                    href={
+                                                        ROUTES.TEACHER.DASHBOARD
+                                                    }
+                                                    variant="outline"
+                                                    size="lg"
+                                                    leftIcon={
+                                                        <IconSchool className="size-5" />
+                                                    }
+                                                    className="w-full justify-center mb-1"
+                                                >
+                                                    Espace Enseignant
                                                 </ButtonReusable>
                                             )}
                                             <ButtonReusable

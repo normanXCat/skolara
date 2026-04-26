@@ -110,7 +110,7 @@ export const SelectReusable = React.forwardRef<
                                 className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0deg,var(--primary)_40deg,transparent_80deg)]"
                                 animate={{ rotate: 360 }}
                                 transition={{
-                                    duration: 4,
+                                    duration: 3,
                                     repeat: Infinity,
                                     ease: "linear",
                                 }}
@@ -133,7 +133,13 @@ export const SelectReusable = React.forwardRef<
 
                 <Select
                     value={value}
-                    onValueChange={onValueChange}
+                    onValueChange={(val) => {
+                        if (val === "CLEAR_SELECTION") {
+                            onValueChange("");
+                        } else {
+                            onValueChange(val);
+                        }
+                    }}
                     onOpenChange={setIsOpen}
                     disabled={disabled || isLoading}
                 >
@@ -150,35 +156,38 @@ export const SelectReusable = React.forwardRef<
                             className={cn(
                                 "!h-14 w-full bg-transparent border-none focus:ring-0 focus:ring-offset-0 rounded-full !py-0",
                                 "text-base font-medium transition-all shadow-none outline-none",
-                                IconProp || isLoading ? "pl-12 pr-12" : "px-12",
+                                IconProp || isLoading ? "pl-12" : "pl-6",
                                 error && "text-destructive",
+                                !value && "text-muted-foreground/40",
                             )}
                             {...rest}
                         >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 min-w-0 w-full">
                                 {isLoading && (
                                     <IconLoader2
                                         size={iconSize}
                                         className="animate-spin text-primary shrink-0"
                                     />
                                 )}
-                                <SelectValue
-                                    placeholder={
-                                        isLoading
-                                            ? "Chargement..."
-                                            : placeholder
-                                    }
-                                />
+                                <div className="flex-1 truncate text-left">
+                                    <SelectValue
+                                        placeholder={
+                                            isLoading
+                                                ? "Chargement..."
+                                                : placeholder
+                                        }
+                                    />
+                                </div>
                             </div>
                         </SelectTrigger>
                     </motion.div>
 
-                    <SelectContent className="rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl p-1">
+                    <SelectContent position="popper" className="rounded-3xl border-border/40 bg-background/91 backdrop-blur-3xl shadow-2xl p-1 z-[300]">
                         {onSearchChange && (
                             <div className="relative mb-1 p-2">
-                                <IconSearch className="absolute left-5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/50" />
+                                <IconSearch className="absolute left-6 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/50" />
                                 <input
-                                    className="w-full h-10 rounded-xl bg-muted/50 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-primary/20 border-transparent transition-all"
+                                    className="w-full h-11 rounded-2xl bg-muted/50 pl-11 pr-4 text-sm outline-none focus:ring-2 focus:ring-primary/20 border-transparent transition-all"
                                     placeholder="Rechercher..."
                                     value={searchTerm}
                                     onChange={(e) =>
@@ -191,11 +200,20 @@ export const SelectReusable = React.forwardRef<
                         )}
 
                         <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                            {value && (
+                                <SelectItem
+                                    value="CLEAR_SELECTION"
+                                    className="rounded-xl py-3 px-4 text-destructive focus:bg-destructive/10 focus:text-destructive transition-colors cursor-pointer font-bold border-b border-border/20 mb-1"
+                                >
+                                    Effacer la sélection
+                                </SelectItem>
+                            )}
+                            
                             {options.map((option) => (
                                 <SelectItem
                                     key={option.value}
                                     value={option.value.toString()}
-                                    className="rounded-xl py-3 px-4 focus:bg-primary/10 focus:text-primary transition-colors cursor-pointer"
+                                    className="rounded-xl py-3 pl-10 pr-4 focus:bg-primary/10 focus:text-primary transition-colors cursor-pointer font-semibold"
                                 >
                                     {option.label}
                                 </SelectItem>

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const env_1 = require("./config/env");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
@@ -16,7 +17,12 @@ const grade_routes_1 = __importDefault(require("./modules/grade/grade.routes"));
 const upload_routes_1 = __importDefault(require("./modules/upload/upload.routes"));
 const auth_routes_1 = __importDefault(require("./modules/auth/auth.routes"));
 const admin_routes_1 = __importDefault(require("./modules/admin/admin.routes"));
-const env_1 = require("./config/env");
+const teacher_routes_1 = __importDefault(require("./modules/teacher/teacher.routes"));
+const student_routes_1 = __importDefault(require("./modules/student/student.routes"));
+const parent_routes_1 = __importDefault(require("./modules/parent/parent.routes"));
+const news_routes_1 = __importDefault(require("./modules/news/news.routes"));
+const contact_routes_1 = __importDefault(require("./modules/contact/contact.routes"));
+const calendar_routes_1 = __importDefault(require("./modules/calendar/calendar.routes"));
 /**
  * Application Express principale.
  * Configure les middlewares globaux, les routes et la documentation Swagger.
@@ -52,12 +58,20 @@ app.use((0, cookie_parser_1.default)());
 app.use("/uploads", express_1.default.static(path_1.default.join(process.cwd(), "uploads")));
 /* ─── Documentation Swagger ─── */
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerDocument));
+const notifications_routes_1 = __importDefault(require("./modules/notifications/notifications.routes"));
 /* --- Routes API --- */
 app.use("/api/auth", auth_routes_1.default);
 app.use("/api/admin", admin_routes_1.default);
+app.use("/api/teacher", teacher_routes_1.default);
+app.use("/api/student", student_routes_1.default);
+app.use("/api/parent", parent_routes_1.default);
+app.use("/api/notifications", notifications_routes_1.default);
 app.use("/api/pre-registrations", pre_registration_routes_1.default);
 app.use("/api/grades", grade_routes_1.default);
 app.use("/api/upload", upload_routes_1.default);
+app.use("/api/news", news_routes_1.default);
+app.use("/api/contact", contact_routes_1.default);
+app.use("/api/calendar", calendar_routes_1.default);
 /* ─── Route de santé ─── */
 app.get("/api/health", (_req, res) => {
     res.json({ success: true, message: "API Skolara opérationnelle" });

@@ -1,11 +1,11 @@
 import gradeRepository from "./grade.repository";
-import { Grade } from "../../generated/prisma";
+import { SchoolLevel } from "../../generated/prisma";
 
 export class GradeService {
     /**
-     * Récupère la liste de tous les grades.
+     * Récupère la liste de tous les niveaux scolaires.
      */
-    async getAllGrades(): Promise<Grade[]> {
+    async getAllGrades(): Promise<SchoolLevel[]> {
         return gradeRepository.findAll();
     }
 }

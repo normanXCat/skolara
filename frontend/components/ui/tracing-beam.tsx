@@ -10,9 +10,11 @@ import { cn } from "@/lib/utils";
 export const TracingBeam = ({
     children,
     className,
+    leftContent,
 }: {
     children: React.ReactNode;
     className?: string;
+    leftContent?: React.ReactNode;
 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -71,6 +73,11 @@ export const TracingBeam = ({
             )}
         >
             <div className="absolute -left-4 md:-left-20 top-3">
+                {leftContent && (
+                    <div className="hidden md:block absolute right-full mr-12 top-0">
+                        {leftContent}
+                    </div>
+                )}
                 <motion.div
                     transition={{
                         duration: 0.2,

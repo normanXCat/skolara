@@ -47,6 +47,30 @@ exports.swaggerDocument = {
             name: "Admin-Stats",
             description: "Statistiques du tableau de bord (Accès Admin uniquement)",
         },
+        {
+            name: "Admin-Classes",
+            description: "Gestion des classes (Accès Admin uniquement)",
+        },
+        {
+            name: "Admin-Teachers",
+            description: "Gestion des enseignants (Accès Admin uniquement)",
+        },
+        {
+            name: "Admin-Subjects",
+            description: "Gestion des matières (Accès Admin uniquement)",
+        },
+        {
+            name: "Admin-Grades",
+            description: "Consultation des notes (Accès Admin uniquement)",
+        },
+        {
+            name: "Admin-Absences",
+            description: "Gestion des absences (Accès Admin uniquement)",
+        },
+        {
+            name: "Teacher-Operations",
+            description: "Opérations spécialisées pour les enseignants",
+        },
     ],
     paths: {
         "/auth/login": {
@@ -443,6 +467,34 @@ exports.swaggerDocument = {
                 },
             },
         },
+        "/admin/pre-registrations/{id}/resend-emails": {
+            post: {
+                tags: ["PreRegistrations"],
+                summary: "Renvoyer les emails de bienvenue (Admin)",
+                description: "Renvoie les identifiants aux parents et à l'élève.",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: { type: "integer" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Emails renvoyés avec succès",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: "#/components/schemas/SuccessResponse",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/upload/single": {
             post: {
                 tags: ["Uploads"],
@@ -514,9 +566,300 @@ exports.swaggerDocument = {
                 },
             },
         },
+        "/admin/classes": {
+            get: {
+                tags: ["Admin-Classes"],
+                summary: "Lister toutes les classes (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Liste des classes",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean" },
+                                        data: {
+                                            type: "array",
+                                            items: { $ref: "#/components/schemas/Class" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            post: {
+                tags: ["Admin-Classes"],
+                summary: "Créer une nouvelle classe (Admin)",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/CreateClassInput" }
+                        }
+                    }
+                },
+                responses: {
+                    "201": {
+                        description: "Classe créée",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/SuccessResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/teachers": {
+            get: {
+                tags: ["Admin-Teachers"],
+                summary: "Lister les enseignants (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "page", in: "query", schema: { type: "integer" } },
+                    { name: "limit", in: "query", schema: { type: "integer" } },
+                    { name: "search", in: "query", schema: { type: "string" } }
+                ],
+                responses: {
+                    "200": {
+                        description: "Liste paginée des enseignants",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/TeacherPaginatedResponse" }
+                            }
+                        }
+                    }
+                }
+            },
+            post: {
+                tags: ["Admin-Teachers"],
+                summary: "Créer un nouvel enseignant (Admin)",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/CreateTeacherInput" }
+                        }
+                    }
+                },
+                responses: {
+                    "201": {
+                        description: "Enseignant créé",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/SuccessResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/subjects": {
+            get: {
+                tags: ["Admin-Subjects"],
+                summary: "Lister toutes les matières (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Liste des matières",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean" },
+                                        data: {
+                                            type: "array",
+                                            items: { $ref: "#/components/schemas/Subject" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            post: {
+                tags: ["Admin-Subjects"],
+                summary: "Créer une nouvelle matière (Admin)",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                required: ["name", "code"],
+                                properties: {
+                                    name: { type: "string" },
+                                    code: { type: "string" },
+                                    description: { type: "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "201": {
+                        description: "Matière créée",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/SuccessResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/grades": {
+            get: {
+                tags: ["Admin-Grades"],
+                summary: "Lister toutes les notes avec filtres (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "page", in: "query", schema: { type: "integer" } },
+                    { name: "limit", in: "query", schema: { type: "integer" } },
+                    { name: "search", in: "query", schema: { type: "string" } },
+                    { name: "classId", in: "query", schema: { type: "integer" } },
+                    { name: "subjectId", in: "query", schema: { type: "integer" } },
+                    { name: "semester", in: "query", schema: { type: "integer" } }
+                ],
+                responses: {
+                    "200": {
+                        description: "Liste des notes récupérée",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/GradePaginatedResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/grades/stats": {
+            get: {
+                tags: ["Admin-Grades"],
+                summary: "Statistiques globales des notes (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Statistiques récupérées",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean" },
+                                        data: { $ref: "#/components/schemas/GradeStats" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/absences": {
+            get: {
+                tags: ["Admin-Absences"],
+                summary: "Lister toutes les absences avec filtres (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "page", in: "query", schema: { type: "integer" } },
+                    { name: "limit", in: "query", schema: { type: "integer" } },
+                    { name: "search", in: "query", schema: { type: "string" } },
+                    { name: "classId", in: "query", schema: { type: "integer" } },
+                    { name: "status", in: "query", schema: { type: "string", enum: ["PRESENT", "ABSENT", "LATE"] } },
+                    { name: "isJustified", in: "query", schema: { type: "boolean" } }
+                ],
+                responses: {
+                    "200": {
+                        description: "Liste des absences récupérée",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/AbsencePaginatedResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/absences/stats": {
+            get: {
+                tags: ["Admin-Absences"],
+                summary: "Statistiques globales des absences (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Statistiques récupérées",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        success: { type: "boolean" },
+                                        data: { $ref: "#/components/schemas/AbsenceStats" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/absences/{id}/justify": {
+            put: {
+                tags: ["Admin-Absences"],
+                summary: "Justifier une absence (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "id", in: "path", required: true, schema: { type: "integer" } }
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                required: ["isJustified", "reason"],
+                                properties: {
+                                    isJustified: { type: "boolean" },
+                                    reason: { type: "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": {
+                        description: "Absence justifiée avec succès",
+                        content: {
+                            "application/json": {
+                                schema: { $ref: "#/components/schemas/SuccessResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
     },
     components: {
         schemas: {
+            Subject: {
+                type: "object",
+                properties: {
+                    id: { type: "integer" },
+                    name: { type: "string" },
+                    code: { type: "string" },
+                    description: { type: "string" }
+                }
+            },
             AdminStats: {
                 type: "object",
                 properties: {
@@ -867,6 +1210,164 @@ exports.swaggerDocument = {
                     active: { type: "boolean" },
                     createdAt: { type: "string", format: "date-time" },
                 },
+            },
+            Class: {
+                type: "object",
+                properties: {
+                    id: { type: "integer" },
+                    name: { type: "string" },
+                    level: { type: "string" },
+                    schoolYear: { type: "string" },
+                    maxCapacity: { type: "integer" },
+                    headTeacher: { $ref: "#/components/schemas/Teacher" }
+                }
+            },
+            CreateClassInput: {
+                type: "object",
+                required: ["name", "level", "schoolYear"],
+                properties: {
+                    name: { type: "string" },
+                    level: { type: "string" },
+                    schoolYear: { type: "string" },
+                    maxCapacity: { type: "integer" },
+                    headTeacherId: { type: "integer", nullable: true }
+                }
+            },
+            Teacher: {
+                type: "object",
+                properties: {
+                    id: { type: "integer" },
+                    userId: { type: "integer" },
+                    speciality: { type: "string" },
+                    phone: { type: "string" },
+                    user: { $ref: "#/components/schemas/User" }
+                }
+            },
+            TeacherPaginatedResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean" },
+                    data: {
+                        type: "array",
+                        items: { $ref: "#/components/schemas/Teacher" }
+                    },
+                    meta: {
+                        type: "object",
+                        properties: {
+                            total: { type: "integer" },
+                            page: { type: "integer" },
+                            limit: { type: "integer" },
+                            totalPages: { type: "integer" }
+                        }
+                    }
+                }
+            },
+            CreateTeacherInput: {
+                type: "object",
+                required: ["firstName", "lastName"],
+                properties: {
+                    firstName: { type: "string" },
+                    lastName: { type: "string" },
+                    email: { type: "string", format: "email" },
+                    speciality: { type: "string" },
+                    phone: { type: "string" }
+                }
+            },
+            GradePaginatedResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean" },
+                    data: {
+                        type: "object",
+                        properties: {
+                            grades: {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        id: { type: "integer" },
+                                        value: { type: "number" },
+                                        semester: { type: "integer" },
+                                        comment: { type: "string", nullable: true },
+                                        student: { $ref: "#/components/schemas/Student" }
+                                    }
+                                }
+                            },
+                            pagination: {
+                                type: "object",
+                                properties: {
+                                    total: { type: "integer" },
+                                    page: { type: "integer" },
+                                    limit: { type: "integer" },
+                                    totalPages: { type: "integer" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            GradeStats: {
+                type: "object",
+                properties: {
+                    totalGrades: { type: "integer" },
+                    average: { type: "number" },
+                    highest: { type: "number" },
+                    lowest: { type: "number" },
+                    distribution: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                range: { type: "string" },
+                                count: { type: "integer" }
+                            }
+                        }
+                    }
+                }
+            },
+            AbsencePaginatedResponse: {
+                type: "object",
+                properties: {
+                    success: { type: "boolean" },
+                    data: {
+                        type: "object",
+                        properties: {
+                            absences: {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        id: { type: "integer" },
+                                        date: { type: "string", format: "date-time" },
+                                        status: { type: "string", enum: ["PRESENT", "ABSENT", "LATE"] },
+                                        reason: { type: "string", nullable: true },
+                                        isJustified: { type: "boolean" },
+                                        student: { $ref: "#/components/schemas/Student" }
+                                    }
+                                }
+                            },
+                            pagination: {
+                                type: "object",
+                                properties: {
+                                    total: { type: "integer" },
+                                    page: { type: "integer" },
+                                    limit: { type: "integer" },
+                                    totalPages: { type: "integer" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            AbsenceStats: {
+                type: "object",
+                properties: {
+                    totalAbsences: { type: "integer" },
+                    absentCount: { type: "integer" },
+                    lateCount: { type: "integer" },
+                    justifiedCount: { type: "integer" },
+                    unjustifiedCount: { type: "integer" }
+                }
             },
         },
         securitySchemes: {

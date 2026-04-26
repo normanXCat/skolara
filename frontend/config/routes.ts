@@ -4,9 +4,10 @@
 export const ROUTES = {
     HOME: "/",
     BLOG: "/blog",
-    CALENDAR: "/calendrier",
+    CALENDAR: "/calendar",
     PRE_REGISTRATION: "/pre-registration",
     CONTACT: "/contact",
+    FAQ: "/legal/faq",
     LOGIN: "/login",
     DASHBOARD: "/",
     ADMIN: {
@@ -20,12 +21,26 @@ export const ROUTES = {
         TEACHERS: "/admin/teachers",
         CLASSES: "/admin/classes",
         TIMETABLES: "/admin/timetables",
+        SUBJECTS: "/admin/subjects",
         GRADES: "/admin/grades",
         ABSENCES: "/admin/absences",
         REPORTS: "/admin/reports",
         PAYMENTS: "/admin/payments",
         MESSAGES: "/admin/messages",
+        NEWS: "/admin/news",
+        NEWS_NEW: "/admin/news/new",
+        NEWS_EDIT: (id: string | number) => `/admin/news/${id}/edit`,
+        NEWS_DETAIL: (id: string | number) => `/admin/news/${id}`,
+        CALENDAR: "/admin/calendar",
         SETTINGS: "/admin/settings",
+    },
+    TEACHER: {
+        DASHBOARD: "/teacher/dashboard",
+        GRADES: "/teacher/grades",
+        ABSENCES: "/teacher/absences",
+        MY_CLASSES: "/teacher/classes",
+        PLANNING: "/teacher/planning",
+        SETTINGS: "/teacher/settings",
     },
 } as const;
 

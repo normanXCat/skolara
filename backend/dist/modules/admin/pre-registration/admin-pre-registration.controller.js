@@ -87,6 +87,19 @@ class AdminPreRegistrationController {
             next(error);
         }
     }
+    /**
+     * POST /api/admin/pre-registrations/:id/resend-emails
+     */
+    async resendEmails(req, res, next) {
+        try {
+            const id = parseInt(req.params.id, 10);
+            const result = await this.service.resendWelcomeEmails(id);
+            res.json(result);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
 }
 exports.AdminPreRegistrationController = AdminPreRegistrationController;
 //# sourceMappingURL=admin-pre-registration.controller.js.map

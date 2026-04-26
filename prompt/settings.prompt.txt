@@ -1,0 +1,281 @@
+# ⚙️ STORY — Site Settings + Legal Pages + Footer + Contact Update
+
+## Context
+Tu travailles sur **Skolara**, une plateforme de gestion scolaire.
+Stack : **Next.js 14 (App Router) · TypeScript · Prisma · PostgreSQL · shadcn/ui · Tailwind CSS · Zod**
+
+Avant de coder quoi que ce soit :
+1. **Lis et analyse toute la structure du projet** — conventions, patterns API, composants existants, layouts
+2. **Consulte `architecture/MLD_Skolara`**
+3. **Respecte 100% les conventions déjà en place**
+4. **Lis et applique le skill UI/UX ProMax**
+5. **Analyse toutes les pages déjà livrées** (accueil, login, dashboard admin, contact, pré-inscription, actualités) pour garantir une cohérence visuelle parfaite — zéro nouvelle décision de design
+6. **Analyse tous les composants réutilisables existants** (`InputReusable`, `TextareaReusable`, `SelectReusable`, `ToastReusable`, etc.) et utilise-les systématiquement dans tous les formulaires
+7. **Analyse le footer existant** avant toute modification — comprends sa structure, ses composants, son design
+
+---
+
+## 🎯 Scope
+
+- **A. Site Settings** — page admin `/admin/settings` (sous-lien de Paramètres)
+- **B. Footer update** — brancher les données dynamiques depuis les settings
+- **C. Contact page update** — brancher les données depuis les settings
+- **D. Legal pages** — Mentions légales, CGU, FAQ (côté visiteur)
+
+---
+
+## 📁 Route structure
+/admin/settings                      → Site settings (sub-link under Paramètres)
+/legal/mentions-legales              → Mentions légales (public)
+/legal/cgu                           → Conditions Générales d'Utilisation (public)
+/legal/faq                           → FAQ (public)
+
+---
+
+## 📦 Prisma
+
+```prisma
+model SiteSettings {
+  id            Int      @id @default(autoincrement())
+  key           String   @unique
+  value         String   @db.Text
+  updatedAt     DateTime @updatedAt
+}
+```
+
+Seed initial avec toutes les clés :
+
+```typescript
+const defaultSettings = [
+  { key: 'school_name',      value: 'Skolara' },
+  { key: 'phone',            value: '' },
+  { key: 'email',            value: '' },
+  { key: 'address',          value: '' },
+  { key: 'city',             value: '' },
+  { key: 'google_maps_url',  value: '' },
+  { key: 'facebook_url',     value: '' },
+  { key: 'instagram_url',    value: '' },
+  { key: 'twitter_url',      value: '' },
+  { key: 'linkedin_url',     value: '' },
+  { key: 'mentions_legales', value: '' },  // HTML from WYSIWYG
+  { key: 'cgu',              value: '' },  // HTML from WYSIWYG
+]
+```
+
+Génère la migration + seed Prisma.
+
+---
+
+## 📦 Settings utility — `lib/settings.ts`
+
+```typescript
+// Get all settings as a key-value object
+export async function getSettings(): Promise<Record<string, string>>
+
+// Get a single setting
+export async function getSetting(key: string): Promise<string>
+
+// Update multiple settings at once
+export async function updateSettings(data: Record<string, string>): Promise<void>
+```
+
+- `getSettings()` est mis en cache avec `unstable_cache` (Next.js) ou équivalent
+- Le cache est invalidé après chaque `updateSettings()`
+- Utilisé côté serveur dans les Server Components (footer, contact, legal pages)
+
+---
+
+## 📦 A. Site Settings — `/admin/settings`
+
+### API Routes
+GET  /api/admin/settings        → all settings as key-value object
+PUT  /api/admin/settings        → update all settings (upsert)
+
+#### `GET /api/admin/settings`
+```typescript
+{
+  success: true,
+  data: {
+    schoolName: string,
+    phone: string,
+    email: string,
+    address: string,
+    city: string,
+    googleMapsUrl: string,
+    facebookUrl: string,
+    instagramUrl: string,
+    twitterUrl: string,
+    linkedinUrl: string,
+    mentionsLegales: string,   // HTML
+    cgu: string                // HTML
+  }
+}
+```
+
+#### `PUT /api/admin/settings` — Body
+Même structure que la réponse GET.
+- Upsert chaque clé via `updateSettings()`
+- Invalide le cache après sauvegarde
+- Vérifie le rôle `ADMIN`
+
+#### Zod schema — `lib/validations/settings.ts`
+- `updateSettingsSchema`
+- URLs : `.url()` ou vide (`z.string().url().or(z.literal(''))`)
+- Email : format valide ou vide
+- Phone : string, pas de format strict
+- Messages en français
+
+### UI — Settings page `/admin/settings`
+
+**Accès** : sous-lien dans la sidebar admin sous "Paramètres" — ajoute le lien dans `AdminSidebar`
+
+**Layout** : page avec sections séparées par des cards
+
+**Card 1 — School information**
+- `InputReusable` : School name
+- `InputReusable` : Phone number
+- `InputReusable` : Email address
+- `InputReusable` : Address
+- `InputReusable` : City
+- `InputReusable` : Google Maps embed URL *(coller l'URL depuis Google Maps → "Share" → "Embed a map" → copier le src de l'iframe)*
+
+**Card 2 — Social media**
+- `InputReusable` : Facebook URL (avec icône Facebook à gauche)
+- `InputReusable` : Instagram URL (avec icône Instagram)
+- `InputReusable` : Twitter / X URL (avec icône Twitter/X)
+- `InputReusable` : LinkedIn URL (avec icône LinkedIn)
+
+**Card 3 — Mentions légales**
+- `WysiwygReusable` : contenu des mentions légales
+- Label : "Mentions légales content"
+
+**Card 4 — CGU**
+- `WysiwygReusable` : contenu des CGU
+- Label : "Terms & Conditions content"
+
+**Save behavior** :
+- Un seul bouton "Save changes" en bas de page (sticky footer de la page)
+- Submit tout en une fois via `PUT /api/admin/settings`
+- État loading sur le bouton pendant la sauvegarde
+- `ToastReusable` de succès après sauvegarde
+- Erreurs inline via les composants réutilisables
+- Indicateur "Unsaved changes" si le formulaire a été modifié (dirty state)
+
+---
+
+## 📦 B. Footer Update
+
+**Analyse le footer existant** avant toute modification — ne change pas son design, uniquement ses données.
+
+Remplace toutes les données hardcodées du footer par des données dynamiques depuis `getSettings()` :
+
+- Numéro de téléphone
+- Email de contact
+- Adresse / ville
+- Liens réseaux sociaux (affiche uniquement ceux dont l'URL est renseignée — si vide, masque l'icône)
+- Lien "Mentions légales" → `/legal/mentions-legales`
+- Lien "CGU" → `/legal/cgu`
+- Lien "FAQ" → `/legal/faq`
+
+Le footer est un **Server Component** — utilise `getSettings()` directement, pas de fetch côté client.
+
+**Règle** : si une valeur est vide dans les settings, masque l'élément correspondant dans le footer proprement (pas de lien vide, pas d'icône sans URL).
+
+---
+
+## 📦 C. Contact Page Update
+
+**Analyse la page `/contact` existante** — ne change pas son design.
+
+Remplace les données hardcodées par des données dynamiques depuis `getSettings()` :
+
+- Téléphone affiché dans la colonne droite
+- Email affiché dans la colonne droite
+- Adresse / ville affichés
+- Google Maps embed : remplace l'iframe src hardcodée par `getSetting('google_maps_url')`
+  - Si `google_maps_url` est vide → masque la map et affiche un placeholder "Map not configured"
+- Liens réseaux sociaux dans la colonne droite (si renseignés)
+
+La page contact est un **Server Component** pour la partie données — utilise `getSettings()` côté serveur.
+
+---
+
+## 📦 D. Legal Pages
+
+### UI — Mentions légales `/legal/mentions-legales`
+
+- Layout cohérent avec le reste du site public (header + footer identiques)
+- Affiche le contenu HTML depuis `getSetting('mentions_legales')` avec `dangerouslySetInnerHTML`
+- Styles prose sur le contenu HTML (Tailwind Typography ou CSS custom cohérent)
+- Si le contenu est vide → message "Cette page est en cours de rédaction."
+- Breadcrumb : Accueil → Mentions légales
+
+### UI — CGU `/legal/cgu`
+
+Même layout que mentions légales.
+- Contenu depuis `getSetting('cgu')`
+- Breadcrumb : Accueil → Conditions Générales d'Utilisation
+
+### UI — FAQ `/legal/faq`
+
+- Layout cohérent avec le reste du site public
+- **Accordion** (shadcn/ui `Accordion`) — une question par item
+- Les questions/réponses sont **hardcodées** dans le composant (pas de WYSIWYG pour la FAQ)
+  — elles seront éditables plus tard si nécessaire
+- Prépare au moins 8 questions pertinentes pour une école :
+  - Comment s'inscrire ?
+  - Comment accéder à mon espace élève/parent ?
+  - Comment consulter les notes ?
+  - Comment justifier une absence ?
+  - Comment payer les frais de scolarité ?
+  - Comment contacter l'administration ?
+  - Que faire si j'ai oublié mon mot de passe ?
+  - Comment télécharger mon bulletin de notes ?
+- Search bar au-dessus de l'accordion : filtre les questions en temps réel (debounce 300ms)
+- Breadcrumb : Accueil → FAQ
+
+---
+
+## 🧩 Shared utility
+lib/settings.ts          → getSettings(), getSetting(), updateSettings()
+
+---
+
+## 🧪 Tests
+
+**Settings API :**
+- ✅ GET returns all settings as key-value
+- ✅ PUT updates all settings — upsert behavior
+- ✅ Cache invalidated after PUT
+- ❌ Invalid URL format → 400
+- ❌ Access without ADMIN role → 403
+
+**Footer + Contact :**
+- ✅ Footer displays phone/email/address from settings
+- ✅ Social icon hidden if URL is empty
+- ✅ Contact map shows if googleMapsUrl is set
+- ✅ Contact map hidden if googleMapsUrl is empty
+
+---
+
+## ✅ Validation checklist
+
+- [ ] Existing project structure fully analyzed
+- [ ] Footer existing code analyzed — design untouched
+- [ ] Contact page existing code analyzed — design untouched
+- [ ] All existing reusable components analyzed and used in settings form
+- [ ] `WysiwygReusable` used for mentions légales and CGU fields
+- [ ] `lib/settings.ts` utility created with caching
+- [ ] Cache invalidated after settings update
+- [ ] Prisma migration + seed generated
+- [ ] Footer data fully dynamic from settings
+- [ ] Social icons hidden when URL is empty
+- [ ] Contact map hidden when googleMapsUrl is empty
+- [ ] Google Maps embed uses URL from settings
+- [ ] Legal pages use Server Components (no client-side fetch)
+- [ ] FAQ has search bar with real-time filtering
+- [ ] All pages have consistent design with existing site
+- [ ] AdminSidebar updated with Settings → Site settings sub-link
+- [ ] Footer links to /legal/mentions-legales, /legal/cgu, /legal/faq
+- [ ] Unsaved changes indicator on settings form
+- [ ] All tests pass

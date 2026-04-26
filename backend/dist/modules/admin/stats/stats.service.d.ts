@@ -48,6 +48,8 @@ export declare class StatsService {
             processedAt: Date | null;
             studentId: number | null;
             submittedAt: Date;
+            parentEmailSentAt: Date | null;
+            studentEmailSentAt: Date | null;
         }[];
     }>;
 }

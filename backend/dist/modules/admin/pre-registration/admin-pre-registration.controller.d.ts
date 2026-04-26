@@ -10,5 +10,9 @@ export declare class AdminPreRegistrationController {
     findById(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
     updateStatus(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
     convert(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>> | undefined>;
+    /**
+     * POST /api/admin/pre-registrations/:id/resend-emails
+     */
+    resendEmails(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 //# sourceMappingURL=admin-pre-registration.controller.d.ts.map

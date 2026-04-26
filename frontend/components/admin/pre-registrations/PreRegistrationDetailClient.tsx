@@ -70,17 +70,25 @@ export default function PreRegistrationDetailClient({ id }: Props) {
     const handleConvert = async () => {
         setProcessing(true);
         try {
-            const response = await api.post(
+            const response = await api.post<any>(
                 `/admin/pre-registrations/${id}/convert`,
                 {
                     createParentAccount: true,
                 },
             );
+
             if (response.success) {
                 toast.success(
                     "Dossier validé ! L'élève a été inscrit au registre.",
                 );
                 router.push(ROUTES.ADMIN.STUDENTS);
+            } else if (response.error && (response as any).code === "NO_CLASS_AVAILABLE") {
+                toast.info("Aucune classe disponible. Redirection vers la création de classe...");
+                // On passe les infos pour automatiser la validation après création
+                const level = (response as any).grade;
+                router.push(`${ROUTES.ADMIN.CLASSES}/new?preRegId=${id}&level=${encodeURIComponent(level)}`);
+            } else {
+                toast.error(response.error || "Échec de la conversion en élève");
             }
         } catch (error) {
             toast.error("Échec de la conversion en élève");
@@ -247,6 +255,20 @@ export default function PreRegistrationDetailClient({ id }: Props) {
         );
     }
 
+    const handleResendEmails = async () => {
+        setProcessing(true);
+        try {
+            const response = await api.post(`/admin/pre-registrations/${id}/resend-emails`);
+            if (response.success) {
+                toast.success("Les emails de bienvenue ont été renvoyés avec de nouveaux mots de passe.");
+            }
+        } catch (error) {
+            toast.error("Échec lors de l'envoi des emails");
+        } finally {
+            setProcessing(false);
+        }
+    };
+
     return (
         <div className="space-y-8">
             <PreRegistrationDetailHeader
@@ -254,6 +276,7 @@ export default function PreRegistrationDetailClient({ id }: Props) {
                 processing={processing}
                 onUpdateStatus={handleUpdateStatus}
                 onOpenConvertDialog={() => setIsConvertDialogOpen(true)}
+                onResendEmails={handleResendEmails}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
