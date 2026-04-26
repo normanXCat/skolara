@@ -13,7 +13,7 @@ const env_1 = require("./config/env");
 const server = http_1.default.createServer(app_1.default);
 server.on("error", (error) => {
     if (error.code === "EADDRINUSE") {
-        console.error(`❌ Le port ${env_1.env.PORT} est déjà utilisé. Veuillez libérer le port ou changer PORT dans le fichier .env`);
+        console.error(`❌ Le port ${env_1.env.PORT} est déjà utilisé. Veuillez libérer le port ou changer PORT dans le fichier .env.prod`);
         process.exit(1);
     }
     throw error;

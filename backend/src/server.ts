@@ -11,7 +11,7 @@ const server = http.createServer(app);
 server.on("error", (error: any) => {
     if (error.code === "EADDRINUSE") {
         console.error(
-            `❌ Le port ${env.PORT} est déjà utilisé. Veuillez libérer le port ou changer PORT dans le fichier .env`,
+            `❌ Le port ${env.PORT} est déjà utilisé. Veuillez libérer le port ou changer PORT dans le fichier .env.prod`,
         );
         process.exit(1);
     }
