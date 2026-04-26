@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { ArticleStatus } from "../../generated/prisma";
+
+export enum ArticleStatus {
+  DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
+  ARCHIVED = "ARCHIVED",
+}
 
 export const createArticleSchema = z.object({
   title: z.string().min(1, "Le titre est requis"),
