@@ -72,13 +72,13 @@ export const ADMIN_NAVIGATION_LINKS = [
         label: "Notes",
         href: ROUTES.ADMIN.GRADES,
         icon: "IconFileCertificate",
-        disabled: true,
+        disabled: false,
     },
     {
         label: "Absences",
         href: ROUTES.ADMIN.ABSENCES,
         icon: "IconUserX",
-        disabled: true,
+        disabled: false,
     },
     {
         label: "Bulletins",
@@ -112,7 +112,29 @@ export const ADMIN_NAVIGATION_LINKS = [
         label: "Messages",
         href: ROUTES.ADMIN.MESSAGES,
         icon: "IconMessages",
-        disabled: true,
+        disabled: false,
+    },
+    {
+        label: "Actualités",
+        href: ROUTES.ADMIN.NEWS,
+        icon: "IconNews",
+        disabled: false,
+        subLinks: [
+            {
+                label: "Tous les articles",
+                href: ROUTES.ADMIN.NEWS,
+            },
+            {
+                label: "Nouvel article",
+                href: ROUTES.ADMIN.NEWS_NEW,
+            },
+        ],
+    },
+    {
+        label: "Calendrier",
+        href: ROUTES.ADMIN.CALENDAR,
+        icon: "IconCalendar",
+        disabled: false,
     },
     {
         label: "Paramètres",
@@ -120,6 +142,7 @@ export const ADMIN_NAVIGATION_LINKS = [
         icon: "IconSettings",
         disabled: false,
         subLinks: [
+            { label: "Paramètres du site", href: ROUTES.ADMIN.SETTINGS },
             { label: "Mon profil", href: ROUTES.ADMIN.SETTINGS + "/profile" },
             { label: "Sécurité", href: ROUTES.ADMIN.SETTINGS + "/security" },
             {

@@ -22,26 +22,17 @@ import {
     IconMenu2,
     IconX,
     IconLogout,
-    IconBell,
     IconUserCircle,
-    IconCheck,
     IconPlus,
     IconMinus,
 } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import Logo from "@/components/common/logo";
 import SectionDivider from "../ui/section-divider";
 import { useAuthStore } from "@/stores/auth-store";
+import { NotificationBell } from "@/components/shared/NotificationBell";
 
 const MotionLink = motion.create(Link);
 
@@ -120,32 +111,7 @@ export const Sidebar = () => {
                     <div className="flex items-center gap-3">
                         <ThemeToggle />
                         <div className="mx-1 h-6 w-px bg-border/60" />
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className="relative flex items-center justify-center size-8 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-primary transition-all duration-300 group active:scale-95">
-                                    <IconBell size={26} className="group-hover:rotate-12 transition-transform" />
-                                    <span className="absolute top-1 right-1 flex h-3 w-3">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/30"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary border-2 border-background shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]"></span>
-                                    </span>
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-80 p-0 rounded-2xl overflow-hidden border-border/40 shadow-2xl">
-                                <DropdownMenuLabel className="p-4 border-b border-border/10 bg-muted/30">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm font-bold">Notifications</span>
-                                        <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase font-black">0 nouvelles</span>
-                                    </div>
-                                </DropdownMenuLabel>
-                                <div className="p-8 text-center text-xs text-muted-foreground">Aucune notification</div>
-                                <DropdownMenuSeparator className="m-0" />
-                                <div className="p-2 bg-muted/20">
-                                    <button className="w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors py-2">
-                                        <IconCheck size={12} /> Tout marquer comme lu
-                                    </button>
-                                </div>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <NotificationBell role={user?.role?.toLowerCase() as any} />
                     </div>
                     <button onClick={() => setIsMobileOpen(false)} className="lg:hidden p-2 rounded-xl bg-muted/40 text-foreground">
                         <IconX size={24} />
@@ -192,13 +158,6 @@ export const Sidebar = () => {
                                 {isActive && (
                                     <motion.div layoutId="active-pill" className="absolute inset-0 bg-primary/5 rounded-2xl -z-10" />
                                 )}
-                                <motion.div
-                                    className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
-                                    variants={{
-                                        initial: { x: "-100%", skewX: -20 },
-                                        hover: { x: "100%", transition: { duration: 0.8, ease: "easeInOut" } },
-                                    }}
-                                />
                                 {Icon && (
                                     <motion.div
                                         animate={isActive ? { y: [0, -3, 0], rotate: [0, 8, -8, 0], scale: [1, 1.1, 1] } : { y: 0, rotate: 0, scale: 1 }}

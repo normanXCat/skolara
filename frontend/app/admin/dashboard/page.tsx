@@ -1,5 +1,4 @@
-import api from "@/lib/api-client";
-import { cookies } from "next/headers";
+import { serverFetch } from "@/lib/server-api";
 import { redirect } from "next/navigation";
 import { DashboardStats } from "@/components/admin/dashboard/DashboardStats";
 import { EnrollmentChart } from "@/components/admin/dashboard/EnrollmentChart";
@@ -19,15 +18,8 @@ export const metadata = {
  * Fetch les données sur le serveur et les distribue aux composants clients spécialisés.
  */
 export default async function AdminDashboardPage() {
-    const cookieStore = await cookies();
-
-    // Récupération des statistiques en une seule fois sur le serveur
-    const statsRes = await api.get<any>("/admin/stats", {
-        headers: {
-            Cookie: cookieStore.toString(),
-        },
-        cache: "no-store",
-    });
+    // Récupération des statistiques via le server-api (gère les cookies et le refresh automatiquement)
+    const statsRes = await serverFetch<any>("/admin/stats");
 
     // Si on est pas autorisé côté serveur, on redirige
     if (!statsRes.success && statsRes.error === "Session expirée") {

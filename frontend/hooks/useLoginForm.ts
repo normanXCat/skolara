@@ -41,9 +41,15 @@ export const useLoginForm = () => {
                     setState("success");
                     setUser(user);
                     const isAdmin = user.role === "ADMIN";
-                    router.push(
-                        isAdmin ? ROUTES.ADMIN.DASHBOARD : ROUTES.DASHBOARD,
-                    );
+                    const isTeacher = user.role === "ENSEIGNANT";
+                    
+                    if (isAdmin) {
+                        router.push(ROUTES.ADMIN.DASHBOARD);
+                    } else if (isTeacher) {
+                        router.push(ROUTES.TEACHER.DASHBOARD);
+                    } else {
+                        router.push(ROUTES.DASHBOARD);
+                    }
                 } else {
                     setState("error");
                     toast.error("Données utilisateur manquantes");

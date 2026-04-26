@@ -162,25 +162,27 @@ export const SelectReusable = React.forwardRef<
                             )}
                             {...rest}
                         >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 min-w-0 w-full">
                                 {isLoading && (
                                     <IconLoader2
                                         size={iconSize}
                                         className="animate-spin text-primary shrink-0"
                                     />
                                 )}
-                                <SelectValue
-                                    placeholder={
-                                        isLoading
-                                            ? "Chargement..."
-                                            : placeholder
-                                    }
-                                />
+                                <div className="flex-1 truncate text-left">
+                                    <SelectValue
+                                        placeholder={
+                                            isLoading
+                                                ? "Chargement..."
+                                                : placeholder
+                                        }
+                                    />
+                                </div>
                             </div>
                         </SelectTrigger>
                     </motion.div>
 
-                    <SelectContent className="rounded-3xl border-border/40 bg-background/91 backdrop-blur-3xl shadow-2xl p-1">
+                    <SelectContent position="popper" className="rounded-3xl border-border/40 bg-background/91 backdrop-blur-3xl shadow-2xl p-1 z-[300]">
                         {onSearchChange && (
                             <div className="relative mb-1 p-2">
                                 <IconSearch className="absolute left-6 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/50" />

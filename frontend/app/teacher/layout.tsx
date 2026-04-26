@@ -12,6 +12,17 @@ import { SkeletonReusable } from "@/components/ui/skeleton-reusable";
 import { useAuthStore } from "@/stores/auth-store";
 import { translateRole } from "@/lib/roles";
 import UserAvatar from "@/components/common/user-avatar";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { ROUTES } from "@/config/routes";
+import { IconLayoutDashboard, IconLogout, IconSchool } from "@tabler/icons-react";
+import api from "@/lib/api-client";
 
 interface TeacherLayoutProps {
     children: React.ReactNode;
@@ -19,7 +30,7 @@ interface TeacherLayoutProps {
 
 export default function TeacherRootLayout({ children }: TeacherLayoutProps) {
     const pathname = usePathname();
-    const { user, fetchUser, isLoading } = useAuthStore();
+    const { user, fetchUser, isLoading, clearUser } = useAuthStore();
 
     useEffect(() => {
         fetchUser();
@@ -29,6 +40,17 @@ export default function TeacherRootLayout({ children }: TeacherLayoutProps) {
         (link: any) => link.href === pathname
     );
     const pageTitle = currentLink ? currentLink.label : "Tableau de bord Enseignant";
+
+    const handleLogout = async () => {
+        try {
+            await api.post("/auth/logout");
+        } catch (error) {
+            console.error("Logout error", error);
+        } finally {
+            clearUser();
+            window.location.href = ROUTES.LOGIN;
+        }
+    };
 
     return (
         <div className="flex h-screen w-full overflow-hidden bg-background p-4 gap-4 relative">
@@ -66,7 +88,64 @@ export default function TeacherRootLayout({ children }: TeacherLayoutProps) {
                                     </motion.div>
                                 ) : null}
                             </AnimatePresence>
-                            <UserAvatar isLoading={isLoading} firstName={user?.firstName} lastName={user?.name} size={44} />
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <div className="cursor-pointer">
+                                        <UserAvatar
+                                            isLoading={isLoading}
+                                            firstName={user?.firstName}
+                                            lastName={user?.name}
+                                            size={44}
+                                        />
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-56 bg-background/95 backdrop-blur-xl rounded-3xl border-border/40 shadow-2xl p-2"
+                                >
+                                    <div className="px-3 py-2 text-sm font-bold truncate">
+                                        {user?.firstName} {user?.name}
+                                    </div>
+                                    <DropdownMenuSeparator className="bg-border/40" />
+                                    
+                                    <DropdownMenuItem
+                                        asChild
+                                        className="rounded-xl cursor-pointer"
+                                    >
+                                        <Link
+                                            href={ROUTES.TEACHER.DASHBOARD}
+                                            className="w-full flex items-center text-foreground/80 hover:text-primary py-2 px-3"
+                                        >
+                                            <IconSchool className="mr-2 h-4 w-4" />
+                                            Espace Enseignant
+                                        </Link>
+                                    </DropdownMenuItem>
+
+                                    {user?.role === "ADMIN" && (
+                                        <DropdownMenuItem
+                                            asChild
+                                            className="rounded-xl cursor-pointer"
+                                        >
+                                            <Link
+                                                href={ROUTES.ADMIN.DASHBOARD}
+                                                className="w-full flex items-center text-foreground/80 hover:text-primary py-2 px-3"
+                                            >
+                                                <IconLayoutDashboard className="mr-2 h-4 w-4" />
+                                                Tableau de bord
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    )}
+
+                                    <DropdownMenuSeparator className="bg-border/40" />
+                                    <DropdownMenuItem
+                                        onClick={handleLogout}
+                                        className="rounded-xl cursor-pointer text-destructive hover:bg-destructive/10 hover:text-destructive py-2 px-3"
+                                    >
+                                        <IconLogout className="mr-2 h-4 w-4" />
+                                        Déconnexion
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     </div>
                 </header>

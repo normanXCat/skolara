@@ -59,8 +59,14 @@ class ApiClient {
     /**
      * Tente un refresh du token avec un retry en cas d'erreur réseau.
      * Retourne les données utilisateur en cas de succès.
+     * Ne fonctionne que côté client (navigateur) — côté serveur, le middleware gère le refresh.
      */
     private async attemptRefresh(): Promise<any | null> {
+        // Le refresh côté serveur est impossible (pas de cookie jar) — seul le middleware le gère
+        if (typeof window === "undefined") {
+            return null;
+        }
+
         const maxRetries = 2;
         for (let i = 0; i < maxRetries; i++) {
             try {
@@ -95,7 +101,16 @@ class ApiClient {
                 ? window.location.origin
                 : "http://localhost:3000";
 
-        const url = new URL(`${BASE_URL}${endpoint}`, baseOrigin);
+        // Nettoyage de l'endpoint pour éviter les doubles slashs
+        const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+        
+        // Si l'URL de base est déjà présente au début de l'endpoint (cas fréquent dans le code actuel),
+        // ou si BASE_URL est "/" (cas de prod avec rewrite), on évite le double préfixe.
+        const needsPrefix = BASE_URL && BASE_URL !== "/" && !cleanEndpoint.startsWith(BASE_URL);
+        const fullPath = needsPrefix ? `${BASE_URL}${cleanEndpoint}` : cleanEndpoint;
+
+        const url = new URL(fullPath, baseOrigin);
+
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
                 if (value !== undefined) {
@@ -119,12 +134,17 @@ class ApiClient {
         try {
             let response = await fetch(url.toString(), config);
 
-            // Interception du 401 pour tentative de refresh
+            // Interception du 401 pour tentative de refresh (client-side uniquement)
             if (
                 response.status === 401 &&
                 !endpoint.includes("/auth/refresh") &&
                 !endpoint.includes("/auth/login")
             ) {
+                // Côté serveur, pas de refresh automatique — le middleware s'en charge
+                if (typeof window === "undefined") {
+                    return { success: false, error: "Session expirée" };
+                }
+
                 // Si un refresh est déjà en cours, on attend sa résolution
                 if (this.isRefreshing) {
                     const userData = await this.waitForRefresh();
@@ -148,6 +168,7 @@ class ApiClient {
                     );
 
                     this.isRefreshing = false;
+                    this.refreshPromise = null;
                     this.processQueue(userData);
 
                     if (userData) {
@@ -161,17 +182,18 @@ class ApiClient {
                     );
 
                     // Rediriger uniquement si on est sur une route protégée
-                    if (typeof window !== "undefined") {
-                        const path = window.location.pathname;
-                        const isProtectedRoute = path.startsWith("/admin");
+                    const path = window.location.pathname;
+                    const isProtectedRoute =
+                        path.startsWith("/admin") ||
+                        path.startsWith("/teacher");
 
-                        if (isProtectedRoute) {
-                            window.location.href = `/login?redirect=${encodeURIComponent(path)}`;
-                        }
+                    if (isProtectedRoute) {
+                        window.location.href = `/login?redirect=${encodeURIComponent(path)}`;
                     }
                     return { success: false, error: "Session expirée" };
                 } catch (err) {
                     this.isRefreshing = false;
+                    this.refreshPromise = null;
                     this.processQueue(null);
                     console.error("[ApiClient] Refresh error:", err);
                     return { success: false, error: "Session expirée" };
