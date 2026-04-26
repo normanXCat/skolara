@@ -34,8 +34,8 @@ export declare class ClassesService {
             level: string;
             createdAt: Date;
             updatedAt: Date;
-            maxCapacity: number;
             headTeacherId: number | null;
+            maxCapacity: number;
         })[];
         pagination: {
             page: number;
@@ -48,6 +48,26 @@ export declare class ClassesService {
      * Détails d'une classe.
      */
     findById(id: number): Promise<{
+        headTeacher: ({
+            user: {
+                id: number;
+                name: string;
+                firstName: string;
+                email: string;
+                passwordHash: string;
+                role: import("@prisma/client").$Enums.Role;
+                active: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+            };
+        } & {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: number;
+            phone: string | null;
+            speciality: string | null;
+        }) | null;
         students: ({
             user: {
                 id: number;
@@ -55,24 +75,33 @@ export declare class ClassesService {
                 firstName: string;
                 email: string;
                 passwordHash: string;
-                role: import("../../../generated/prisma").$Enums.Role;
+                role: import("@prisma/client").$Enums.Role;
                 active: boolean;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
+            status: import("@prisma/client").$Enums.StudentStatus;
             id: number;
+            classId: number | null;
             birthDate: Date;
             address: string | null;
             schoolYear: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number;
-            classId: number | null;
             parentId: number | null;
         })[];
         assignments: ({
+            subject: {
+                id: number;
+                name: string;
+                code: string;
+                createdAt: Date;
+                updatedAt: Date;
+                coefficient: number;
+                description: string | null;
+            };
             teacher: {
                 user: {
                     id: number;
@@ -80,7 +109,7 @@ export declare class ClassesService {
                     firstName: string;
                     email: string;
                     passwordHash: string;
-                    role: import("../../../generated/prisma").$Enums.Role;
+                    role: import("@prisma/client").$Enums.Role;
                     active: boolean;
                     createdAt: Date;
                     updatedAt: Date;
@@ -93,41 +122,12 @@ export declare class ClassesService {
                 phone: string | null;
                 speciality: string | null;
             };
-            subject: {
-                id: number;
-                name: string;
-                code: string;
-                createdAt: Date;
-                updatedAt: Date;
-                coefficient: number;
-                description: string | null;
-            };
         } & {
-            schoolYear: string;
             classId: number;
-            teacherId: number;
             subjectId: number;
+            schoolYear: string;
+            teacherId: number;
         })[];
-        headTeacher: ({
-            user: {
-                id: number;
-                name: string;
-                firstName: string;
-                email: string;
-                passwordHash: string;
-                role: import("../../../generated/prisma").$Enums.Role;
-                active: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-            };
-        } & {
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            userId: number;
-            phone: string | null;
-            speciality: string | null;
-        }) | null;
     } & {
         id: number;
         name: string;
@@ -135,8 +135,8 @@ export declare class ClassesService {
         level: string;
         createdAt: Date;
         updatedAt: Date;
-        maxCapacity: number;
         headTeacherId: number | null;
+        maxCapacity: number;
     }>;
     /**
      * Création d'une classe.
@@ -148,8 +148,8 @@ export declare class ClassesService {
         level: string;
         createdAt: Date;
         updatedAt: Date;
-        maxCapacity: number;
         headTeacherId: number | null;
+        maxCapacity: number;
     }>;
     /**
      * Mise à jour d'une classe.
@@ -162,7 +162,7 @@ export declare class ClassesService {
                 firstName: string;
                 email: string;
                 passwordHash: string;
-                role: import("../../../generated/prisma").$Enums.Role;
+                role: import("@prisma/client").$Enums.Role;
                 active: boolean;
                 createdAt: Date;
                 updatedAt: Date;
@@ -182,8 +182,8 @@ export declare class ClassesService {
         level: string;
         createdAt: Date;
         updatedAt: Date;
-        maxCapacity: number;
         headTeacherId: number | null;
+        maxCapacity: number;
     }>;
     /**
      * Suppression d'une classe.
@@ -196,8 +196,8 @@ export declare class ClassesService {
         level: string;
         createdAt: Date;
         updatedAt: Date;
-        maxCapacity: number;
         headTeacherId: number | null;
+        maxCapacity: number;
     }>;
 }
 //# sourceMappingURL=classes.service.d.ts.map

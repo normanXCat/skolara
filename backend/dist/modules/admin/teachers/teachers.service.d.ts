@@ -32,10 +32,10 @@ export declare class TeachersService {
                     description: string | null;
                 };
             } & {
-                schoolYear: string;
                 classId: number;
-                teacherId: number;
                 subjectId: number;
+                schoolYear: string;
+                teacherId: number;
             })[];
         } & {
             id: number;
@@ -75,8 +75,8 @@ export declare class TeachersService {
                 level: string;
                 createdAt: Date;
                 updatedAt: Date;
-                maxCapacity: number;
                 headTeacherId: number | null;
+                maxCapacity: number;
             };
             subject: {
                 id: number;
@@ -88,10 +88,10 @@ export declare class TeachersService {
                 description: string | null;
             };
         } & {
-            schoolYear: string;
             classId: number;
-            teacherId: number;
             subjectId: number;
+            schoolYear: string;
+            teacherId: number;
         })[];
     } & {
         id: number;
@@ -164,16 +164,16 @@ export declare class TeachersService {
      * Gère les assignations.
      */
     addAssignment(id: number, assignment: AssignmentInput): Promise<{
-        schoolYear: string;
         classId: number;
-        teacherId: number;
         subjectId: number;
+        schoolYear: string;
+        teacherId: number;
     }>;
     removeAssignment(id: number, assignment: AssignmentInput): Promise<{
-        schoolYear: string;
         classId: number;
-        teacherId: number;
         subjectId: number;
+        schoolYear: string;
+        teacherId: number;
     }>;
 }
 //# sourceMappingURL=teachers.service.d.ts.map

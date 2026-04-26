@@ -38,7 +38,7 @@ export declare class SubjectsRepository {
      */
     findById(id: number): Promise<({
         _count: {
-            marks: number;
+            grades: number;
             assignments: number;
         };
     } & {

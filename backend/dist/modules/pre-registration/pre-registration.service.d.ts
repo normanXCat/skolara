@@ -22,7 +22,7 @@ export declare class PreRegistrationService {
      * @throws Erreur 409 si doublon détecté
      */
     create(data: CreatePreRegistrationInput): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
+        status: import("@prisma/client").$Enums.Status;
         id: number;
         parentEmail: string;
         parentPhone: string;
@@ -66,7 +66,7 @@ export declare class PreRegistrationService {
      */
     findAll(query: ListQueryInput): Promise<{
         data: {
-            status: import("../../generated/prisma").$Enums.Status;
+            status: import("@prisma/client").$Enums.Status;
             id: number;
             parentEmail: string;
             parentPhone: string;
@@ -109,7 +109,7 @@ export declare class PreRegistrationService {
      * @throws Erreur 404 si non trouvée
      */
     findById(id: number): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
+        status: import("@prisma/client").$Enums.Status;
         id: number;
         parentEmail: string;
         parentPhone: string;
@@ -146,7 +146,7 @@ export declare class PreRegistrationService {
      * @throws Erreur 404 si non trouvée
      */
     update(id: number, data: UpdatePreRegistrationInput): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
+        status: import("@prisma/client").$Enums.Status;
         id: number;
         parentEmail: string;
         parentPhone: string;
@@ -182,7 +182,7 @@ export declare class PreRegistrationService {
      * @throws Erreur 404 si non trouvée
      */
     delete(id: number): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
+        status: import("@prisma/client").$Enums.Status;
         id: number;
         parentEmail: string;
         parentPhone: string;

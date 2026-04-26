@@ -65,7 +65,7 @@ export class SubjectsRepository {
                 _count: {
                     select: { 
                         assignments: true,
-                        marks: true
+                        grades: true
                     },
                 },
             },

@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authenticate_1 = require("../../middlewares/authenticate");
@@ -21,10 +24,26 @@ const absencesRepo = new absences_repository_1.AbsencesRepository();
 const absencesService = new absences_service_1.AbsencesService(absencesRepo);
 const absencesController = new absences_controller_1.AbsencesController(absencesService);
 // 1. Gestion des Notes
-router.post("/grades/bulk", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.bulkCreate(req, res, next));
-router.get("/grades/grid", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.getGrid(req, res, next));
+router.get("/grades", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.getAssignments(req, res, next));
+router.get("/grades/:classId/:subjectId", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.getGrid(req, res, next));
+router.post("/grades/:classId/:subjectId", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.bulkSave(req, res, next));
+router.put("/grades/:id", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.updateGrade(req, res, next));
+router.delete("/grades/:id", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.deleteGrade(req, res, next));
+router.get("/grades/:classId/:subjectId/stats", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => gradesController.getStats(req, res, next));
 // 2. Gestion des Absences (Appel)
-router.post("/absences/roll-call", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => absencesController.saveRollCall(req, res, next));
+router.post("/absences/:classId/roll-call", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => absencesController.saveRollCall(req, res, next));
+router.get("/absences/:classId/roll-call", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => absencesController.getRollCall(req, res, next));
+router.get("/absences/:classId/students", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => absencesController.getClassStudents(req, res, next));
+router.put("/absences/:id/justify", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => absencesController.justifyAbsence(req, res, next));
 router.get("/absences", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => absencesController.getHistory(req, res, next));
+// 3. Emploi du temps
+const teacher_timetable_controller_1 = __importDefault(require("./timetable/teacher-timetable.controller"));
+router.get("/timetable", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => teacher_timetable_controller_1.default.getMyTimetable(req, res, next));
+// 4. Notifications
+const notifications_controller_1 = __importDefault(require("../notifications/notifications.controller"));
+router.get("/notifications", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), notifications_controller_1.default.getAll);
+router.get("/notifications/unread-count", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), notifications_controller_1.default.getUnreadCount);
+router.patch("/notifications/read-all", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), notifications_controller_1.default.markAllAsRead);
+router.patch("/notifications/:id/read", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), notifications_controller_1.default.markAsRead);
 exports.default = router;
 //# sourceMappingURL=teacher.routes.js.map

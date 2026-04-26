@@ -56,6 +56,10 @@ export class ClassesController {
     async findById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = parseInt(req.params.id as string, 10);
+            if (isNaN(id)) {
+                res.status(400).json({ success: false, message: "ID invalide" });
+                return;
+            }
             const result = await this.service.findById(id);
             res.json({
                 success: true,

@@ -30,10 +30,10 @@ export declare class TeachersRepository {
                     description: string | null;
                 };
             } & {
-                schoolYear: string;
                 classId: number;
-                teacherId: number;
                 subjectId: number;
+                schoolYear: string;
+                teacherId: number;
             })[];
         } & {
             id: number;
@@ -68,8 +68,8 @@ export declare class TeachersRepository {
                 level: string;
                 createdAt: Date;
                 updatedAt: Date;
-                maxCapacity: number;
                 headTeacherId: number | null;
+                maxCapacity: number;
             };
             subject: {
                 id: number;
@@ -81,10 +81,10 @@ export declare class TeachersRepository {
                 description: string | null;
             };
         } & {
-            schoolYear: string;
             classId: number;
-            teacherId: number;
             subjectId: number;
+            schoolYear: string;
+            teacherId: number;
         })[];
     } & {
         id: number;
@@ -132,19 +132,19 @@ export declare class TeachersRepository {
      * Ajoute une assignation.
      */
     addAssignment(teacherId: number, subjectId: number, classId: number, schoolYear: string): Promise<{
-        schoolYear: string;
         classId: number;
-        teacherId: number;
         subjectId: number;
+        schoolYear: string;
+        teacherId: number;
     }>;
     /**
      * Supprime une assignation.
      */
     removeAssignment(teacherId: number, subjectId: number, classId: number, schoolYear: string): Promise<{
-        schoolYear: string;
         classId: number;
-        teacherId: number;
         subjectId: number;
+        schoolYear: string;
+        teacherId: number;
     }>;
     /**
      * Vérifie si un conflit d'assignation existe.
@@ -172,10 +172,10 @@ export declare class TeachersRepository {
             speciality: string | null;
         };
     } & {
-        schoolYear: string;
         classId: number;
-        teacherId: number;
         subjectId: number;
+        schoolYear: string;
+        teacherId: number;
     }) | null>;
 }
 //# sourceMappingURL=teachers.repository.d.ts.map

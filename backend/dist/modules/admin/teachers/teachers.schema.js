@@ -45,8 +45,8 @@ exports.UpdateTeacherSchema = TeacherBaseSchema.partial().superRefine(async (dat
  * Schéma pour l'assignation enseignant-matière-classe.
  */
 exports.AssignmentSchema = zod_1.z.object({
-    subjectId: zod_1.z.number().int().positive(),
-    classId: zod_1.z.number().int().positive(),
+    subjectId: zod_1.z.coerce.number().int().positive(),
+    classId: zod_1.z.coerce.number().int().positive(),
     schoolYear: zod_1.z.string().regex(/^\d{4}-\d{4}$/),
 });
 /**

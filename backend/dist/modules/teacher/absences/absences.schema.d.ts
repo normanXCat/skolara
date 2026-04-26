@@ -15,9 +15,8 @@ export declare const AbsenceItemSchema: z.ZodObject<{
  * Schéma pour l'appel complet d'une classe.
  */
 export declare const RollCallSchema: z.ZodObject<{
-    classId: z.ZodNumber;
-    date: z.ZodDefault<z.ZodCoercedDate<unknown>>;
-    items: z.ZodArray<z.ZodObject<{
+    date: z.ZodString;
+    records: z.ZodArray<z.ZodObject<{
         studentId: z.ZodNumber;
         status: z.ZodEnum<{
             PRESENT: "PRESENT";
@@ -28,13 +27,27 @@ export declare const RollCallSchema: z.ZodObject<{
     }, z.core.$strip>>;
 }, z.core.$strip>;
 /**
+ * Schéma pour justifier une absence.
+ */
+export declare const JustifyAbsenceSchema: z.ZodObject<{
+    isJustified: z.ZodBoolean;
+    reason: z.ZodString;
+}, z.core.$strip>;
+/**
  * Filtres pour consulter les absences.
  */
 export declare const AbsenceFiltersSchema: z.ZodObject<{
     classId: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
     studentId: z.ZodOptional<z.ZodCoercedNumber<unknown>>;
     date: z.ZodOptional<z.ZodString>;
+    status: z.ZodOptional<z.ZodEnum<{
+        PRESENT: "PRESENT";
+        ABSENT: "ABSENT";
+        LATE: "LATE";
+    }>>;
+    isJustified: z.ZodOptional<z.ZodCoercedBoolean<unknown>>;
 }, z.core.$strip>;
 export type RollCallInput = z.infer<typeof RollCallSchema>;
+export type JustifyAbsenceInput = z.infer<typeof JustifyAbsenceSchema>;
 export type AbsenceFiltersInput = z.infer<typeof AbsenceFiltersSchema>;
 //# sourceMappingURL=absences.schema.d.ts.map

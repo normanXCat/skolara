@@ -48,19 +48,19 @@ export declare class StudentsService {
             level: string;
             createdAt: Date;
             updatedAt: Date;
-            maxCapacity: number;
             headTeacherId: number | null;
+            maxCapacity: number;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -82,19 +82,19 @@ export declare class StudentsService {
                 level: string;
                 createdAt: Date;
                 updatedAt: Date;
-                maxCapacity: number;
                 headTeacherId: number | null;
+                maxCapacity: number;
             } | null;
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            classId: number | null;
             birthDate: Date;
             address: string | null;
             schoolYear: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number;
-            classId: number | null;
             parentId: number | null;
         })[];
         pagination: {
@@ -139,34 +139,41 @@ export declare class StudentsService {
             userId: number;
             phone: string;
         }) | null;
+        class: {
+            id: number;
+            name: string;
+            schoolYear: string;
+            level: string;
+            createdAt: Date;
+            updatedAt: Date;
+            headTeacherId: number | null;
+            maxCapacity: number;
+        } | null;
         absences: {
             status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             id: number;
+            classId: number;
+            isJustified: boolean;
+            reason: string | null;
             date: Date;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
-            classId: number | null;
-            teacherId: number | null;
-            reason: string | null;
-            justified: boolean;
             parentNotifiedAt: Date | null;
+            teacherId: number;
         }[];
-        marks: {
+        grades: {
             value: number;
             id: number;
-            date: Date;
+            classId: number;
+            subjectId: number;
+            semester: number;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
-            classId: number | null;
-            subject: string;
-            teacherId: number | null;
-            subjectId: number | null;
-            coefficient: number;
-            semester: number | null;
+            teacherId: number;
             comment: string | null;
-            term: string;
+            gradedAt: Date;
         }[];
         payments: {
             status: import("../../../generated/prisma").$Enums.PaymentStatus;
@@ -178,26 +185,16 @@ export declare class StudentsService {
             dueDate: Date;
             paymentDate: Date | null;
         }[];
-        class: {
-            id: number;
-            name: string;
-            schoolYear: string;
-            level: string;
-            createdAt: Date;
-            updatedAt: Date;
-            maxCapacity: number;
-            headTeacherId: number | null;
-        } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -222,19 +219,19 @@ export declare class StudentsService {
             level: string;
             createdAt: Date;
             updatedAt: Date;
-            maxCapacity: number;
             headTeacherId: number | null;
+            maxCapacity: number;
         } | null;
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -243,13 +240,13 @@ export declare class StudentsService {
     archive(id: number): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**
@@ -258,13 +255,13 @@ export declare class StudentsService {
     restore(id: number): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**

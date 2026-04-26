@@ -196,11 +196,11 @@ exports.Prisma.ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
   level: 'level',
-  schoolYear: 'schoolYear',
-  maxCapacity: 'maxCapacity',
-  headTeacherId: 'headTeacherId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  headTeacherId: 'headTeacherId',
+  maxCapacity: 'maxCapacity',
+  schoolYear: 'schoolYear'
 };
 
 exports.Prisma.SubjectScalarFieldEnum = {
@@ -229,19 +229,30 @@ exports.Prisma.TeacherSubjectClassScalarFieldEnum = {
   schoolYear: 'schoolYear'
 };
 
-exports.Prisma.MarkScalarFieldEnum = {
+exports.Prisma.TimetableScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  subjectId: 'subjectId',
+  teacherId: 'teacherId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  room: 'room',
+  schoolYear: 'schoolYear',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GradeScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   subjectId: 'subjectId',
   teacherId: 'teacherId',
   classId: 'classId',
-  subject: 'subject',
   value: 'value',
-  coefficient: 'coefficient',
   semester: 'semester',
   comment: 'comment',
-  term: 'term',
-  date: 'date',
+  gradedAt: 'gradedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -249,15 +260,15 @@ exports.Prisma.MarkScalarFieldEnum = {
 exports.Prisma.AbsenceScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
-  teacherId: 'teacherId',
-  classId: 'classId',
   date: 'date',
-  status: 'status',
   reason: 'reason',
-  justified: 'justified',
-  parentNotifiedAt: 'parentNotifiedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  classId: 'classId',
+  parentNotifiedAt: 'parentNotifiedAt',
+  status: 'status',
+  teacherId: 'teacherId',
+  isJustified: 'isJustified'
 };
 
 exports.Prisma.PaymentScalarFieldEnum = {
@@ -275,6 +286,79 @@ exports.Prisma.SchoolLevelScalarFieldEnum = {
   id: 'id',
   value: 'value',
   label: 'label'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  content: 'content',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ReportCardScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  classId: 'classId',
+  semester: 'semester',
+  schoolYear: 'schoolYear',
+  overallAverage: 'overallAverage',
+  mention: 'mention',
+  generalAppreciation: 'generalAppreciation',
+  generatedAt: 'generatedAt',
+  pdfPath: 'pdfPath'
+};
+
+exports.Prisma.ArticleScalarFieldEnum = {
+  id: 'id',
+  authorId: 'authorId',
+  title: 'title',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  status: 'status',
+  category: 'category',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ContactMessageScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  email: 'email',
+  subject: 'subject',
+  message: 'message',
+  isRead: 'isRead',
+  receivedAt: 'receivedAt',
+  repliedAt: 'repliedAt',
+  status: 'status'
+};
+
+exports.Prisma.CalendarEventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  eventType: 'eventType',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CalendarEventTypeScalarFieldEnum = {
+  id: 'id',
+  value: 'value',
+  label: 'label',
+  color: 'color'
+};
+
+exports.Prisma.SiteSettingsScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -322,6 +406,20 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   LATE: 'LATE'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  ABSENCE: 'ABSENCE',
+  GRADE: 'GRADE',
+  PAYMENT: 'PAYMENT',
+  MESSAGE: 'MESSAGE',
+  GENERAL: 'GENERAL'
+};
+
+exports.ArticleStatus = exports.$Enums.ArticleStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
@@ -332,10 +430,18 @@ exports.Prisma.ModelName = {
   Subject: 'Subject',
   Teacher: 'Teacher',
   TeacherSubjectClass: 'TeacherSubjectClass',
-  Mark: 'Mark',
+  Timetable: 'Timetable',
+  Grade: 'Grade',
   Absence: 'Absence',
   Payment: 'Payment',
-  SchoolLevel: 'SchoolLevel'
+  SchoolLevel: 'SchoolLevel',
+  Notification: 'Notification',
+  ReportCard: 'ReportCard',
+  Article: 'Article',
+  ContactMessage: 'ContactMessage',
+  CalendarEvent: 'CalendarEvent',
+  CalendarEventType: 'CalendarEventType',
+  SiteSettings: 'SiteSettings'
 };
 
 /**

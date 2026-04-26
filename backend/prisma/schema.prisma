@@ -17,6 +17,8 @@ model User {
   active                 Boolean           @default(true)
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
+  articles               Article[]
+  notifications          Notification[]
   parent                 Parent?
   processedRegistrations PreRegistration[]
   refreshTokens          RefreshToken[]
@@ -85,9 +87,10 @@ model Student {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   absences        Absence[]
-  marks           Mark[]
+  grades          Grade[]
   payments        Payment[]
   preRegistration PreRegistration?
+  reportCards     ReportCard[]
   class           Class?           @relation(fields: [classId], references: [id])
   parent          Parent?          @relation(fields: [parentId], references: [id])
   user            User             @relation(fields: [userId], references: [id])
@@ -112,16 +115,18 @@ model Class {
   id            Int                   @id @default(autoincrement())
   name          String
   level         String
-  schoolYear    String                @default("2024-2025")
-  maxCapacity   Int                   @default(30)
-  headTeacherId Int?
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
-  students      Student[]
-  headTeacher   Teacher?              @relation("HeadTeacher", fields: [headTeacherId], references: [id])
-  assignments   TeacherSubjectClass[]
-  marks         Mark[]
+  headTeacherId Int?
+  maxCapacity   Int                   @default(30)
+  schoolYear    String                @default("2024-2025")
   absences      Absence[]
+  headTeacher   Teacher?              @relation("HeadTeacher", fields: [headTeacherId], references: [id])
+  grades        Grade[]
+  reportCards   ReportCard[]
+  students      Student[]
+  assignments   TeacherSubjectClass[]
+  timetables    Timetable[]
 
   @@map("classes")
 }
@@ -134,8 +139,9 @@ model Subject {
   description String?
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
+  grades      Grade[]
   assignments TeacherSubjectClass[]
-  marks       Mark[]
+  timetables  Timetable[]
 
   @@map("subjects")
 }
@@ -147,11 +153,12 @@ model Teacher {
   phone         String?
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
-  user          User                  @relation(fields: [userId], references: [id])
-  headOfClasses Class[]               @relation("HeadTeacher")
-  assignments   TeacherSubjectClass[]
-  marks         Mark[]
   absences      Absence[]
+  headOfClasses Class[]               @relation("HeadTeacher")
+  grades        Grade[]
+  assignments   TeacherSubjectClass[]
+  user          User                  @relation(fields: [userId], references: [id])
+  timetables    Timetable[]
 
   @@map("teachers")
 }
@@ -161,53 +168,70 @@ model TeacherSubjectClass {
   subjectId  Int
   classId    Int
   schoolYear String
-
-  teacher Teacher @relation(fields: [teacherId], references: [id])
-  subject Subject @relation(fields: [subjectId], references: [id])
-  class   Class   @relation(fields: [classId], references: [id])
+  class      Class   @relation(fields: [classId], references: [id])
+  subject    Subject @relation(fields: [subjectId], references: [id])
+  teacher    Teacher @relation(fields: [teacherId], references: [id])
 
   @@id([teacherId, subjectId, classId, schoolYear])
   @@map("teacher_subject_classes")
 }
 
-model Mark {
-  id          Int      @id @default(autoincrement())
-  studentId   Int
-  subjectId   Int?
-  teacherId   Int?
-  classId     Int?
-  subject     String
-  value       Float
-  coefficient Float    @default(1.0)
-  semester    Int?
-  comment     String?
-  term        String
-  date        DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  student     Student  @relation(fields: [studentId], references: [id])
-  subjectRef  Subject? @relation(fields: [subjectId], references: [id])
-  teacher     Teacher? @relation(fields: [teacherId], references: [id])
-  class       Class?   @relation(fields: [classId], references: [id])
+model Timetable {
+  id         Int      @id @default(autoincrement())
+  classId    Int
+  subjectId  Int
+  teacherId  Int
+  dayOfWeek  Int
+  startTime  String
+  endTime    String
+  room       String?
+  schoolYear String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  class      Class    @relation(fields: [classId], references: [id])
+  subject    Subject  @relation(fields: [subjectId], references: [id])
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
 
-  @@map("marks")
+  @@unique([classId, dayOfWeek, startTime, schoolYear])
+  @@unique([teacherId, dayOfWeek, startTime, schoolYear])
+  @@map("timetables")
+}
+
+model Grade {
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  subjectId Int
+  teacherId Int
+  classId   Int
+  value     Float
+  semester  Int
+  comment   String?
+  gradedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  class     Class    @relation(fields: [classId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id])
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+
+  @@map("grades")
 }
 
 model Absence {
   id               Int           @id @default(autoincrement())
   studentId        Int
-  teacherId        Int?
-  classId          Int?
   date             DateTime
-  status           AbsenceStatus @default(ABSENT)
   reason           String?
-  justified        Boolean       @default(false)
-  parentNotifiedAt DateTime?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
+  classId          Int
+  parentNotifiedAt DateTime?
+  status           AbsenceStatus @default(ABSENT)
+  teacherId        Int
+  isJustified      Boolean       @default(false)
+  class            Class         @relation(fields: [classId], references: [id])
   student          Student       @relation(fields: [studentId], references: [id])
-  teacher          Teacher?      @relation(fields: [teacherId], references: [id])
-  class            Class?        @relation(fields: [classId], references: [id])
+  teacher          Teacher       @relation(fields: [teacherId], references: [id])
 
   @@map("absences")
 }
@@ -234,7 +258,106 @@ model SchoolLevel {
   @@map("school_levels")
 }
 
-/// Rôle utilisateur dans le système Skolara
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  type      NotificationType
+  content   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model ReportCard {
+  id                  Int      @id @default(autoincrement())
+  studentId           Int
+  classId             Int
+  semester            Int
+  schoolYear          String
+  overallAverage      Float
+  mention             String?
+  generalAppreciation String?
+  generatedAt         DateTime @default(now())
+  pdfPath             String?
+  class               Class    @relation(fields: [classId], references: [id])
+  student             Student  @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, semester, schoolYear])
+  @@map("report_cards")
+}
+
+model Article {
+  id          Int           @id @default(autoincrement())
+  authorId    Int
+  title       String
+  content     String
+  imageUrl    String?
+  status      ArticleStatus @default(DRAFT)
+  category    String?
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  author      User          @relation(fields: [authorId], references: [id])
+
+  @@map("articles")
+}
+
+model ContactMessage {
+  id         Int       @id @default(autoincrement())
+  fullName   String
+  email      String
+  subject    String
+  message    String
+  isRead     Boolean   @default(false)
+  receivedAt DateTime  @default(now())
+  repliedAt  DateTime?
+  status     String    @default("pending")
+
+  @@map("contact_messages")
+}
+
+model CalendarEvent {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  eventType   String
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("calendar_events")
+}
+
+model CalendarEventType {
+  id    Int    @id @default(autoincrement())
+  value String @unique // e.g., "holiday", "exam"
+  label String // e.g., "Vacances Académiques"
+  color String? // Hex or CSS class
+
+  @@map("calendar_event_types")
+}
+
+model SiteSettings {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+enum NotificationType {
+  ABSENCE
+  GRADE
+  PAYMENT
+  MESSAGE
+  GENERAL
+}
+
 enum Role {
   ADMIN
   ENSEIGNANT
@@ -264,4 +387,10 @@ enum AbsenceStatus {
   PRESENT
   ABSENT
   LATE
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }

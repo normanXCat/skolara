@@ -22,8 +22,8 @@ export declare const UpdateTeacherSchema: z.ZodObject<{
  * Schéma pour l'assignation enseignant-matière-classe.
  */
 export declare const AssignmentSchema: z.ZodObject<{
-    subjectId: z.ZodNumber;
-    classId: z.ZodNumber;
+    subjectId: z.ZodCoercedNumber<unknown>;
+    classId: z.ZodCoercedNumber<unknown>;
     schoolYear: z.ZodString;
 }, z.core.$strip>;
 /**

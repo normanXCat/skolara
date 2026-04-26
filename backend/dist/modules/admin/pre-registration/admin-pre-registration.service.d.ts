@@ -57,13 +57,13 @@ export declare class AdminPreRegistrationService {
         } & {
             status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            classId: number | null;
             birthDate: Date;
             address: string | null;
             schoolYear: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number;
-            classId: number | null;
             parentId: number | null;
         }) | null;
         processedByUser: {
@@ -146,13 +146,13 @@ export declare class AdminPreRegistrationService {
     }): Promise<{
         status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        classId: number | null;
         birthDate: Date;
         address: string | null;
         schoolYear: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
-        classId: number | null;
         parentId: number | null;
     }>;
     /**

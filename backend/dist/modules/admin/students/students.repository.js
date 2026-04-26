@@ -75,8 +75,8 @@ class StudentsRepository {
                 parent: {
                     include: { user: true },
                 },
-                marks: {
-                    orderBy: { date: "desc" },
+                grades: {
+                    orderBy: { gradedAt: "desc" },
                     take: 20,
                 },
                 absences: {

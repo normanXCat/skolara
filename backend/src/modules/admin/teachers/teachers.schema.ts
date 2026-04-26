@@ -46,8 +46,8 @@ export const UpdateTeacherSchema = TeacherBaseSchema.partial().superRefine(async
  * Schéma pour l'assignation enseignant-matière-classe.
  */
 export const AssignmentSchema = z.object({
-    subjectId: z.number().int().positive(),
-    classId: z.number().int().positive(),
+    subjectId: z.coerce.number().int().positive(),
+    classId: z.coerce.number().int().positive(),
     schoolYear: z.string().regex(/^\d{4}-\d{4}$/),
 });
 

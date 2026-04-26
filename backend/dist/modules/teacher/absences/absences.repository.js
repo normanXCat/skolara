@@ -4,35 +4,42 @@ exports.AbsencesRepository = void 0;
 const client_1 = require("../../../prisma/client");
 class AbsencesRepository {
     /**
-     * Enregistre l'appel.
+     * Enregistre l'appel en masse pour une classe et une date donnée.
+     * Utilise une transaction pour supprimer et recréer les records de la journée.
      */
     async saveRollCall(data) {
-        const { classId, teacherId, date, items } = data;
-        return client_1.prisma.$transaction([
-            // On supprime l'appel existant pour cette date/classe s'il existe (pour éviter les doublons)
-            client_1.prisma.absence.deleteMany({
+        const { classId, teacherId, date, records } = data;
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999);
+        return client_1.prisma.$transaction(async (tx) => {
+            // Supprimer l'existant pour cette classe/date
+            await tx.absence.deleteMany({
                 where: {
                     classId,
                     date: {
-                        gte: new Date(date.setHours(0, 0, 0, 0)),
-                        lt: new Date(date.setHours(23, 59, 59, 999)),
+                        gte: startOfDay,
+                        lte: endOfDay,
                     },
                 },
-            }),
-            // On recrée les entrées (uniquement pour ABSENT et LATE)
-            ...items
-                .filter((item) => item.status !== "PRESENT")
-                .map((item) => client_1.prisma.absence.create({
-                data: {
-                    studentId: item.studentId,
-                    classId,
-                    teacherId,
-                    date,
-                    status: item.status,
-                    reason: item.reason,
-                },
-            })),
-        ]);
+            });
+            // Créer les nouveaux records
+            const results = [];
+            for (const record of records) {
+                results.push(await tx.absence.create({
+                    data: {
+                        studentId: record.studentId,
+                        classId,
+                        teacherId,
+                        date,
+                        status: record.status,
+                        reason: record.reason,
+                    },
+                }));
+            }
+            return results;
+        });
     }
     /**
      * Récupère les absences avec filtres.
@@ -46,6 +53,37 @@ class AbsencesRepository {
                 teacher: { include: { user: true } },
             },
             orderBy: { date: "desc" },
+        });
+    }
+    /**
+     * Justifie une absence.
+     */
+    async justify(id, data) {
+        return client_1.prisma.absence.update({
+            where: { id },
+            data: {
+                isJustified: data.isJustified,
+                reason: data.reason
+            }
+        });
+    }
+    /**
+     * Marque une notification parent comme envoyée.
+     */
+    async markNotified(id) {
+        return client_1.prisma.absence.update({
+            where: { id },
+            data: { parentNotifiedAt: new Date() }
+        });
+    }
+    /**
+     * Récupère les élèves d'une classe.
+     */
+    async findStudentsByClass(classId) {
+        return client_1.prisma.student.findMany({
+            where: { classId, status: "ACTIVE" },
+            include: { user: { select: { id: true, firstName: true, name: true } } },
+            orderBy: { user: { name: "asc" } },
         });
     }
 }

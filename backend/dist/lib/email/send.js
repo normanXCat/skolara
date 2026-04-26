@@ -6,7 +6,7 @@ const client_1 = require("./client");
  * Wrapper générique pour l'envoi d'emails.
  * Gère le logging et ne throw pas d'erreurs pour ne pas bloquer les transactions si non souhaité.
  */
-async function sendEmail({ to, subject, html }) {
+async function sendEmail({ to, subject, html, replyTo }) {
     const fromName = (process.env.EMAIL_FROM_NAME || 'Skolara').replace(/^["'](.+)["']$/, '$1').trim();
     // Nettoyer les variables d'env des potentiels guillemets résiduels
     const fromEmail = (process.env.EMAIL_FROM || '').replace(/^["'](.+)["']$/, '$1').trim();
@@ -15,7 +15,8 @@ async function sendEmail({ to, subject, html }) {
         from: `"${fromName}" <${fromEmail}>`,
         to: Array.isArray(to) ? to.join(', ') : to,
         subject,
-        html
+        html,
+        replyTo
     };
     // On simule l'envoi seulement si NODE_ENV est 'development' ET qu'aucun mot de passe n'est fourni,
     // ou si on force explicitement la simulation.

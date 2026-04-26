@@ -730,6 +730,176 @@ export declare const swaggerDocument: {
                 };
             };
         };
+        "/admin/grades": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/grades/stats": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                        };
+                                        data: {
+                                            $ref: string;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/absences": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: ({
+                    name: string;
+                    in: string;
+                    schema: {
+                        type: string;
+                        enum?: undefined;
+                    };
+                } | {
+                    name: string;
+                    in: string;
+                    schema: {
+                        type: string;
+                        enum: string[];
+                    };
+                })[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/absences/stats": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: string;
+                                    properties: {
+                                        success: {
+                                            type: string;
+                                        };
+                                        data: {
+                                            $ref: string;
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        "/admin/absences/{id}/justify": {
+            put: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: string;
+                                required: string[];
+                                properties: {
+                                    isJustified: {
+                                        type: string;
+                                    };
+                                    reason: {
+                                        type: string;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "200": {
+                        description: string;
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    $ref: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+        };
     };
     components: {
         schemas: {
@@ -1399,6 +1569,170 @@ export declare const swaggerDocument: {
                         type: string;
                     };
                     phone: {
+                        type: string;
+                    };
+                };
+            };
+            GradePaginatedResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                    };
+                    data: {
+                        type: string;
+                        properties: {
+                            grades: {
+                                type: string;
+                                items: {
+                                    type: string;
+                                    properties: {
+                                        id: {
+                                            type: string;
+                                        };
+                                        value: {
+                                            type: string;
+                                        };
+                                        semester: {
+                                            type: string;
+                                        };
+                                        comment: {
+                                            type: string;
+                                            nullable: boolean;
+                                        };
+                                        student: {
+                                            $ref: string;
+                                        };
+                                    };
+                                };
+                            };
+                            pagination: {
+                                type: string;
+                                properties: {
+                                    total: {
+                                        type: string;
+                                    };
+                                    page: {
+                                        type: string;
+                                    };
+                                    limit: {
+                                        type: string;
+                                    };
+                                    totalPages: {
+                                        type: string;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            GradeStats: {
+                type: string;
+                properties: {
+                    totalGrades: {
+                        type: string;
+                    };
+                    average: {
+                        type: string;
+                    };
+                    highest: {
+                        type: string;
+                    };
+                    lowest: {
+                        type: string;
+                    };
+                    distribution: {
+                        type: string;
+                        items: {
+                            type: string;
+                            properties: {
+                                range: {
+                                    type: string;
+                                };
+                                count: {
+                                    type: string;
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            AbsencePaginatedResponse: {
+                type: string;
+                properties: {
+                    success: {
+                        type: string;
+                    };
+                    data: {
+                        type: string;
+                        properties: {
+                            absences: {
+                                type: string;
+                                items: {
+                                    type: string;
+                                    properties: {
+                                        id: {
+                                            type: string;
+                                        };
+                                        date: {
+                                            type: string;
+                                            format: string;
+                                        };
+                                        status: {
+                                            type: string;
+                                            enum: string[];
+                                        };
+                                        reason: {
+                                            type: string;
+                                            nullable: boolean;
+                                        };
+                                        isJustified: {
+                                            type: string;
+                                        };
+                                        student: {
+                                            $ref: string;
+                                        };
+                                    };
+                                };
+                            };
+                            pagination: {
+                                type: string;
+                                properties: {
+                                    total: {
+                                        type: string;
+                                    };
+                                    page: {
+                                        type: string;
+                                    };
+                                    limit: {
+                                        type: string;
+                                    };
+                                    totalPages: {
+                                        type: string;
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+            AbsenceStats: {
+                type: string;
+                properties: {
+                    totalAbsences: {
+                        type: string;
+                    };
+                    absentCount: {
+                        type: string;
+                    };
+                    lateCount: {
+                        type: string;
+                    };
+                    justifiedCount: {
+                        type: string;
+                    };
+                    unjustifiedCount: {
                         type: string;
                     };
                 };

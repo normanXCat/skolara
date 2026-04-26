@@ -40,19 +40,60 @@ class GradesController {
         this.service = service;
     }
     /**
-     * POST /api/teacher/grades/bulk
+     * GET /api/teacher/grades
+     * Liste des assignations de l'enseignant.
      */
-    async bulkCreate(req, res, next) {
+    async getAssignments(req, res, next) {
         try {
-            const teacherId = req.user.userId;
-            // On a besoin de l'ID Enseignant réel, pas user.id
-            const teacher = await this.getTeacherFromUser(teacherId);
+            const userId = req.user.userId;
+            const teacher = await this.getTeacherFromUser(userId);
+            const data = await this.service.getAssignments(teacher.id);
+            res.json({ success: true, data });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * GET /api/teacher/grades/:classId/:subjectId
+     * Grille de notes.
+     */
+    async getGrid(req, res, next) {
+        try {
+            const userId = req.user.userId;
+            const teacher = await this.getTeacherFromUser(userId);
+            const classId = parseInt(req.params.classId, 10);
+            const subjectId = parseInt(req.params.subjectId, 10);
+            const semester = parseInt(req.query.semester, 10) || 1;
+            if (isNaN(classId) || isNaN(subjectId)) {
+                return res.status(400).json({ success: false, message: "ID de classe ou de matière invalide" });
+            }
+            const data = await this.service.getGrid(teacher.id, classId, subjectId, semester);
+            res.json({ success: true, data });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * POST /api/teacher/grades/:classId/:subjectId
+     * Sauvegarde groupée.
+     */
+    async bulkSave(req, res, next) {
+        try {
+            const userId = req.user.userId;
+            const teacher = await this.getTeacherFromUser(userId);
+            const classId = parseInt(req.params.classId, 10);
+            const subjectId = parseInt(req.params.subjectId, 10);
+            if (isNaN(classId) || isNaN(subjectId)) {
+                return res.status(400).json({ success: false, message: "ID de classe ou de matière invalide" });
+            }
             const data = grades_schema_1.BulkGradeSchema.parse(req.body);
-            const result = await this.service.bulkCreate(teacher.id, data);
-            res.status(201).json({
+            const result = await this.service.bulkSave(teacher.id, classId, subjectId, data);
+            res.json({
                 success: true,
                 data: result,
-                message: "Les notes ont été enregistrées",
+                message: "Notes sauvegardées avec succès",
             });
         }
         catch (error) {
@@ -60,19 +101,48 @@ class GradesController {
         }
     }
     /**
-     * GET /api/teacher/grades/grid
+     * PUT /api/teacher/grades/:id
+     * Mise à jour d'une note unique.
      */
-    async getGrid(req, res, next) {
+    async updateGrade(req, res, next) {
         try {
-            const teacherId = req.user.userId;
-            const teacher = await this.getTeacherFromUser(teacherId);
-            const classId = parseInt(req.query.classId, 10);
-            const subjectId = parseInt(req.query.subjectId, 10);
-            const students = await this.service.getEntryGrid(teacher.id, classId, subjectId);
-            res.json({
-                success: true,
-                data: students,
-            });
+            const gradeId = parseInt(req.params.id, 10);
+            const data = grades_schema_1.SingleGradeSchema.parse(req.body);
+            const result = await this.service.updateGrade(gradeId, data);
+            res.json({ success: true, data: result });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * DELETE /api/teacher/grades/:id
+     * Suppression d'une note.
+     */
+    async deleteGrade(req, res, next) {
+        try {
+            const gradeId = parseInt(req.params.id, 10);
+            await this.service.deleteGrade(gradeId);
+            res.json({ success: true, message: "Note supprimée" });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * GET /api/teacher/grades/:classId/:subjectId/stats
+     * Stats de classe.
+     */
+    async getStats(req, res, next) {
+        try {
+            const classId = parseInt(req.params.classId, 10);
+            const subjectId = parseInt(req.params.subjectId, 10);
+            const semester = parseInt(req.query.semester, 10) || 1;
+            if (isNaN(classId) || isNaN(subjectId)) {
+                return res.status(400).json({ success: false, message: "ID de classe ou de matière invalide" });
+            }
+            const data = await this.service.getStats(classId, subjectId, semester);
+            res.json({ success: true, data });
         }
         catch (error) {
             next(error);

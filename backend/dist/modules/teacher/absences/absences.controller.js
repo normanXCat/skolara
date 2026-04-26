@@ -40,18 +40,39 @@ class AbsencesController {
         this.service = service;
     }
     /**
-     * POST /api/teacher/absences/roll-call
+     * GET /api/teacher/absences/:classId/students
+     * Liste des élèves d'une classe pour l'appel.
+     */
+    async getClassStudents(req, res, next) {
+        try {
+            const userId = req.user.userId;
+            const teacher = await this.getTeacherFromUser(userId);
+            const classId = parseInt(req.params.classId, 10);
+            if (isNaN(classId)) {
+                return res.status(400).json({ success: false, message: "ID de classe invalide" });
+            }
+            const data = await this.service.getClassStudents(teacher.id, classId);
+            res.json({ success: true, data });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * POST /api/teacher/absences/:classId/roll-call
+     * Enregistre l'appel pour une classe.
      */
     async saveRollCall(req, res, next) {
         try {
             const userId = req.user.userId;
             const teacher = await this.getTeacherFromUser(userId);
+            const classId = parseInt(req.params.classId, 10);
             const data = absences_schema_1.RollCallSchema.parse(req.body);
-            const result = await this.service.saveRollCall(teacher.id, data);
-            res.status(201).json({
+            const result = await this.service.saveRollCall(teacher.id, classId, data);
+            res.json({
                 success: true,
                 data: result,
-                message: "L'appel a été enregistré avec succès",
+                message: "L'appel a été enregistré et les parents notifiés",
             });
         }
         catch (error) {
@@ -59,7 +80,40 @@ class AbsencesController {
         }
     }
     /**
+     * GET /api/teacher/absences/:classId/roll-call
+     * Récupère l'appel pour une date donnée.
+     */
+    async getRollCall(req, res, next) {
+        try {
+            const classId = parseInt(req.params.classId, 10);
+            const date = req.query.date;
+            if (!date)
+                throw { status: 400, message: "La date est requise" };
+            const data = await this.service.getRollCall(classId, date);
+            res.json({ success: true, data });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * PUT /api/teacher/absences/:id/justify
+     * Justifie une absence.
+     */
+    async justifyAbsence(req, res, next) {
+        try {
+            const absenceId = parseInt(req.params.id, 10);
+            const data = absences_schema_1.JustifyAbsenceSchema.parse(req.body);
+            const result = await this.service.justifyAbsence(absenceId, data);
+            res.json({ success: true, data: result, message: "Absence justifiée" });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    /**
      * GET /api/teacher/absences
+     * Historique des absences avec filtres.
      */
     async getHistory(req, res, next) {
         try {

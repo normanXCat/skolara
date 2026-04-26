@@ -1,77 +1,70 @@
 import { GradesRepository } from "./grades.repository";
-import { BulkGradeInput, MarkFiltersInput } from "./grades.schema";
+import { BulkGradeInput, SingleGradeInput } from "./grades.schema";
 export declare class GradesService {
     private repository;
     constructor(repository: GradesRepository);
     /**
      * Saisie groupée de notes.
      */
-    bulkCreate(teacherId: number, data: BulkGradeInput): Promise<{
+    bulkSave(teacherId: number, classId: number, subjectId: number, data: BulkGradeInput): Promise<{
         value: number;
         id: number;
-        date: Date;
+        classId: number;
+        subjectId: number;
+        semester: number;
         createdAt: Date;
         updatedAt: Date;
         studentId: number;
-        classId: number | null;
-        subject: string;
-        teacherId: number | null;
-        subjectId: number | null;
-        coefficient: number;
-        semester: number | null;
+        teacherId: number;
         comment: string | null;
-        term: string;
+        gradedAt: Date;
     }[]>;
     /**
-     * Liste des élèves pour la saisie.
+     * Grille de saisie pour une classe/matière/semestre.
+     * Retourne tous les élèves avec leur note si elle existe.
      */
-    getEntryGrid(teacherId: number, classId: number, subjectId: number): Promise<({
-        user: {
+    getGrid(teacherId: number, classId: number, subjectId: number, semester: number): Promise<{
+        classId: number;
+        subjectId: number;
+        semester: number;
+        students: {
+            id: number;
+            firstName: string;
+            lastName: string;
+            gradeId: number | null;
+            value: number | null;
+            comment: string | null;
+        }[];
+    }>;
+    /**
+     * Statistiques de classe.
+     */
+    getStats(classId: number, subjectId: number, semester: number): Promise<{
+        average: number;
+        highest: number;
+        lowest: number;
+        gradeCount: number;
+        totalStudents: number;
+        distribution: {
+            range: string;
+            count: number;
+        }[];
+    }>;
+    /**
+     * Liste des assignations de l'enseignant.
+     */
+    getAssignments(teacherId: number): Promise<({
+        class: {
             id: number;
             name: string;
-            firstName: string;
-        };
-    } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
-        id: number;
-        birthDate: Date;
-        address: string | null;
-        schoolYear: string;
-        createdAt: Date;
-        updatedAt: Date;
-        userId: number;
-        classId: number | null;
-        parentId: number | null;
-    })[]>;
-    /**
-     * Historique des notes saisies.
-     */
-    getHistory(filters: MarkFiltersInput): Promise<({
-        student: {
-            user: {
-                id: number;
-                name: string;
-                firstName: string;
-                email: string;
-                passwordHash: string;
-                role: import("../../../generated/prisma").$Enums.Role;
-                active: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-            };
-        } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
-            id: number;
-            birthDate: Date;
-            address: string | null;
             schoolYear: string;
+            level: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number;
-            classId: number | null;
-            parentId: number | null;
+            headTeacherId: number | null;
+            maxCapacity: number;
         };
-        subjectRef: {
+        subject: {
             id: number;
             name: string;
             code: string;
@@ -79,22 +72,38 @@ export declare class GradesService {
             updatedAt: Date;
             coefficient: number;
             description: string | null;
-        } | null;
+        };
     } & {
+        classId: number;
+        subjectId: number;
+        schoolYear: string;
+        teacherId: number;
+    })[]>;
+    updateGrade(id: number, data: SingleGradeInput): Promise<{
         value: number;
         id: number;
-        date: Date;
+        classId: number;
+        subjectId: number;
+        semester: number;
         createdAt: Date;
         updatedAt: Date;
         studentId: number;
-        classId: number | null;
-        subject: string;
-        teacherId: number | null;
-        subjectId: number | null;
-        coefficient: number;
-        semester: number | null;
+        teacherId: number;
         comment: string | null;
-        term: string;
-    })[]>;
+        gradedAt: Date;
+    }>;
+    deleteGrade(id: number): Promise<{
+        value: number;
+        id: number;
+        classId: number;
+        subjectId: number;
+        semester: number;
+        createdAt: Date;
+        updatedAt: Date;
+        studentId: number;
+        teacherId: number;
+        comment: string | null;
+        gradedAt: Date;
+    }>;
 }
 //# sourceMappingURL=grades.service.d.ts.map

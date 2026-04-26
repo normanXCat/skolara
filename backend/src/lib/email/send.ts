@@ -4,6 +4,7 @@ interface SendEmailOptions {
     to: string | string[];
     subject: string;
     html: string;
+    replyTo?: string;
 }
 
 /**
@@ -13,7 +14,8 @@ interface SendEmailOptions {
 export async function sendEmail({
     to,
     subject,
-    html
+    html,
+    replyTo
 }: SendEmailOptions): Promise<{ success: boolean; error?: string }> {
     const fromName = (process.env.EMAIL_FROM_NAME || 'Skolara').replace(/^["'](.+)["']$/, '$1').trim();
     // Nettoyer les variables d'env des potentiels guillemets résiduels
@@ -24,7 +26,8 @@ export async function sendEmail({
         from: `"${fromName}" <${fromEmail}>`,
         to: Array.isArray(to) ? to.join(', ') : to,
         subject,
-        html
+        html,
+        replyTo
     };
 
     // On simule l'envoi seulement si NODE_ENV est 'development' ET qu'aucun mot de passe n'est fourni,
