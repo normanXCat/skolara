@@ -9,6 +9,7 @@
 - **Design System Avancé** : Utilisation intensive du Glassmorphism, de typographies hiérarchisées et de micro-interactions fluides (`rounded-3xl` standard).
 - **Hero Section Dynamique** : Navigation intelligente, Spotlight effects et mise en page éditoriale.
 - **Admin Dashboard "Next-Gen"** : Statistiques interactives, DataTables avancées avec gestion de colonnes et export automatique.
+- **Registre des Notes & Absences** : Suivi global des performances académiques et de la présence des élèves par l'administration.
 - **Traitement des Pré-inscriptions** : Module complet de gestion des dossiers avec timeline d'historique, notes internes et signature de documents.
 - **Expérience de Chargement** : Système de Skeleton Loaders premium synchronisés avec la structure finale des pages.
 - **Adaptativité Totale** : Support complet du mode clair/sombre avec overlays et composants auto-adaptatifs.
