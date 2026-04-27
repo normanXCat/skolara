@@ -7,20 +7,18 @@ import { revalidateTag } from "next/cache";
  */
 export const getSettings = unstable_cache(
   async (): Promise<Record<string, string>> => {
-    // Sur le serveur, on utilise l'URL absolue du backend
-    const baseUrl = process.env.BACKEND_URL || "http://localhost:8000";
-  const url = `${baseUrl}/api/admin/settings`;
+    const baseUrl = process.env.BACKEND_URL || "http://127.0.0.1:8000";
+    const url = `${baseUrl}/api/admin/settings`;
     
     try {
       console.log(`[getSettings] Fetching settings from: ${url}`);
       const res = await fetch(url, {
-        // Pas besoin de tags ici car unstable_cache s'en occupe déjà
-        cache: 'no-store', // On laisse unstable_cache gérer le cache au-dessus
+        cache: 'no-store',
       });
 
       if (!res.ok) {
         console.error(`[getSettings] API returned error ${res.status}: ${res.statusText}`);
-        return {};
+        throw new Error(`API Error: ${res.status}`);
       }
 
       const json = await res.json();
@@ -29,10 +27,12 @@ export const getSettings = unstable_cache(
       return json?.data || {};
     } catch (error) {
       console.error("[getSettings] Failed to fetch settings:", error);
+      // On retourne un objet vide pour ne pas crasher toute l'application.
+      // Si cette valeur est mise en cache, elle pourra être revalidée via le panneau d'administration.
       return {};
     }
   },
-  ["site-settings"],
+  ["site-settings-v2"],
   { tags: ["settings"] }
 );
 
@@ -44,26 +44,3 @@ export async function getSetting(key: string): Promise<string> {
   return settings[key] || "";
 }
 
-/**
- * Met à jour les paramètres du site et invalide le cache.
- * Note: Cette fonction est principalement destinée à être utilisée côté serveur (ex: Server Actions).
- */
-export async function updateSettings(data: Record<string, string>): Promise<void> {
-  const baseUrl = process.env.BACKEND_URL || "http://localhost:8000";
-  const url = `${baseUrl}/api/admin/settings`;
-
-  try {
-    const res = await fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    
-    if (res.ok) {
-      revalidateTag("settings", "max");
-    }
-  } catch (error) {
-    console.error("Failed to update settings in updateSettings utility:", error);
-    throw error;
-  }
-}

@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
  * On ne passe PAS par le rewrite Next.js (qui utilise `/api`)
  * mais directement vers le backend pour éviter les boucles.
  */
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8000";
+const BACKEND_URL = process.env.BACKEND_URL || "http://127.0.0.1:8000";
 
 /**
  * Type de réponse standard de l'API.

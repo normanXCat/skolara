@@ -8,6 +8,39 @@ import type { NextRequest } from "next/server";
  */
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8000";
 
+type UserRole = "ADMIN" | "TEACHER" | "STUDENT" | "PARENT";
+
+function normalizeRole(role?: string): UserRole | null {
+    if (!role) return null;
+
+    const upper = role.toUpperCase();
+    if (upper === "ADMIN") return "ADMIN";
+    if (upper === "TEACHER" || upper === "ENSEIGNANT") return "TEACHER";
+    if (upper === "STUDENT" || upper === "ELEVE" || upper === "ÉLÈVE") return "STUDENT";
+    if (upper === "PARENT") return "PARENT";
+    return null;
+}
+
+function getDashboardByRole(role: UserRole): string {
+    if (role === "ADMIN") return "/admin/dashboard";
+    if (role === "TEACHER") return "/teacher/dashboard";
+    if (role === "STUDENT") return "/student/dashboard";
+    return "/parent/dashboard";
+}
+
+function isRoleAllowedForPath(role: UserRole, pathname: string): boolean {
+    if (pathname.startsWith("/admin")) return role === "ADMIN";
+    if (pathname.startsWith("/teacher")) return role === "TEACHER";
+    if (pathname.startsWith("/student")) return role === "STUDENT";
+    if (pathname.startsWith("/parent")) return role === "PARENT";
+    return true;
+}
+
+function extractCookieValue(cookieHeader: string, cookieName: string): string | null {
+    const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${cookieName}=([^;]+)`));
+    return match ? decodeURIComponent(match[1]) : null;
+}
+
 /**
  * Middleware Next.js pour la protection des routes et le rafraîchissement
  * proactif des tokens d'accès.
@@ -42,7 +75,7 @@ export async function middleware(request: NextRequest) {
     // ──── 2. Récupérer les cookies de session ────
     const refreshToken = request.cookies.get("refreshToken")?.value;
     const accessToken = request.cookies.get("accessToken")?.value;
-    const userRole = request.cookies.get("userRole")?.value;
+    const userRole = normalizeRole(request.cookies.get("userRole")?.value);
 
     const hasRefreshToken = !!refreshToken;
     const hasAccessToken = !!accessToken;
@@ -59,12 +92,12 @@ export async function middleware(request: NextRequest) {
                 new URL("/admin/dashboard", request.url),
             );
         }
-        if (userRole === "ENSEIGNANT") {
+        if (userRole === "TEACHER") {
             return NextResponse.redirect(
                 new URL("/teacher/dashboard", request.url),
             );
         }
-        if (userRole === "ELEVE") {
+        if (userRole === "STUDENT") {
             return NextResponse.redirect(
                 new URL("/student/dashboard", request.url),
             );
@@ -75,6 +108,13 @@ export async function middleware(request: NextRequest) {
             );
         }
         return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    // ──── 4bis. Route protégée + rôle différent de l'espace demandé → redirection ────
+    if (isProtected && userRole && !isRoleAllowedForPath(userRole, pathname)) {
+        const redirectUrl = new URL(getDashboardByRole(userRole), request.url);
+        redirectUrl.searchParams.set("accessDenied", "1");
+        return NextResponse.redirect(redirectUrl);
     }
 
     // ──── 5. Route protégée sans refreshToken → login ────
@@ -153,6 +193,23 @@ export async function middleware(request: NextRequest) {
 
                 // Injecter la nouvelle chaîne de cookies dans la requête transmise aux Server Components
                 newHeaders.set("cookie", cookieString);
+
+                // Re-valider l'accès après refresh avec le rôle potentiellement mis à jour.
+                const refreshedRole = normalizeRole(
+                    extractCookieValue(cookieString, "userRole") || undefined,
+                );
+                if (
+                    isProtected &&
+                    refreshedRole &&
+                    !isRoleAllowedForPath(refreshedRole, pathname)
+                ) {
+                    const redirectUrl = new URL(
+                        getDashboardByRole(refreshedRole),
+                        request.url,
+                    );
+                    redirectUrl.searchParams.set("accessDenied", "1");
+                    return NextResponse.redirect(redirectUrl);
+                }
 
                 return response;
             }

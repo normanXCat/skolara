@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api-client";
-import { ADMIN_NAVIGATION_LINKS, TEACHER_NAVIGATION_LINKS } from "@/config/navigation";
+import { ADMIN_NAVIGATION_LINKS, TEACHER_NAVIGATION_LINKS, STUDENT_NAVIGATION_LINKS, PARENT_NAVIGATION_LINKS } from "@/config/navigation";
 import { ROUTES } from "@/config/routes";
 import {
     IconLayoutDashboard,
@@ -19,6 +19,7 @@ import {
     IconClipboardList,
     IconMessages,
     IconSettings,
+    IconBook,
     IconMenu2,
     IconX,
     IconLogout,
@@ -49,6 +50,7 @@ const ICON_MAP: Record<string, any> = {
     IconClipboardList: IconClipboardList,
     IconMessages: IconMessages,
     IconSettings: IconSettings,
+    IconBook: IconBook,
 };
 
 export const Sidebar = () => {
@@ -57,7 +59,29 @@ export const Sidebar = () => {
     const { user, clearUser } = useAuthStore();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-    const links = user?.role === "ADMIN" ? ADMIN_NAVIGATION_LINKS : TEACHER_NAVIGATION_LINKS;
+    const getLinks = () => {
+        switch (user?.role) {
+            case "ADMIN":
+                return ADMIN_NAVIGATION_LINKS;
+            case "TEACHER":
+                return TEACHER_NAVIGATION_LINKS;
+            case "ELEVE":
+            case "STUDENT":
+                return STUDENT_NAVIGATION_LINKS;
+            case "PARENT":
+                return PARENT_NAVIGATION_LINKS;
+            default: {
+                // Pendant le premier rendu (user null) ou si le backend renvoie un rôle non prévu,
+                // on ne doit pas afficher le sidebar ADMIN par défaut.
+                if (pathname.startsWith("/teacher")) return TEACHER_NAVIGATION_LINKS;
+                if (pathname.startsWith("/student")) return STUDENT_NAVIGATION_LINKS;
+                if (pathname.startsWith("/parent")) return PARENT_NAVIGATION_LINKS;
+                if (pathname.startsWith("/admin")) return ADMIN_NAVIGATION_LINKS;
+                return [];
+            }
+        }
+    };
+    const links = getLinks();
 
     // State for expanded sections
     const [openSections, setOpenSections] = useState<string[]>(() =>

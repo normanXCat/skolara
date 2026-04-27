@@ -33,6 +33,7 @@ export const ROUTES = {
         NEWS_DETAIL: (id: string | number) => `/admin/news/${id}`,
         CALENDAR: "/admin/calendar",
         SETTINGS: "/admin/settings",
+        LESSON_BOOK: "/admin/lesson-book",
     },
     TEACHER: {
         DASHBOARD: "/teacher/dashboard",
@@ -41,7 +42,29 @@ export const ROUTES = {
         MY_CLASSES: "/teacher/classes",
         PLANNING: "/teacher/planning",
         SETTINGS: "/teacher/settings",
+        MESSAGES: "/teacher/messages",
+        LESSON_BOOK: "/teacher/lesson-book",
     },
+    STUDENT: {
+        DASHBOARD: "/student/dashboard",
+        TIMETABLE: "/student/timetable",
+        REPORTS: "/student/report-cards",
+        GRADES: "/student/grades",
+        ABSENCES: "/student/absences",
+        PAYMENTS: "/student/payments",
+        SETTINGS: "/student/settings",
+        LESSON_BOOK: "/student/lesson-book",
+        MESSAGES: "/student/messages"
+    },
+    PARENT: {
+        DASHBOARD: "/parent/dashboard",
+        TIMETABLE: "/parent/timetable",
+        REPORTS: "/parent/report-cards",
+        PAYMENTS: "/parent/payments",
+        SETTINGS: "/parent/settings",
+        LESSON_BOOK: "/parent/lesson-book",
+        MESSAGES: "/parent/messages"
+    }
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

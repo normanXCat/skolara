@@ -8,7 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default async function MentionsLegalesPage() {
-  const content = await getSetting("mentions_legales");
+  const content = await getSetting("mentions_legales").catch(() => "");
+
   return (
     <LegalPageClient
       title="Mentions Légales"

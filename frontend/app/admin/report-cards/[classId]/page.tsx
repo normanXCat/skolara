@@ -69,6 +69,14 @@ export default function ClassReportCardsPage() {
     }
   };
 
+  const handleExportZip = () => {
+    window.location.href = `/api/admin/report-cards/export-batch/${classId}?semester=${semester}&schoolYear=${schoolYear}`;
+  };
+
+  const handleDownloadSingle = (studentId: number) => {
+    window.location.href = `/api/admin/report-cards/download/${studentId}?semester=${semester}&schoolYear=${schoolYear}`;
+  };
+
   if (loading) return <div className="p-8 animate-pulse text-center">Chargement...</div>;
 
   return (
@@ -109,8 +117,17 @@ export default function ClassReportCardsPage() {
             disabled={generating}
             className="h-14 px-6 rounded-full font-black gap-2 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
           >
-            <IconFileExport size={20} />
+            <IconCircleCheck size={20} />
             {generating ? 'Génération...' : 'Tout Générer'}
+          </Button>
+
+          <Button 
+            onClick={handleExportZip} 
+            variant="outline"
+            className="h-14 px-6 rounded-full font-black gap-2 border-border/40 hover:bg-muted shadow-sm"
+          >
+            <IconFileExport size={20} />
+            Exporter ZIP
           </Button>
         </div>
       </div>
@@ -162,7 +179,12 @@ export default function ClassReportCardsPage() {
                   </Button>
                   
                   {item.reportCards?.length > 0 && (
-                    <Button size="icon" variant="secondary" className="rounded-xl h-10 w-10">
+                    <Button 
+                      size="icon" 
+                      variant="secondary" 
+                      onClick={() => handleDownloadSingle(item.id)}
+                      className="rounded-xl h-10 w-10"
+                    >
                        <IconFileExport size={18} />
                     </Button>
                   )}
