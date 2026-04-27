@@ -15,7 +15,14 @@ const errorHandler = (err, _req, res, _next) => {
     const status = "status" in err ? (err.status ?? 500) : 500;
     const message = err.message || "Erreur interne du serveur";
     const { details, status: _s, message: _m, ...rest } = err;
-    console.error(`[ERROR] ${status} – ${message}`, details ?? "");
+    // Logging amélioré
+    console.error(`[ERROR] ${status} – ${message}`);
+    if (err instanceof Error && err.stack) {
+        console.error(err.stack);
+    }
+    if (details) {
+        console.error("Details:", JSON.stringify(details, null, 2));
+    }
     res.status(status).json({
         success: false,
         error: message,
