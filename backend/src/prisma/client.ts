@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { PrismaClient } from "../generated/prisma";
+import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 function createPrismaClient(): PrismaClient {
@@ -9,9 +10,18 @@ function createPrismaClient(): PrismaClient {
         throw new Error("[Prisma] DATABASE_URL est manquant sur Render !");
     }
 
-    const adapter = new PrismaPg({ connectionString });
+    const isProduction = process.env.NODE_ENV === "production";
+    
+    // Configuration du pool avec SSL pour Render/Production
+    const pool = new Pool({
+        connectionString,
+        ssl: isProduction ? { rejectUnauthorized: false } : false,
+    });
+
+    const adapter = new PrismaPg(pool);
     return new PrismaClient({ adapter });
 }
+
 
 declare global {
     var prisma: PrismaClient | undefined;
