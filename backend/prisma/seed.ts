@@ -11,9 +11,14 @@ async function main() {
     const DATABASE_URL = process.env.DATABASE_URL;
     if (!DATABASE_URL) throw new Error("DATABASE_URL manquant");
 
+    const isProduction = process.env.NODE_ENV === "production";
     const prisma = new PrismaClient({
-        adapter: new PrismaPg({ connectionString: DATABASE_URL }),
+        adapter: new PrismaPg({ 
+            connectionString: DATABASE_URL,
+            ssl: isProduction ? { rejectUnauthorized: false } : false 
+        }),
     });
+
 
     try {
         // 1. School Levels (niveaux scolaires)
