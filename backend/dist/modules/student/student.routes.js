@@ -113,5 +113,39 @@ router.patch("/notifications/:id/read", notifications_controller_1.default.markA
  *       200: { description: Compteur }
  */
 router.get("/notifications/unread-count", notifications_controller_1.default.getUnreadCount);
+// Report Cards
+const student_report_cards_controller_1 = __importDefault(require("./report-cards/student-report-cards.controller"));
+/**
+ * @swagger
+ * /student/report-cards:
+ *   get:
+ *     tags: [Students]
+ *     summary: Bulletins de l'élève
+ *     security: [{ bearerAuth: [] }]
+ */
+router.get("/report-cards", student_report_cards_controller_1.default.getMyReportCards);
+/**
+ * @swagger
+ * /student/report-cards/{id}/download:
+ *   get:
+ *     tags: [Students]
+ *     summary: Télécharger un bulletin en PDF
+ *     security: [{ bearerAuth: [] }]
+ */
+router.get("/report-cards/:id/download", student_report_cards_controller_1.default.downloadMyPdf);
+// Payments
+const student_payments_controller_1 = __importDefault(require("./payments/student-payments.controller"));
+/**
+ * @swagger
+ * /student/payments:
+ *   get:
+ *     tags: [Students]
+ *     summary: Historique et stats des paiements de l'élève
+ *     security: [{ bearerAuth: [] }]
+ */
+router.get("/payments", student_payments_controller_1.default.getMyPayments);
+// Lesson Book
+const lesson_book_routes_1 = __importDefault(require("./lesson-book/lesson-book.routes"));
+router.use("/lesson-book", lesson_book_routes_1.default);
 exports.default = router;
 //# sourceMappingURL=student.routes.js.map

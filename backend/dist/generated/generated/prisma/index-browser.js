@@ -274,10 +274,15 @@ exports.Prisma.AbsenceScalarFieldEnum = {
 exports.Prisma.PaymentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
-  amount: 'amount',
-  dueDate: 'dueDate',
+  feeType: 'feeType',
+  amountDue: 'amountDue',
+  amountPaid: 'amountPaid',
   status: 'status',
-  paymentDate: 'paymentDate',
+  dueDate: 'dueDate',
+  paidAt: 'paidAt',
+  paymentMethod: 'paymentMethod',
+  reference: 'reference',
+  note: 'note',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -361,6 +366,30 @@ exports.Prisma.SiteSettingsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  senderId: 'senderId',
+  receiverId: 'receiverId',
+  subject: 'subject',
+  content: 'content',
+  isRead: 'isRead',
+  sentAt: 'sentAt',
+  readAt: 'readAt'
+};
+
+exports.Prisma.LessonBookScalarFieldEnum = {
+  id: 'id',
+  teacherId: 'teacherId',
+  classId: 'classId',
+  subjectId: 'subjectId',
+  lessonDate: 'lessonDate',
+  content: 'content',
+  homework: 'homework',
+  homeworkDueDate: 'homeworkDueDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -402,8 +431,14 @@ exports.AbsenceStatus = exports.$Enums.AbsenceStatus = {
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
   PAID: 'PAID',
   LATE: 'LATE'
+};
+
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  MVOLA: 'MVOLA',
+  ORANGE_MONEY: 'ORANGE_MONEY'
 };
 
 exports.NotificationType = exports.$Enums.NotificationType = {
@@ -441,7 +476,9 @@ exports.Prisma.ModelName = {
   ContactMessage: 'ContactMessage',
   CalendarEvent: 'CalendarEvent',
   CalendarEventType: 'CalendarEventType',
-  SiteSettings: 'SiteSettings'
+  SiteSettings: 'SiteSettings',
+  Message: 'Message',
+  LessonBook: 'LessonBook'
 };
 
 /**

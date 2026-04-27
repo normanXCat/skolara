@@ -117,9 +117,14 @@ export declare class StudentsRepository {
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
-            amount: number;
+            feeType: string;
+            amountDue: number;
+            amountPaid: number;
             dueDate: Date;
-            paymentDate: Date | null;
+            paidAt: Date | null;
+            paymentMethod: import("../../../generated/prisma").$Enums.PaymentMethod | null;
+            reference: string | null;
+            note: string | null;
         }[];
     } & {
         status: import("../../../generated/prisma").$Enums.StudentStatus;

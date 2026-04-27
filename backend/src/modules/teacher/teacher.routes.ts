@@ -112,7 +112,11 @@ router.get(
     (req, res, next) => teacherTimetableController.getMyTimetable(req, res, next)
 );
 
-// 4. Notifications
+// 4. Cahier de Texte
+import lessonBookRoutes from "./lesson-book/lesson-book.routes";
+router.use("/lesson-book", lessonBookRoutes);
+
+// 5. Notifications
 import notificationsController from "../notifications/notifications.controller";
 router.get("/notifications", authenticate, authorize("ENSEIGNANT"), notificationsController.getAll);
 router.get("/notifications/unread-count", authenticate, authorize("ENSEIGNANT"), notificationsController.getUnreadCount);

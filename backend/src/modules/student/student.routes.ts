@@ -119,4 +119,42 @@ router.patch("/notifications/:id/read", notificationsController.markAsRead);
  */
 router.get("/notifications/unread-count", notificationsController.getUnreadCount);
 
+// Report Cards
+import studentReportCardsController from "./report-cards/student-report-cards.controller";
+/**
+ * @swagger
+ * /student/report-cards:
+ *   get:
+ *     tags: [Students]
+ *     summary: Bulletins de l'élève
+ *     security: [{ bearerAuth: [] }]
+ */
+router.get("/report-cards", studentReportCardsController.getMyReportCards);
+
+/**
+ * @swagger
+ * /student/report-cards/{id}/download:
+ *   get:
+ *     tags: [Students]
+ *     summary: Télécharger un bulletin en PDF
+ *     security: [{ bearerAuth: [] }]
+ */
+router.get("/report-cards/:id/download", studentReportCardsController.downloadMyPdf);
+
+// Payments
+import studentPaymentsController from "./payments/student-payments.controller";
+/**
+ * @swagger
+ * /student/payments:
+ *   get:
+ *     tags: [Students]
+ *     summary: Historique et stats des paiements de l'élève
+ *     security: [{ bearerAuth: [] }]
+ */
+router.get("/payments", studentPaymentsController.getMyPayments);
+
+// Lesson Book
+import studentLessonBookRoutes from "./lesson-book/lesson-book.routes";
+router.use("/lesson-book", studentLessonBookRoutes);
+
 export default router;

@@ -24,6 +24,8 @@ model User {
   refreshTokens          RefreshToken[]
   student                Student?
   teacher                Teacher?
+  sentMessages           Message[]         @relation("SentMessages")
+  receivedMessages       Message[]         @relation("ReceivedMessages")
 
   @@map("users")
 }
@@ -127,6 +129,7 @@ model Class {
   students      Student[]
   assignments   TeacherSubjectClass[]
   timetables    Timetable[]
+  lessonBooks   LessonBook[]
 
   @@map("classes")
 }
@@ -142,6 +145,7 @@ model Subject {
   grades      Grade[]
   assignments TeacherSubjectClass[]
   timetables  Timetable[]
+  lessonBooks LessonBook[]
 
   @@map("subjects")
 }
@@ -159,6 +163,7 @@ model Teacher {
   assignments   TeacherSubjectClass[]
   user          User                  @relation(fields: [userId], references: [id])
   timetables    Timetable[]
+  lessonBooks   LessonBook[]
 
   @@map("teachers")
 }
@@ -237,15 +242,20 @@ model Absence {
 }
 
 model Payment {
-  id          Int           @id @default(autoincrement())
-  studentId   Int
-  amount      Float
-  dueDate     DateTime
-  status      PaymentStatus @default(PENDING)
-  paymentDate DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  student     Student       @relation(fields: [studentId], references: [id])
+  id            Int            @id @default(autoincrement())
+  studentId     Int
+  feeType       String
+  amountDue     Float
+  amountPaid    Float          @default(0)
+  status        PaymentStatus  @default(PENDING)
+  dueDate       DateTime
+  paidAt        DateTime?
+  paymentMethod PaymentMethod?
+  reference     String?
+  note          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  student       Student        @relation(fields: [studentId], references: [id])
 
   @@map("payments")
 }
@@ -379,6 +389,7 @@ enum StudentStatus {
 
 enum PaymentStatus {
   PENDING
+  PARTIAL
   PAID
   LATE
 }
@@ -393,4 +404,44 @@ enum ArticleStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+enum PaymentMethod {
+  MVOLA
+  ORANGE_MONEY
+}
+
+model Message {
+  id         Int       @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  subject    String
+  content    String    @db.Text
+  isRead     Boolean   @default(false)
+  sentAt     DateTime  @default(now())
+  readAt     DateTime?
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  @@map("messages")
+}
+
+model LessonBook {
+  id              Int       @id @default(autoincrement())
+  teacherId       Int
+  classId         Int
+  subjectId       Int
+  lessonDate      DateTime
+  content         String    @db.Text
+  homework        String?   @db.Text
+  homeworkDueDate DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+
+  @@map("lesson_books")
 }

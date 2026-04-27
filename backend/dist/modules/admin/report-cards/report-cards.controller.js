@@ -7,6 +7,7 @@ exports.ReportCardsController = void 0;
 const report_cards_service_1 = __importDefault(require("./report-cards.service"));
 const pdf_service_1 = __importDefault(require("../../../lib/pdf/pdf.service"));
 const report_card_template_1 = require("./templates/report-card.template");
+const archiver_1 = __importDefault(require("archiver"));
 class ReportCardsController {
     async downloadPdf(req, res, next) {
         try {
@@ -87,6 +88,41 @@ class ReportCardsController {
         }
         catch (error) {
             next(error);
+        }
+    }
+    async exportBatch(req, res, next) {
+        try {
+            const classId = Number(req.params.classId);
+            const semester = Number(req.query.semester) || 1;
+            const schoolYear = req.query.schoolYear || "2024-2025";
+            const reportCardsStatus = await report_cards_service_1.default.getStatusByClass(classId, schoolYear, semester);
+            if (!reportCardsStatus.class) {
+                res.status(404).json({ success: false, message: "Classe introuvable" });
+                return;
+            }
+            res.setHeader("Content-Type", "application/zip");
+            res.setHeader("Content-Disposition", `attachment; filename="report-cards-${reportCardsStatus.class.name}-S${semester}-${schoolYear}.zip"`);
+            const archive = (0, archiver_1.default)("zip", { zlib: { level: 9 } });
+            archive.on("error", (err) => { throw err; });
+            archive.pipe(res);
+            for (const studentData of reportCardsStatus.students) {
+                if (studentData.reportCards && studentData.reportCards.length > 0) {
+                    const data = await report_cards_service_1.default.getPreviewData(studentData.id, schoolYear, semester);
+                    const html = (0, report_card_template_1.getReportCardHtml)({ ...data, semester, schoolYear });
+                    const pdfBuffer = await pdf_service_1.default.generateFromHtml(html);
+                    const fileName = `Bulletin_${data.student.lastName || ''}_${data.student.firstName || ''}_S${semester}.pdf`.replace(/\s+/g, '_');
+                    archive.append(pdfBuffer, { name: fileName });
+                }
+            }
+            await archive.finalize();
+        }
+        catch (error) {
+            if (!res.headersSent) {
+                next(error);
+            }
+            else {
+                console.error("Error during zip streaming", error);
+            }
         }
     }
 }

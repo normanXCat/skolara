@@ -23,6 +23,7 @@ const parent_routes_1 = __importDefault(require("./modules/parent/parent.routes"
 const news_routes_1 = __importDefault(require("./modules/news/news.routes"));
 const contact_routes_1 = __importDefault(require("./modules/contact/contact.routes"));
 const calendar_routes_1 = __importDefault(require("./modules/calendar/calendar.routes"));
+const messages_routes_1 = __importDefault(require("./modules/messages/messages.routes"));
 /**
  * Application Express principale.
  * Configure les middlewares globaux, les routes et la documentation Swagger.
@@ -65,6 +66,7 @@ app.use("/api/admin", admin_routes_1.default);
 app.use("/api/teacher", teacher_routes_1.default);
 app.use("/api/student", student_routes_1.default);
 app.use("/api/parent", parent_routes_1.default);
+app.use("/api/messages", messages_routes_1.default);
 app.use("/api/notifications", notifications_routes_1.default);
 app.use("/api/pre-registrations", pre_registration_routes_1.default);
 app.use("/api/grades", grade_routes_1.default);

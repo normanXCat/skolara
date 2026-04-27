@@ -5,6 +5,12 @@ export declare class AdminGradesRepository {
      */
     findAll(filters: AdminGradeFiltersInput): Promise<{
         grades: ({
+            subject: {
+                id: number;
+                name: string;
+                code: string;
+                coefficient: number;
+            };
             student: {
                 user: {
                     id: number;
@@ -28,12 +34,6 @@ export declare class AdminGradesRepository {
                 id: number;
                 name: string;
                 level: string;
-            };
-            subject: {
-                id: number;
-                name: string;
-                code: string;
-                coefficient: number;
             };
             teacher: {
                 user: {

@@ -7,6 +7,15 @@ export interface TimetableFilters {
 }
 export declare class TimetablesRepository {
     findMany(filters: TimetableFilters): Promise<({
+        subject: {
+            id: number;
+            name: string;
+            code: string;
+            createdAt: Date;
+            updatedAt: Date;
+            coefficient: number;
+            description: string | null;
+        };
         class: {
             id: number;
             name: string;
@@ -16,15 +25,6 @@ export declare class TimetablesRepository {
             updatedAt: Date;
             headTeacherId: number | null;
             maxCapacity: number;
-        };
-        subject: {
-            id: number;
-            name: string;
-            code: string;
-            createdAt: Date;
-            updatedAt: Date;
-            coefficient: number;
-            description: string | null;
         };
         teacher: {
             user: {
@@ -53,6 +53,15 @@ export declare class TimetablesRepository {
         room: string | null;
     })[]>;
     findById(id: number): Promise<({
+        subject: {
+            id: number;
+            name: string;
+            code: string;
+            createdAt: Date;
+            updatedAt: Date;
+            coefficient: number;
+            description: string | null;
+        };
         class: {
             id: number;
             name: string;
@@ -62,15 +71,6 @@ export declare class TimetablesRepository {
             updatedAt: Date;
             headTeacherId: number | null;
             maxCapacity: number;
-        };
-        subject: {
-            id: number;
-            name: string;
-            code: string;
-            createdAt: Date;
-            updatedAt: Date;
-            coefficient: number;
-            description: string | null;
         };
         teacher: {
             user: {
@@ -150,6 +150,15 @@ export declare class TimetablesRepository {
         excludeId?: number;
     }): Promise<{
         classConflict: ({
+            subject: {
+                id: number;
+                name: string;
+                code: string;
+                createdAt: Date;
+                updatedAt: Date;
+                coefficient: number;
+                description: string | null;
+            };
             class: {
                 id: number;
                 name: string;
@@ -159,15 +168,6 @@ export declare class TimetablesRepository {
                 updatedAt: Date;
                 headTeacherId: number | null;
                 maxCapacity: number;
-            };
-            subject: {
-                id: number;
-                name: string;
-                code: string;
-                createdAt: Date;
-                updatedAt: Date;
-                coefficient: number;
-                description: string | null;
             };
         } & {
             id: number;

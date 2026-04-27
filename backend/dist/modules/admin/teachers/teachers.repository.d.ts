@@ -61,6 +61,15 @@ export declare class TeachersRepository {
             updatedAt: Date;
         };
         assignments: ({
+            subject: {
+                id: number;
+                name: string;
+                code: string;
+                createdAt: Date;
+                updatedAt: Date;
+                coefficient: number;
+                description: string | null;
+            };
             class: {
                 id: number;
                 name: string;
@@ -70,15 +79,6 @@ export declare class TeachersRepository {
                 updatedAt: Date;
                 headTeacherId: number | null;
                 maxCapacity: number;
-            };
-            subject: {
-                id: number;
-                name: string;
-                code: string;
-                createdAt: Date;
-                updatedAt: Date;
-                coefficient: number;
-                description: string | null;
             };
         } & {
             classId: number;

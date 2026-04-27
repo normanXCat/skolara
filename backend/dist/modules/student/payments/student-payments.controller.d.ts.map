@@ -1,0 +1,1 @@
+{"version":3,"file":"student-payments.controller.d.ts","sourceRoot":"","sources":["../../../../src/modules/student/payments/student-payments.controller.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAI1D,cAAM,yBAAyB;IACvB,aAAa,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,EAAE,IAAI,EAAE,YAAY;CAgDpE;;AAED,wBAA+C"}

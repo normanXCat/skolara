@@ -1,6 +1,15 @@
 import { TimetableFilters } from "./timetables.repository";
 export declare class TimetablesService {
     getTimetables(filters: TimetableFilters): Promise<({
+        subject: {
+            id: number;
+            name: string;
+            code: string;
+            createdAt: Date;
+            updatedAt: Date;
+            coefficient: number;
+            description: string | null;
+        };
         class: {
             id: number;
             name: string;
@@ -10,15 +19,6 @@ export declare class TimetablesService {
             updatedAt: Date;
             headTeacherId: number | null;
             maxCapacity: number;
-        };
-        subject: {
-            id: number;
-            name: string;
-            code: string;
-            createdAt: Date;
-            updatedAt: Date;
-            coefficient: number;
-            description: string | null;
         };
         teacher: {
             user: {
@@ -47,6 +47,15 @@ export declare class TimetablesService {
         room: string | null;
     })[]>;
     getTimetableById(id: number): Promise<{
+        subject: {
+            id: number;
+            name: string;
+            code: string;
+            createdAt: Date;
+            updatedAt: Date;
+            coefficient: number;
+            description: string | null;
+        };
         class: {
             id: number;
             name: string;
@@ -56,15 +65,6 @@ export declare class TimetablesService {
             updatedAt: Date;
             headTeacherId: number | null;
             maxCapacity: number;
-        };
-        subject: {
-            id: number;
-            name: string;
-            code: string;
-            createdAt: Date;
-            updatedAt: Date;
-            coefficient: number;
-            description: string | null;
         };
         teacher: {
             user: {

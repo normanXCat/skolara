@@ -27,8 +27,10 @@ import { AdminAbsencesRepository } from "./absences/absences.repository";
 import { SettingsController } from "./settings/settings.controller";
 import { SettingsService } from "./settings/settings.service";
 import { SettingsRepository } from "./settings/settings.repository";
+import { PaymentsController } from "./payments/payments.controller";
 
 const router = Router();
+const paymentsController = new PaymentsController();
 
 // Depedency Injection
 const statsService = new StatsService();
@@ -119,6 +121,7 @@ router.get("/report-cards/preview/:studentId", authenticate, authorize("ADMIN"),
 router.post("/report-cards/finalize", authenticate, authorize("ADMIN"), (req, res, next) => reportCardsController.finalize(req, res, next));
 router.post("/report-cards/generate-class", authenticate, authorize("ADMIN"), (req, res, next) => reportCardsController.generateForClass(req, res, next));
 router.get("/report-cards/download/:studentId", authenticate, authorize("ADMIN"), (req, res, next) => reportCardsController.downloadPdf(req, res, next));
+router.get("/report-cards/export-batch/:classId", authenticate, authorize("ADMIN"), (req, res, next) => reportCardsController.exportBatch(req, res, next));
 
 // 9. Notes (Vue admin, lecture seule)
 router.get("/grades", authenticate, authorize("ADMIN"), (req, res, next) => adminGradesController.findAll(req, res, next));
@@ -139,5 +142,14 @@ router.patch("/notifications/:id/read", authenticate, authorize("ADMIN"), notifi
 // 12. Site Settings
 router.get("/settings", (req, res, next) => settingsController.getAll(req, res, next));
 router.put("/settings", authenticate, authorize("ADMIN"), (req, res, next) => settingsController.updateAll(req, res, next));
+
+// 13. Paiements
+router.get("/payments", authenticate, authorize("ADMIN"), (req, res, next) => paymentsController.getAll(req, res, next));
+router.get("/payments/stats", authenticate, authorize("ADMIN"), (req, res, next) => paymentsController.getStats(req, res, next));
+router.patch("/payments/:id", authenticate, authorize("ADMIN"), (req, res, next) => paymentsController.updatePayment(req, res, next));
+
+// 14. Cahier de Texte
+import adminLessonBookRoutes from "./lesson-book/lesson-book.routes";
+router.use("/lesson-book", authenticate, authorize("ADMIN"), adminLessonBookRoutes);
 
 export default router;

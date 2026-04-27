@@ -135,7 +135,7 @@ export class StatsService {
             paymentAlerts: paymentAlerts.map((p) => ({
                 id: p.id,
                 studentName: `${p.student.user.firstName} ${p.student.user.name}`,
-                amount: p.amount,
+                amount: p.amountDue,
                 dueDate: p.dueDate,
             })),
             latestPreRegistrations,
