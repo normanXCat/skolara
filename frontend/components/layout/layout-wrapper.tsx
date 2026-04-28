@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
+import { useEffect, Suspense, createContext } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ROUTES } from "@/config/routes";
 import { ToastContainer } from "@/components/ui/toast";
@@ -12,6 +12,11 @@ interface LayoutWrapperProps {
     navbar: React.ReactNode;
     footer: React.ReactNode;
 }
+
+export const LayoutContext = createContext<{
+    navbar: React.ReactNode;
+    footer: React.ReactNode;
+}>({ navbar: null, footer: null });
 
 function AccessDeniedHandler() {
     const searchParams = useSearchParams();
@@ -44,7 +49,7 @@ export function LayoutWrapper({ children, navbar, footer }: LayoutWrapperProps) 
         pathname.startsWith("/student");
 
     return (
-        <>
+        <LayoutContext.Provider value={{ navbar, footer }}>
             <Suspense fallback={null}>
                 <AccessDeniedHandler />
             </Suspense>
@@ -53,7 +58,6 @@ export function LayoutWrapper({ children, navbar, footer }: LayoutWrapperProps) 
             {!hideLayout && footer}
             <ToastContainer />
             <NetworkStatus />
-        </>
+        </LayoutContext.Provider>
     );
 }
-

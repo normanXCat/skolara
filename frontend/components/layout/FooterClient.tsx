@@ -281,7 +281,7 @@ export function FooterClient({ settings }: FooterClientProps) {
                                             showUnderline={false}
                                             className="gap-3"
                                         >
-                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                                                 <IconMail className="size-4" />
                                             </div>
                                             {displayEmail}
@@ -297,7 +297,7 @@ export function FooterClient({ settings }: FooterClientProps) {
                                             showUnderline={false}
                                             className="gap-3"
                                         >
-                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                                                 <IconPhone className="size-4" />
                                             </div>
                                             {displayPhone}
@@ -306,7 +306,7 @@ export function FooterClient({ settings }: FooterClientProps) {
                                 )}
                                 {displayLocation && (
                                     <li className="flex items-start gap-3 text-sm font-semibold text-muted-foreground">
-                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary/60">
+                                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary/60">
                                             <IconMapPin className="size-4" />
                                         </div>
                                         <span className="mt-1.5">

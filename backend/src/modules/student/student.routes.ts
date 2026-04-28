@@ -141,6 +141,10 @@ router.get("/report-cards", studentReportCardsController.getMyReportCards);
  */
 router.get("/report-cards/:id/download", studentReportCardsController.downloadMyPdf);
 
+// Absences
+import studentAbsencesController from "./absences/student-absences.controller";
+router.get("/absences", studentAbsencesController.getMyAbsences);
+
 // Payments
 import studentPaymentsController from "./payments/student-payments.controller";
 /**

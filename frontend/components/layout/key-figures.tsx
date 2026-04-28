@@ -6,37 +6,7 @@ import WrapperSection from "@/components/wrapper-section";
 import { Typography } from "@/components/ui/typography";
 import { IconTrophy, IconCircleCheck, IconStar } from "@tabler/icons-react";
 
-// ──────────────────────────────────────────────
-// DATA
-// ──────────────────────────────────────────────
-
-const figures = [
-    {
-        value: 1200,
-        suffix: "+",
-        label: "Élèves",
-    },
-    {
-        value: 85,
-        suffix: "",
-        label: "Experts",
-    },
-    {
-        value: 48,
-        suffix: "",
-        label: "Classes",
-    },
-    {
-        value: 25,
-        suffix: " ans",
-        label: "Expansion",
-    },
-    {
-        value: 97,
-        suffix: "%",
-        label: "Réussite",
-    },
-];
+import api from "@/lib/api-client";
 
 // ──────────────────────────────────────────────
 // ANIMATED COUNTER
@@ -46,28 +16,13 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
     const [count, setCount] = React.useState(0);
     const [hasAnimated, setHasAnimated] = React.useState(false);
     const ref = React.useRef<HTMLSpanElement>(null);
+    const countRef = React.useRef(0);
 
     React.useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && !hasAnimated) {
                     setHasAnimated(true);
-
-                    const duration = 2000;
-                    const steps = 60;
-                    const increment = value / steps;
-                    let current = 0;
-                    const interval = duration / steps;
-
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= value) {
-                            setCount(value);
-                            clearInterval(timer);
-                        } else {
-                            setCount(Math.floor(current));
-                        }
-                    }, interval);
                 }
             },
             { threshold: 0.3 },
@@ -75,6 +30,35 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 
         if (ref.current) observer.observe(ref.current);
         return () => observer.disconnect();
+    }, [hasAnimated]);
+
+    React.useEffect(() => {
+        if (!hasAnimated) return;
+
+        const diff = value - countRef.current;
+        if (diff === 0) return;
+
+        const duration = 2000;
+        const steps = 60;
+        const increment = diff / Math.max(1, steps);
+        const interval = duration / steps;
+
+        let current = countRef.current;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if ((increment > 0 && current >= value) || (increment < 0 && current <= value)) {
+                countRef.current = value;
+                setCount(value);
+                clearInterval(timer);
+            } else {
+                const newCount = Math.floor(current);
+                countRef.current = newCount;
+                setCount(newCount);
+            }
+        }, interval);
+
+        return () => clearInterval(timer);
     }, [value, hasAnimated]);
 
     return (
@@ -90,6 +74,63 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 // ──────────────────────────────────────────────
 
 export default function KeyFigures() {
+    const [stats, setStats] = React.useState({
+        students: 1200,
+        experts: 85,
+        classes: 48,
+        expansion: 25,
+        successRate: 97
+    });
+
+    React.useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const response = await api.get<{
+                    students: number;
+                    experts: number;
+                    classes: number;
+                    expansion: number;
+                    successRate: number;
+                }>("/public/key-figures");
+            
+                if (response.success) {
+                    setStats(response.data);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération des chiffres-clés", error);
+            }
+        };
+        fetchStats();
+    }, []);
+
+    const figures = [
+        {
+            value: stats.students,
+            suffix: "+",
+            label: "Élèves",
+        },
+        {
+            value: stats.experts,
+            suffix: "",
+            label: "Experts",
+        },
+        {
+            value: stats.classes,
+            suffix: "",
+            label: "Classes",
+        },
+        {
+            value: stats.expansion,
+            suffix: " ans",
+            label: "Expansion",
+        },
+        {
+            value: stats.successRate,
+            suffix: "%",
+            label: "Réussite",
+        },
+    ];
+
     return (
         <WrapperSection
             className="relative overflow-hidden py-32"

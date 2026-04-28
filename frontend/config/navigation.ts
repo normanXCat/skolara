@@ -169,6 +169,7 @@ export const TEACHER_NAVIGATION_LINKS = [
         label: "Mes Classes",
         href: ROUTES.TEACHER.MY_CLASSES,
         icon: "IconDoor",
+        disabled: true,
     },
     {
         label: "Notes",
@@ -189,6 +190,16 @@ export const TEACHER_NAVIGATION_LINKS = [
         label: "Cahier de Texte",
         href: ROUTES.TEACHER.LESSON_BOOK,
         icon: "IconBook",
+        subLinks: [
+            {
+                label: "Vos cahiers",
+                href: ROUTES.TEACHER.LESSON_BOOK,
+            },
+            {
+                label: "Nouvelle entrée",
+                href: ROUTES.TEACHER.LESSON_BOOK + "/new",
+            },
+        ],
     },
     {
         label: "Messages",
@@ -199,6 +210,7 @@ export const TEACHER_NAVIGATION_LINKS = [
         label: "Paramètres",
         href: ROUTES.TEACHER.SETTINGS,
         icon: "IconSettings",
+        disabled: true,
     },
 ] as const;
 
@@ -208,18 +220,18 @@ export const STUDENT_NAVIGATION_LINKS = [
     { label: "Notes", href: ROUTES.STUDENT.GRADES, icon: "IconFileCertificate" },
     { label: "Absences", href: ROUTES.STUDENT.ABSENCES, icon: "IconUserX" },
     { label: "Bulletins", href: ROUTES.STUDENT.REPORTS, icon: "IconFileAnalytics" },
-    { label: "Paiements", href: ROUTES.STUDENT.PAYMENTS, icon: "IconCreditCard" },
+    { label: "Paiements", href: ROUTES.STUDENT.PAYMENTS, icon: "IconCreditCard", disabled: true },
     { label: "Cahier de Texte", href: ROUTES.STUDENT.LESSON_BOOK, icon: "IconBook" },
     { label: "Messages", href: ROUTES.STUDENT.MESSAGES, icon: "IconMessages" },
-    { label: "Paramètres", href: ROUTES.STUDENT.SETTINGS, icon: "IconSettings" },
+    { label: "Paramètres", href: ROUTES.STUDENT.SETTINGS, icon: "IconSettings", disabled: true },
 ] as const;
 
 export const PARENT_NAVIGATION_LINKS = [
     { label: "Tableau de bord", href: ROUTES.PARENT.DASHBOARD, icon: "IconDashboard" },
     { label: "Planning", href: ROUTES.PARENT.TIMETABLE, icon: "IconCalendarTime" },
-    { label: "Bulletins", href: ROUTES.PARENT.REPORTS, icon: "IconFileAnalytics" },
-    { label: "Paiements", href: ROUTES.PARENT.PAYMENTS, icon: "IconCreditCard" },
+    { label: "Bulletins", href: ROUTES.PARENT.REPORTS, icon: "IconFileAnalytics", disabled: true },
+    { label: "Paiements", href: ROUTES.PARENT.PAYMENTS, icon: "IconCreditCard", disabled: true },
     { label: "Cahier de Texte", href: ROUTES.PARENT.LESSON_BOOK, icon: "IconBook" },
     { label: "Messages", href: ROUTES.PARENT.MESSAGES, icon: "IconMessages" },
-    { label: "Paramètres", href: ROUTES.PARENT.SETTINGS, icon: "IconSettings" },
+    { label: "Paramètres", href: ROUTES.PARENT.SETTINGS, icon: "IconSettings", disabled: true },
 ] as const;
