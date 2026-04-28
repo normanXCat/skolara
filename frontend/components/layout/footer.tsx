@@ -6,6 +6,6 @@ import { FooterClient } from "./FooterClient";
  * Récupère les paramètres du site côté serveur pour un rendu optimal (SEO/Performance).
  */
 export default async function Footer() {
-    const settings = await getSettings();
+    const settings = await getSettings().catch(() => ({}));
     return <FooterClient settings={settings} />;
 }
