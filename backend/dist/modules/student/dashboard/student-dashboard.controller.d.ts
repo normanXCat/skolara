@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 export declare class StudentDashboardController {
-    getDashboardData(req: Request, res: Response, next: NextFunction): Promise<void>;
+    getDashboardData: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     private calculateAverages;
 }
 declare const _default: StudentDashboardController;

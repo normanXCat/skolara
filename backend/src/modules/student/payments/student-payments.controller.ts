@@ -3,7 +3,7 @@ import { prisma } from "../../../prisma/client";
 import { computePaymentStatus } from "../../../lib/payments/compute-status";
 
 class StudentPaymentsController {
-  async getMyPayments(req: Request, res: Response, next: NextFunction) {
+  getMyPayments = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.id;
 

@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { prisma } from "../../../prisma/client";
 
 export class StudentLessonBookController {
-  async getMyLessonBooks(req: Request, res: Response, next: NextFunction) {
+  getMyLessonBooks = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const studentUserId = (req as any).user.id;
+      const studentUserId = (req as any).user.userId;
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 20;
 

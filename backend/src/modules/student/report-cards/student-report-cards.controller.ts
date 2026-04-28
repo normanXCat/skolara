@@ -5,7 +5,7 @@ import reportCardsService from "../../admin/report-cards/report-cards.service";
 import { getReportCardHtml } from "../../admin/report-cards/templates/report-card.template";
 
 export class StudentReportCardsController {
-  async getMyReportCards(req: Request, res: Response, next: NextFunction) {
+  getMyReportCards = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const student = await prisma.student.findUnique({
         where: { userId: (req as any).user!.id },
@@ -26,7 +26,7 @@ export class StudentReportCardsController {
     }
   }
 
-  async downloadMyPdf(req: Request, res: Response, next: NextFunction) {
+  downloadMyPdf = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reportCardId = Number(req.params.id);
       const student = await prisma.student.findUnique({

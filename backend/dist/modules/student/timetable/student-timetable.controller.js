@@ -7,26 +7,28 @@ exports.StudentTimetableController = void 0;
 const timetables_service_1 = __importDefault(require("../../admin/timetables/timetables.service"));
 const client_1 = require("../../../prisma/client");
 class StudentTimetableController {
-    async getMyTimetable(req, res, next) {
-        try {
-            const userId = req.user.userId;
-            const student = await client_1.prisma.student.findUnique({ where: { userId } });
-            if (!student || !student.classId) {
-                throw { status: 403, message: "Student profile or class not found" };
+    constructor() {
+        this.getMyTimetable = async (req, res, next) => {
+            try {
+                const userId = req.user.userId;
+                const student = await client_1.prisma.student.findUnique({ where: { userId } });
+                if (!student || !student.classId) {
+                    throw { status: 403, message: "Student profile or class not found" };
+                }
+                const schoolYear = req.query.schoolYear || student.schoolYear;
+                const timetables = await timetables_service_1.default.getTimetables({
+                    classId: student.classId,
+                    schoolYear,
+                });
+                res.status(200).json({
+                    success: true,
+                    data: timetables,
+                });
             }
-            const schoolYear = req.query.schoolYear || student.schoolYear;
-            const timetables = await timetables_service_1.default.getTimetables({
-                classId: student.classId,
-                schoolYear,
-            });
-            res.status(200).json({
-                success: true,
-                data: timetables,
-            });
-        }
-        catch (error) {
-            next(error);
-        }
+            catch (error) {
+                next(error);
+            }
+        };
     }
 }
 exports.StudentTimetableController = StudentTimetableController;

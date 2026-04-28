@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { prisma } from "../../../prisma/client";
 
 export class StudentGradesController {
-  async getMyGrades(req: Request, res: Response, next: NextFunction) {
+  getMyGrades = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
       const student = await prisma.student.findUnique({ where: { userId } });
@@ -58,7 +58,7 @@ export class StudentGradesController {
     }
   }
 
-  async getGradesBySubject(req: Request, res: Response, next: NextFunction) {
+  getGradesBySubject = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
       const subjectId = Number(req.params.subjectId);
