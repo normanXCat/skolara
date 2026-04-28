@@ -150,7 +150,7 @@ export function TeacherMessagesClient() {
   return (
     <div className="relative z-10 space-y-8 pb-20">
       <div className="grid grid-cols-1 lg:grid-cols-[360px_minmax(0,1fr)] gap-6 items-start">
-        <div className="self-start lg:sticky lg:top-24 lg:h-[calc(100vh-10rem)]">
+        <div className="self-start lg:sticky lg:top-0">
           <Card className="rounded-3xl border-border/40 bg-background/40 backdrop-blur-xl h-full">
             <CardContent className="p-5 h-full flex flex-col gap-4">
             <InputReusable
@@ -238,7 +238,7 @@ export function TeacherMessagesClient() {
           </Card>
         </div>
 
-        <div className="self-start lg:sticky lg:top-24 lg:h-[calc(100vh-10rem)]">
+        <div className="self-start lg:sticky lg:top-0 lg:h-[calc(100vh-2rem)]">
           <Card className="rounded-3xl border-border/40 bg-background/40 backdrop-blur-xl h-full">
             <CardContent className="p-0 h-full overflow-hidden flex flex-col">
               {!selectedPeerId ? (

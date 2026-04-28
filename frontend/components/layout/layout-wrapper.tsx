@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ROUTES } from "@/config/routes";
 import { ToastContainer } from "@/components/ui/toast";
@@ -13,17 +13,10 @@ interface LayoutWrapperProps {
     footer: React.ReactNode;
 }
 
-export function LayoutWrapper({ children, navbar, footer }: LayoutWrapperProps) {
-    const pathname = usePathname();
+function AccessDeniedHandler() {
     const searchParams = useSearchParams();
+    const pathname = usePathname();
     const router = useRouter();
-
-    // Routes où le Navbar et le Footer ne doivent pas être affichés
-    const hideLayout =
-        pathname === ROUTES.LOGIN ||
-        pathname === ROUTES.PRE_REGISTRATION ||
-        pathname.startsWith("/admin") ||
-        pathname.startsWith("/teacher");
 
     useEffect(() => {
         if (searchParams.get("accessDenied") !== "1") return;
@@ -36,8 +29,25 @@ export function LayoutWrapper({ children, navbar, footer }: LayoutWrapperProps) 
         router.replace(nextUrl);
     }, [pathname, router, searchParams]);
 
+    return null;
+}
+
+export function LayoutWrapper({ children, navbar, footer }: LayoutWrapperProps) {
+    const pathname = usePathname();
+
+    // Routes où le Navbar et le Footer ne doivent pas être affichés
+    const hideLayout =
+        pathname === ROUTES.LOGIN ||
+        pathname === ROUTES.PRE_REGISTRATION ||
+        pathname.startsWith("/admin") ||
+        pathname.startsWith("/teacher") ||
+        pathname.startsWith("/student");
+
     return (
         <>
+            <Suspense fallback={null}>
+                <AccessDeniedHandler />
+            </Suspense>
             {!hideLayout && navbar}
             <main className="flex-1">{children}</main>
             {!hideLayout && footer}

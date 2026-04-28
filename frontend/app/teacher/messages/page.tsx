@@ -1,5 +1,6 @@
 import { TeacherMessagesClient } from "@/components/teacher/messages/TeacherMessagesClient";
 import Link from "next/link";
+import { Suspense } from "react";
 import { ButtonReusable } from "@/components/ui/button-reusable";
 import { Typography } from "@/components/ui/typography";
 import { IconChevronLeft, IconMessagePlus } from "@tabler/icons-react";
@@ -38,7 +39,9 @@ export default function TeacherMessagesPage() {
           </Link>
         </div>
       </div>
-      <TeacherMessagesClient />
+      <Suspense fallback={<div className="animate-pulse h-[600px] rounded-3xl bg-white/5 border border-white/10" />}>
+        <TeacherMessagesClient />
+      </Suspense>
     </div>
   );
 }

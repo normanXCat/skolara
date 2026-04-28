@@ -32,7 +32,7 @@ type ThreadResponse = {
   messages: any[];
 };
 
-export function AdminMessagesClient() {
+export function StudentMessagesClient() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -154,7 +154,7 @@ export function AdminMessagesClient() {
           <Card className="rounded-3xl border-border/40 bg-background/40 backdrop-blur-xl h-full">
             <CardContent className="p-5 h-full flex flex-col gap-4">
             <InputReusable
-              id="admin-messages-search"
+              id="student-messages-search"
               placeholder="Rechercher une conversation..."
               icon={IconSearch}
               value={searchQuery}
@@ -247,10 +247,10 @@ export function AdminMessagesClient() {
                     <IconMessageCircle size={28} className="text-primary" />
                   </div>
                   <Typography variant="h3" className="text-xl font-black">
-                    Selectionnez une conversation
+                    Sélectionnez une conversation
                   </Typography>
                   <Typography variant="body" className="text-muted-foreground max-w-md mt-2">
-                    Cliquez sur une personne a gauche pour ouvrir la discussion.
+                    Cliquez sur une personne à gauche pour ouvrir la discussion.
                   </Typography>
                 </div>
               ) : (
@@ -326,8 +326,8 @@ export function AdminMessagesClient() {
                   <div className="sticky bottom-0 z-10 p-5 border-t border-border/40 bg-background/70 backdrop-blur-xl">
                     <div className="flex items-center gap-3">
                       <InputReusable
-                        id="admin-reply"
-                        placeholder="Ecrire un message..."
+                        id="student-reply"
+                        placeholder="Écrire un message..."
                         value={reply}
                         onChange={(e) => setReply(e.target.value)}
                         onKeyDown={(e: any) => {
