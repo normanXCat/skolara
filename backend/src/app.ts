@@ -19,6 +19,7 @@ import newsRoutes from "./modules/news/news.routes";
 import contactRoutes from "./modules/contact/contact.routes";
 import calendarRoutes from "./modules/calendar/calendar.routes";
 import messagesRoutes from "./modules/messages/messages.routes";
+import publicRoutes from "./modules/public/public.routes";
 
 /**
  * Application Express principale.
@@ -80,6 +81,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/calendar", calendarRoutes);
+app.use("/api/public", publicRoutes);
 
 /* ─── Route de santé ─── */
 app.get("/api/health", (_req: express.Request, res: express.Response) => {

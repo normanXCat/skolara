@@ -24,6 +24,7 @@ const news_routes_1 = __importDefault(require("./modules/news/news.routes"));
 const contact_routes_1 = __importDefault(require("./modules/contact/contact.routes"));
 const calendar_routes_1 = __importDefault(require("./modules/calendar/calendar.routes"));
 const messages_routes_1 = __importDefault(require("./modules/messages/messages.routes"));
+const public_routes_1 = __importDefault(require("./modules/public/public.routes"));
 /**
  * Application Express principale.
  * Configure les middlewares globaux, les routes et la documentation Swagger.
@@ -74,6 +75,7 @@ app.use("/api/upload", upload_routes_1.default);
 app.use("/api/news", news_routes_1.default);
 app.use("/api/contact", contact_routes_1.default);
 app.use("/api/calendar", calendar_routes_1.default);
+app.use("/api/public", public_routes_1.default);
 /* ─── Route de santé ─── */
 app.get("/api/health", (_req, res) => {
     res.json({ success: true, message: "API Skolara opérationnelle" });

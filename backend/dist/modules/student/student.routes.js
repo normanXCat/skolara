@@ -133,6 +133,9 @@ router.get("/report-cards", student_report_cards_controller_1.default.getMyRepor
  *     security: [{ bearerAuth: [] }]
  */
 router.get("/report-cards/:id/download", student_report_cards_controller_1.default.downloadMyPdf);
+// Absences
+const student_absences_controller_1 = __importDefault(require("./absences/student-absences.controller"));
+router.get("/absences", student_absences_controller_1.default.getMyAbsences);
 // Payments
 const student_payments_controller_1 = __importDefault(require("./payments/student-payments.controller"));
 /**
