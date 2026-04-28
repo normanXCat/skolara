@@ -17,6 +17,7 @@ import {
     IconLayoutDashboard,
     IconLogout,
     IconSchool,
+    IconBackpack,
 } from "@tabler/icons-react";
 import { useAuthStore } from "@/stores/auth-store";
 import api from "@/lib/api-client";
@@ -366,6 +367,23 @@ export default function Navbar() {
                                                         </Link>
                                                     </DropdownMenuItem>
                                                 )}
+                                                {user.role === "ELEVE" && (
+                                                    <DropdownMenuItem
+                                                        asChild
+                                                        className="rounded-xl cursor-pointer"
+                                                    >
+                                                        <Link
+                                                            href={
+                                                                ROUTES.STUDENT
+                                                                    .DASHBOARD
+                                                            }
+                                                            className="w-full flex items-center text-foreground/80 hover:text-primary pb-1.5"
+                                                        >
+                                                            <IconBackpack className="mr-2 h-4 w-4" />
+                                                            Espace Élève
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                )}
                                                 <DropdownMenuSeparator className="bg-border/40" />
                                                 <DropdownMenuItem
                                                     onClick={handleLogout}
@@ -599,6 +617,23 @@ export default function Navbar() {
                                                             </Link>
                                                         </DropdownMenuItem>
                                                     )}
+                                                    {user.role === "ELEVE" && (
+                                                        <DropdownMenuItem
+                                                            asChild
+                                                            className="rounded-xl cursor-pointer"
+                                                        >
+                                                            <Link
+                                                                href={
+                                                                    ROUTES.STUDENT
+                                                                        .DASHBOARD
+                                                                }
+                                                                className="w-full flex items-center text-foreground/80 hover:text-primary pb-1.5"
+                                                            >
+                                                                <IconBackpack className="mr-2 h-4 w-4" />
+                                                                Espace Élève
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                    )}
                                                     <DropdownMenuSeparator className="bg-border/40" />
                                                     <DropdownMenuItem
                                                         onClick={handleLogout}
@@ -748,6 +783,10 @@ export default function Navbar() {
                                                             ? "Administrateur"
                                                             : user.role === "ENSEIGNANT"
                                                             ? "Enseignant"
+                                                            : user.role === "ELEVE"
+                                                            ? "Élève"
+                                                            : user.role === "PARENT"
+                                                            ? "Parent"
                                                             : "Utilisateur"}
                                                     </span>
                                                 </div>
@@ -780,6 +819,21 @@ export default function Navbar() {
                                                     className="w-full justify-center mb-1"
                                                 >
                                                     Espace Enseignant
+                                                </ButtonReusable>
+                                            )}
+                                            {user.role === "ELEVE" && (
+                                                <ButtonReusable
+                                                    href={
+                                                        ROUTES.STUDENT.DASHBOARD
+                                                    }
+                                                    variant="outline"
+                                                    size="lg"
+                                                    leftIcon={
+                                                        <IconBackpack className="size-5" />
+                                                    }
+                                                    className="w-full justify-center mb-1"
+                                                >
+                                                    Espace Élève
                                                 </ButtonReusable>
                                             )}
                                             <ButtonReusable

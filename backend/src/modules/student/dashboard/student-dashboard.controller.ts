@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { prisma } from "../../../prisma/client";
 
 export class StudentDashboardController {
-  async getDashboardData(req: Request, res: Response, next: NextFunction) {
+  getDashboardData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
       

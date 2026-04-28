@@ -77,7 +77,9 @@ export function PageContent({ settings = {} }: PageContentProps) {
             phone={settings.phone || "+261 34 00 000 00"}
           />
           <div className="w-full lg:w-[500px] xl:w-[600px]">
-            <ContactForm />
+            <React.Suspense fallback={<div className="h-[400px] rounded-3xl bg-white/20 animate-pulse border border-white/10" />}>
+              <ContactForm />
+            </React.Suspense>
           </div>
         </div>
 

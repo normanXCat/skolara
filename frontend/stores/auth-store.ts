@@ -15,7 +15,7 @@ interface AuthState {
     isAuthenticated: boolean;
 
     /** Fetch the current user from /auth/me */
-    fetchUser: () => Promise<void>;
+    fetchUser: (opts?: { force?: boolean }) => Promise<void>;
 
     /** Set user directly (e.g. after login) */
     setUser: (user: AuthUser) => void;
@@ -29,8 +29,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     isLoading: false,
     isAuthenticated: false,
 
-    fetchUser: async () => {
-        if (get().user || get().isLoading) return; // Already loaded or in-flight
+    fetchUser: async (opts) => {
+        const force = opts?.force === true;
+        if (!force && (get().user || get().isLoading)) return; // Already loaded or in-flight
         set({ isLoading: true });
         try {
             const res = await api.get<AuthUser>("/auth/me");
@@ -56,5 +57,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 if (typeof window !== "undefined") {
     api.setRefreshCallback((userData) => {
         useAuthStore.getState().setUser(userData);
+        // S'assure de re-synchroniser le profil (droits/role) sans rechargement.
+        useAuthStore.getState().fetchUser({ force: true });
     });
 }

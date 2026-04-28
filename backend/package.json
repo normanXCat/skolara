@@ -5,7 +5,7 @@
     "main": "dist/server.js",
     "scripts": {
         "dev": "nodemon --exec ts-node src/server.ts",
-        "build": "npx prisma generate && tsc -p tsconfig.build.json && cp -r src/generated dist/generated",
+        "build": "npx prisma generate && tsc -p tsconfig.build.json && rm -rf dist/generated && cp -r src/generated dist/generated",
         "start": "npx prisma migrate deploy && npx prisma db seed && node dist/server.js",
         "postinstall": "npx prisma generate",
         "test": "jest --forceExit --detectOpenHandles",
@@ -36,6 +36,7 @@
         "@types/jsonwebtoken": "^9.0.10",
         "@types/multer": "^2.1.0",
         "@types/swagger-ui-express": "^4.1.8",
+        "archiver": "^7.0.1",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
@@ -53,6 +54,7 @@
         "zod": "^4.3.6"
     },
     "devDependencies": {
+        "@types/archiver": "^7.0.0",
         "@types/jest": "^29.5.14",
         "@types/node": "^22.0.0",
         "@types/nodemailer": "^8.0.0",

@@ -3,82 +3,84 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudentDashboardController = void 0;
 const client_1 = require("../../../prisma/client");
 class StudentDashboardController {
-    async getDashboardData(req, res, next) {
-        try {
-            const userId = req.user.userId;
-            const student = await client_1.prisma.student.findUnique({
-                where: { userId },
-                include: {
-                    class: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            name: true,
+    constructor() {
+        this.getDashboardData = async (req, res, next) => {
+            try {
+                const userId = req.user.userId;
+                const student = await client_1.prisma.student.findUnique({
+                    where: { userId },
+                    include: {
+                        class: true,
+                        user: {
+                            select: {
+                                firstName: true,
+                                name: true,
+                            },
                         },
                     },
-                },
-            });
-            if (!student) {
-                throw { status: 403, message: "Student profile not found" };
-            }
-            // Recent grades (last 5)
-            const recentGrades = await client_1.prisma.grade.findMany({
-                where: { studentId: student.id },
-                take: 5,
-                orderBy: { gradedAt: "desc" },
-                include: { subject: true },
-            });
-            // Today's timetable
-            const today = new Date().getDay(); // 0=Sunday, 1=Monday...
-            // Map JS day to our 1-5 (Monday-Friday)
-            const dayOfWeek = today === 0 ? 7 : today; // Simple map, adjust if needed (1=Mon, 5=Fri in prompt)
-            const todayTimetable = await client_1.prisma.timetable.findMany({
-                where: {
-                    classId: student.classId || 0,
-                    dayOfWeek: dayOfWeek,
-                    schoolYear: student.schoolYear,
-                },
-                orderBy: { startTime: "asc" },
-                include: { subject: true, teacher: { include: { user: true } } },
-            });
-            // Recent absences (last 5)
-            const recentAbsences = await client_1.prisma.absence.findMany({
-                where: { studentId: student.id },
-                take: 5,
-                orderBy: { date: "desc" },
-            });
-            // Unread notifications
-            const unreadNotifications = await client_1.prisma.notification.count({
-                where: { userId, isRead: false },
-            });
-            // Simple average calculation (can be improved)
-            // For now, let's just return a placeholder or implement basic logic
-            // In real scenario, we'd calculate weighted average per semester
-            const grades = await client_1.prisma.grade.findMany({
-                where: { studentId: student.id },
-                include: { subject: true },
-            });
-            const calculation = this.calculateAverages(grades);
-            res.status(200).json({
-                success: true,
-                data: {
-                    student: {
-                        firstName: student.user.firstName,
-                        lastName: student.user.name,
-                        class: student.class?.name,
+                });
+                if (!student) {
+                    throw { status: 403, message: "Student profile not found" };
+                }
+                // Recent grades (last 5)
+                const recentGrades = await client_1.prisma.grade.findMany({
+                    where: { studentId: student.id },
+                    take: 5,
+                    orderBy: { gradedAt: "desc" },
+                    include: { subject: true },
+                });
+                // Today's timetable
+                const today = new Date().getDay(); // 0=Sunday, 1=Monday...
+                // Map JS day to our 1-5 (Monday-Friday)
+                const dayOfWeek = today === 0 ? 7 : today; // Simple map, adjust if needed (1=Mon, 5=Fri in prompt)
+                const todayTimetable = await client_1.prisma.timetable.findMany({
+                    where: {
+                        classId: student.classId || 0,
+                        dayOfWeek: dayOfWeek,
                         schoolYear: student.schoolYear,
                     },
-                    recentGrades,
-                    todayTimetable,
-                    recentAbsences,
-                    unreadNotifications,
-                    semesterAverages: calculation,
-                },
-            });
-        }
-        catch (error) {
-            next(error);
-        }
+                    orderBy: { startTime: "asc" },
+                    include: { subject: true, teacher: { include: { user: true } } },
+                });
+                // Recent absences (last 5)
+                const recentAbsences = await client_1.prisma.absence.findMany({
+                    where: { studentId: student.id },
+                    take: 5,
+                    orderBy: { date: "desc" },
+                });
+                // Unread notifications
+                const unreadNotifications = await client_1.prisma.notification.count({
+                    where: { userId, isRead: false },
+                });
+                // Simple average calculation (can be improved)
+                // For now, let's just return a placeholder or implement basic logic
+                // In real scenario, we'd calculate weighted average per semester
+                const grades = await client_1.prisma.grade.findMany({
+                    where: { studentId: student.id },
+                    include: { subject: true },
+                });
+                const calculation = this.calculateAverages(grades);
+                res.status(200).json({
+                    success: true,
+                    data: {
+                        student: {
+                            firstName: student.user.firstName,
+                            lastName: student.user.name,
+                            class: student.class?.name,
+                            schoolYear: student.schoolYear,
+                        },
+                        recentGrades,
+                        todayTimetable,
+                        recentAbsences,
+                        unreadNotifications,
+                        semesterAverages: calculation,
+                    },
+                });
+            }
+            catch (error) {
+                next(error);
+            }
+        };
     }
     calculateAverages(grades) {
         // Basic grouping by semester

@@ -109,6 +109,12 @@ export const ADMIN_NAVIGATION_LINKS = [
         ],
     },
     {
+        label: "Cahier de Texte",
+        href: ROUTES.ADMIN.LESSON_BOOK,
+        icon: "IconBook",
+        disabled: false,
+    },
+    {
         label: "Messages",
         href: ROUTES.ADMIN.MESSAGES,
         icon: "IconMessages",
@@ -180,8 +186,40 @@ export const TEACHER_NAVIGATION_LINKS = [
         icon: "IconCalendarTime",
     },
     {
+        label: "Cahier de Texte",
+        href: ROUTES.TEACHER.LESSON_BOOK,
+        icon: "IconBook",
+    },
+    {
+        label: "Messages",
+        href: ROUTES.TEACHER.MESSAGES,
+        icon: "IconMessages",
+    },
+    {
         label: "Paramètres",
         href: ROUTES.TEACHER.SETTINGS,
         icon: "IconSettings",
     },
+] as const;
+
+export const STUDENT_NAVIGATION_LINKS = [
+    { label: "Tableau de bord", href: ROUTES.STUDENT.DASHBOARD, icon: "IconDashboard" },
+    { label: "Planning", href: ROUTES.STUDENT.TIMETABLE, icon: "IconCalendarTime" },
+    { label: "Notes", href: ROUTES.STUDENT.GRADES, icon: "IconFileCertificate" },
+    { label: "Absences", href: ROUTES.STUDENT.ABSENCES, icon: "IconUserX" },
+    { label: "Bulletins", href: ROUTES.STUDENT.REPORTS, icon: "IconFileAnalytics" },
+    { label: "Paiements", href: ROUTES.STUDENT.PAYMENTS, icon: "IconCreditCard" },
+    { label: "Cahier de Texte", href: ROUTES.STUDENT.LESSON_BOOK, icon: "IconBook" },
+    { label: "Messages", href: ROUTES.STUDENT.MESSAGES, icon: "IconMessages" },
+    { label: "Paramètres", href: ROUTES.STUDENT.SETTINGS, icon: "IconSettings" },
+] as const;
+
+export const PARENT_NAVIGATION_LINKS = [
+    { label: "Tableau de bord", href: ROUTES.PARENT.DASHBOARD, icon: "IconDashboard" },
+    { label: "Planning", href: ROUTES.PARENT.TIMETABLE, icon: "IconCalendarTime" },
+    { label: "Bulletins", href: ROUTES.PARENT.REPORTS, icon: "IconFileAnalytics" },
+    { label: "Paiements", href: ROUTES.PARENT.PAYMENTS, icon: "IconCreditCard" },
+    { label: "Cahier de Texte", href: ROUTES.PARENT.LESSON_BOOK, icon: "IconBook" },
+    { label: "Messages", href: ROUTES.PARENT.MESSAGES, icon: "IconMessages" },
+    { label: "Paramètres", href: ROUTES.PARENT.SETTINGS, icon: "IconSettings" },
 ] as const;

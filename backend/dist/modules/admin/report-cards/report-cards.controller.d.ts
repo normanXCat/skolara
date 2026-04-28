@@ -5,6 +5,7 @@ export declare class ReportCardsController {
     getPreview(req: Request, res: Response, next: NextFunction): Promise<void>;
     finalize(req: Request, res: Response, next: NextFunction): Promise<void>;
     generateForClass(req: Request, res: Response, next: NextFunction): Promise<void>;
+    exportBatch(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 declare const _default: ReportCardsController;
 export default _default;

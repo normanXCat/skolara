@@ -98,19 +98,35 @@ export class AdminPreRegistrationService {
                 };
             }
 
-            // 2. Créer l'utilisateur élève (génération d'email)
-            const baseEmail =
-                `${preReg.childFirstName.toLowerCase()}.${preReg.childLastName.toLowerCase()}`.replace(
-                    /\s+/g,
-                    "",
-                );
-            let studentEmail = `${baseEmail}@student.skolara.pf`;
-            let counter = 1;
-            while (
-                await tx.user.findUnique({ where: { email: studentEmail } })
-            ) {
-                studentEmail = `${baseEmail}${counter}@student.skolara.pf`;
-                counter++;
+            // 2. Créer l'utilisateur élève
+            // Utiliser le vrai email de l'élève (childEmail) s'il existe,
+            // sinon générer un identifiant @student.skolara.pf
+            let studentEmail: string;
+
+            if (preReg.childEmail && preReg.childEmail.trim() !== "") {
+                // Vérifier que le vrai email n'est pas déjà utilisé
+                const existing = await tx.user.findUnique({ where: { email: preReg.childEmail } });
+                if (existing) {
+                    throw {
+                        status: 409,
+                        message: `L'email ${preReg.childEmail} est déjà utilisé par un autre compte.`,
+                    };
+                }
+                studentEmail = preReg.childEmail;
+            } else {
+                const baseEmail =
+                    `${preReg.childFirstName.toLowerCase()}.${preReg.childLastName.toLowerCase()}`.replace(
+                        /\s+/g,
+                        "",
+                    );
+                studentEmail = `${baseEmail}@student.skolara.pf`;
+                let counter = 1;
+                while (
+                    await tx.user.findUnique({ where: { email: studentEmail } })
+                ) {
+                    studentEmail = `${baseEmail}${counter}@student.skolara.pf`;
+                    counter++;
+                }
             }
 
             const studentTempPass = generateRandomPassword(12);
@@ -232,7 +248,8 @@ export class AdminPreRegistrationService {
                 parentTempPass,
                 parentName: preReg.parentFullName,
                 childName: `${preReg.childFirstName} ${preReg.childLastName}`,
-                childFirstName: preReg.childFirstName
+                childFirstName: preReg.childFirstName,
+                childEmail: preReg.childEmail,
             };
         });
 
@@ -268,7 +285,12 @@ export class AdminPreRegistrationService {
             if (res.success) updateData.parentEmailSentAt = new Date();
         }
 
-        // Email à l'élève
+        // Email à l'élève — envoyé à son vrai email s'il existe,
+        // sinon au parent (car @student.skolara.pf n'est pas une vraie boîte mail).
+        const studentRecipient = data.childEmail && data.childEmail.trim() !== ""
+            ? data.childEmail
+            : data.parentEmail;
+
         const studentHtml = StudentWelcomeEmail({
             firstName: data.childFirstName,
             email: data.studentEmail,
@@ -276,8 +298,8 @@ export class AdminPreRegistrationService {
         });
 
         const resStudent = await sendEmail({
-            to: data.studentEmail,
-            subject: 'Bienvenue sur Skolara — Ton compte élève est prêt',
+            to: studentRecipient,
+            subject: `Skolara — Identifiants élève de ${data.childName}`,
             html: studentHtml
         });
 
@@ -336,7 +358,8 @@ export class AdminPreRegistrationService {
             parentTempPass,
             parentName: preReg.parentFullName,
             childName: `${preReg.childFirstName} ${preReg.childLastName}`,
-            childFirstName: preReg.childFirstName
+            childFirstName: preReg.childFirstName,
+            childEmail: preReg.childEmail,
         };
 
         await this.sendWelcomeEmails(id, resultData);

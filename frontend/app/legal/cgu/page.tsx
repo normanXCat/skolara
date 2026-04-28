@@ -8,7 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CGUPage() {
-  const content = await getSetting("cgu");
+  const content = await getSetting("cgu").catch(() => "");
+
   return (
     <LegalPageClient
       title="Conditions Générales d'Utilisation"

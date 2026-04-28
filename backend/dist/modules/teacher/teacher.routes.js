@@ -39,7 +39,10 @@ router.get("/absences", authenticate_1.authenticate, (0, authenticate_1.authoriz
 // 3. Emploi du temps
 const teacher_timetable_controller_1 = __importDefault(require("./timetable/teacher-timetable.controller"));
 router.get("/timetable", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), (req, res, next) => teacher_timetable_controller_1.default.getMyTimetable(req, res, next));
-// 4. Notifications
+// 4. Cahier de Texte
+const lesson_book_routes_1 = __importDefault(require("./lesson-book/lesson-book.routes"));
+router.use("/lesson-book", lesson_book_routes_1.default);
+// 5. Notifications
 const notifications_controller_1 = __importDefault(require("../notifications/notifications.controller"));
 router.get("/notifications", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), notifications_controller_1.default.getAll);
 router.get("/notifications/unread-count", authenticate_1.authenticate, (0, authenticate_1.authorize)("ENSEIGNANT"), notifications_controller_1.default.getUnreadCount);

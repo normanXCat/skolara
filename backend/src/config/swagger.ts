@@ -853,6 +853,182 @@ export const swaggerDocument = {
                 }
             }
         },
+        "/admin/report-cards/export-batch/{classId}": {
+            get: {
+                tags: ["Admin-ReportCards"],
+                summary: "Exporter tous les bulletins d'une classe en ZIP (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [{ name: "classId", in: "path", required: true, schema: { type: "integer" } }],
+                responses: { "200": { description: "Archive ZIP retournée" } }
+            }
+        },
+        "/student/report-cards": {
+            get: {
+                tags: ["Student-ReportCards"],
+                summary: "Lister ses propres bulletins (Élève)",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Liste des bulletins" } }
+            }
+        },
+        "/parent/report-cards": {
+            get: {
+                tags: ["Parent-ReportCards"],
+                summary: "Lister les bulletins de ses enfants (Parent)",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Liste des bulletins des enfants" } }
+            }
+        },
+        "/admin/payments": {
+            get: {
+                tags: ["Admin-Payments"],
+                summary: "Lister les paiements (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Liste paginée des paiements" } }
+            }
+        },
+        "/admin/payments/stats": {
+            get: {
+                tags: ["Admin-Payments"],
+                summary: "Statistiques des paiements (Admin)",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Statistiques récupérées" } }
+            }
+        },
+        "/admin/payments/{id}": {
+            patch: {
+                tags: ["Admin-Payments"],
+                summary: "Mettre à jour un paiement (Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    amountPaid: { type: "number" },
+                                    reference: { type: "string" },
+                                    paymentMethod: { type: "string", enum: ["MVOLA", "ORANGE_MONEY"] }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: { "200": { description: "Paiement mis à jour" } }
+            }
+        },
+        "/student/payments": {
+            get: {
+                tags: ["Student-Payments"],
+                summary: "Historique de paiements de l'élève (Élève)",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Historique et solde de l'élève" } }
+            }
+        },
+        "/parent/payments": {
+            get: {
+                tags: ["Parent-Payments"],
+                summary: "Historique de paiements des enfants (Parent)",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Historique et solde des enfants" } }
+            }
+        },
+        "/messages/inbox": {
+            get: {
+                tags: ["Messages"],
+                summary: "Boîte de réception",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Messages reçus" } }
+            }
+        },
+        "/messages/sent": {
+            get: {
+                tags: ["Messages"],
+                summary: "Messages envoyés",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Boîte d'envoi" } }
+            }
+        },
+        "/messages/users/search": {
+            get: {
+                tags: ["Messages"],
+                summary: "Recherche destinatare",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Résultats de recherche" } }
+            }
+        },
+        "/messages": {
+            post: {
+                tags: ["Messages"],
+                summary: "Envoyer un message",
+                security: [{ bearerAuth: [] }],
+                responses: { "201": { description: "Message envoyé" } }
+            }
+        },
+        "/messages/{id}/read": {
+            patch: {
+                tags: ["Messages"],
+                summary: "Marquer lu",
+                security: [{ bearerAuth: [] }],
+                parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }],
+                responses: { "200": { description: "Statut mis à jour" } }
+            }
+        },
+        "/teacher/lesson-book": {
+            get: {
+                tags: ["Teacher-LessonBook"],
+                summary: "Lire le cahier de texte",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Liste des leçons" } }
+            },
+            post: {
+                tags: ["Teacher-LessonBook"],
+                summary: "Créer une leçon",
+                security: [{ bearerAuth: [] }],
+                responses: { "201": { description: "Créée" } }
+            }
+        },
+        "/teacher/lesson-book/{id}": {
+            patch: {
+                tags: ["Teacher-LessonBook"],
+                summary: "Modifier leçon",
+                security: [{ bearerAuth: [] }],
+                parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }],
+                responses: { "200": { description: "Modifiée" } }
+            },
+            delete: {
+                tags: ["Teacher-LessonBook"],
+                summary: "Supprimer leçon",
+                security: [{ bearerAuth: [] }],
+                parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }],
+                responses: { "200": { description: "Supprimée" } }
+            }
+        },
+        "/admin/lesson-book": {
+            get: {
+                tags: ["Admin-LessonBook"],
+                summary: "Toutes les leçons",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Toutes les leçons" } }
+            }
+        },
+        "/student/lesson-book": {
+            get: {
+                tags: ["Student-LessonBook"],
+                summary: "Leçons de l'élève",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Leçons" } }
+            }
+        },
+        "/parent/lesson-book": {
+            get: {
+                tags: ["Parent-LessonBook"],
+                summary: "Leçons des enfants",
+                security: [{ bearerAuth: [] }],
+                responses: { "200": { description: "Leçons" } }
+            }
+        }
     },
     components: {
         schemas: {

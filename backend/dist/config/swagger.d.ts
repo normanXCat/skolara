@@ -900,6 +900,344 @@ export declare const swaggerDocument: {
                 };
             };
         };
+        "/admin/report-cards/export-batch/{classId}": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/student/report-cards": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/parent/report-cards": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/admin/payments": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/admin/payments/stats": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/admin/payments/{id}": {
+            patch: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                requestBody: {
+                    required: boolean;
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: string;
+                                properties: {
+                                    amountPaid: {
+                                        type: string;
+                                    };
+                                    reference: {
+                                        type: string;
+                                    };
+                                    paymentMethod: {
+                                        type: string;
+                                        enum: string[];
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/student/payments": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/parent/payments": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/messages/inbox": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/messages/sent": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/messages/users/search": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/messages": {
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "201": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/messages/{id}/read": {
+            patch: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/teacher/lesson-book": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "201": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/teacher/lesson-book/{id}": {
+            patch: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            delete: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/admin/lesson-book": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/student/lesson-book": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/parent/lesson-book": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
     };
     components: {
         schemas: {

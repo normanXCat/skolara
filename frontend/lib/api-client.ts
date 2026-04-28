@@ -72,6 +72,22 @@ class ApiClient {
             try {
                 const refreshRes = await this.post<any>("/auth/refresh");
                 if (refreshRes.success) {
+                    // Synchronise explicitement le store auth juste après refresh.
+                    // Import dynamique pour éviter une dépendance circulaire au chargement.
+                    try {
+                        const authStoreModule = await import("@/stores/auth-store");
+                        authStoreModule.useAuthStore
+                            .getState()
+                            .setUser(refreshRes.data);
+                        // Force une resynchronisation /auth/me pour éviter un état stale
+                        // et garantir que l'UI se met à jour sans refresh manuel.
+                        authStoreModule.useAuthStore
+                            .getState()
+                            .fetchUser({ force: true });
+                    } catch {
+                        // Le callback reste un fallback si le store n'est pas accessible ici.
+                    }
+
                     if (this.onRefreshSuccess) {
                         this.onRefreshSuccess(refreshRes.data);
                     }

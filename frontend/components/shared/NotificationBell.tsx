@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bell } from 'lucide-react';
+import { Bell, Mail } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,7 @@ import Link from 'next/link';
 export function NotificationBell({ role }: { role: 'admin' | 'teacher' | 'student' | 'parent' }) {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
   const fetchNotifications = async () => {
     try {
@@ -31,6 +32,10 @@ export function NotificationBell({ role }: { role: 'admin' | 'teacher' | 'studen
       const countRes = await api.get('/api/notifications/unread-count');
       if (countRes.success) {
         setUnreadCount((countRes.data as any).count || 0);
+      }
+      const msgRes = await api.get('/api/messages/unread-count');
+      if (msgRes.success) {
+        setUnreadMessagesCount((msgRes.data as any).count || 0);
       }
     } catch (error) {
       console.error('Failed to fetch notifications', error);
@@ -53,7 +58,22 @@ export function NotificationBell({ role }: { role: 'admin' | 'teacher' | 'studen
   };
 
   return (
-    <DropdownMenu>
+    <div className="flex items-center gap-1">
+      <Link href={`/${role}/messages`}>
+        <Button variant="ghost" size="icon" className="relative mr-1" aria-label="Messages">
+          <Mail className="h-5 w-5" />
+          {unreadMessagesCount > 0 && (
+            <Badge 
+              variant="destructive" 
+              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] shadow-sm animate-pulse-once"
+            >
+              {unreadMessagesCount > 9 ? '9+' : unreadMessagesCount}
+            </Badge>
+          )}
+        </Button>
+      </Link>
+
+      <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
@@ -100,5 +120,6 @@ export function NotificationBell({ role }: { role: 'admin' | 'teacher' | 'studen
         )}
       </DropdownMenuContent>
     </DropdownMenu>
+    </div>
   );
 }

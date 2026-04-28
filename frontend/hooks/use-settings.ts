@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/lib/api-client";
 import { toast } from "@/lib/toast-store";
 import { updateSettingsSchema, type UpdateSettingsInput } from "@/lib/validations/settings";
+import { revalidateSettings } from "@/app/actions/settings";
 
 const defaultValues: UpdateSettingsInput = {
   school_name: "Skolara",
@@ -73,6 +74,7 @@ export function useSettings() {
       if (response.success) {
         toast.success("Paramètres enregistrés avec succès.");
         reset(data); // Reset dirty state
+        await revalidateSettings();
       } else {
         toast.error("Erreur lors de la sauvegarde.");
       }

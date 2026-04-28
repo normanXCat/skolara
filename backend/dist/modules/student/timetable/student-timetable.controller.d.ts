@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 export declare class StudentTimetableController {
-    getMyTimetable(req: Request, res: Response, next: NextFunction): Promise<void>;
+    getMyTimetable: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 }
 declare const _default: StudentTimetableController;
 export default _default;

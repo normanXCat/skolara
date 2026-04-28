@@ -3,7 +3,7 @@ import timetablesService from "../../admin/timetables/timetables.service";
 import { prisma } from "../../../prisma/client";
 
 export class StudentTimetableController {
-  async getMyTimetable(req: Request, res: Response, next: NextFunction) {
+  getMyTimetable = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = (req as any).user.userId;
       const student = await prisma.student.findUnique({ where: { userId } });

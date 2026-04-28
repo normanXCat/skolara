@@ -18,6 +18,7 @@ import parentRoutes from "./modules/parent/parent.routes";
 import newsRoutes from "./modules/news/news.routes";
 import contactRoutes from "./modules/contact/contact.routes";
 import calendarRoutes from "./modules/calendar/calendar.routes";
+import messagesRoutes from "./modules/messages/messages.routes";
 
 /**
  * Application Express principale.
@@ -71,6 +72,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/parent", parentRoutes);
+app.use("/api/messages", messagesRoutes);
 app.use("/api/notifications", notificationsRoutes);
 app.use("/api/pre-registrations", preRegistrationRoutes);
 app.use("/api/grades", gradeRoutes);

@@ -15,6 +15,6 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const settings = await getSettings();
+  const settings = await getSettings().catch(() => ({}));
   return <PageContent settings={settings} />;
 }

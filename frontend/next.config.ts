@@ -15,8 +15,11 @@ try {
     // Si le port n'est pas précisé (ex: https://api.com), on laisse vide pour remotePatterns
     backendPort = url.port || (url.protocol === "https:" ? "" : "80");
 } catch (e) {
-    // Si BACKEND_URL est invalide, on ne plante pas mais on utilise les réglages par défaut
+    if (process.env.NODE_ENV === "production") {
+        console.warn("⚠️ [NextConfig] BACKEND_URL est invalide ou manquant en production. Les rewrites /api risquent de ne pas fonctionner.");
+    }
 }
+
 
 const nextConfig: NextConfig = {
     images: {

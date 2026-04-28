@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import reportCardsService from "./report-cards.service";
 import pdfService from "../../../lib/pdf/pdf.service";
 import { getReportCardHtml } from "./templates/report-card.template";
+import archiver from "archiver";
 
 export class ReportCardsController {
   async downloadPdf(req: Request, res: Response, next: NextFunction) {
@@ -110,6 +111,48 @@ export class ReportCardsController {
       res.status(200).json({ success: true, data: { generated, failed } });
     } catch (error) {
       next(error);
+    }
+  }
+
+  async exportBatch(req: Request, res: Response, next: NextFunction) {
+    try {
+      const classId = Number(req.params.classId);
+      const semester = Number(req.query.semester) || 1;
+      const schoolYear = (req.query.schoolYear as string) || "2024-2025";
+
+      const reportCardsStatus = await reportCardsService.getStatusByClass(classId, schoolYear, semester);
+      if (!reportCardsStatus.class) {
+        res.status(404).json({ success: false, message: "Classe introuvable" });
+        return;
+      }
+
+      res.setHeader("Content-Type", "application/zip");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="report-cards-${reportCardsStatus.class.name}-S${semester}-${schoolYear}.zip"`
+      );
+
+      const archive = archiver("zip", { zlib: { level: 9 } });
+      archive.on("error", (err: any) => { throw err; });
+      archive.pipe(res);
+
+      for (const studentData of reportCardsStatus.students) {
+        if (studentData.reportCards && studentData.reportCards.length > 0) {
+            const data = await reportCardsService.getPreviewData(studentData.id, schoolYear, semester);
+            const html = getReportCardHtml({ ...data, semester, schoolYear });
+            const pdfBuffer = await pdfService.generateFromHtml(html);
+            const fileName = `Bulletin_${data.student.lastName || ''}_${data.student.firstName || ''}_S${semester}.pdf`.replace(/\s+/g, '_');
+            archive.append(pdfBuffer, { name: fileName });
+        }
+      }
+
+      await archive.finalize();
+    } catch (error) {
+      if (!res.headersSent) {
+          next(error);
+      } else {
+          console.error("Error during zip streaming", error);
+      }
     }
   }
 }

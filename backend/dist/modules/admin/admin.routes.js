@@ -32,7 +32,9 @@ const absences_repository_1 = require("./absences/absences.repository");
 const settings_controller_1 = require("./settings/settings.controller");
 const settings_service_1 = require("./settings/settings.service");
 const settings_repository_1 = require("./settings/settings.repository");
+const payments_controller_1 = require("./payments/payments.controller");
 const router = (0, express_1.Router)();
+const paymentsController = new payments_controller_1.PaymentsController();
 // Depedency Injection
 const statsService = new stats_service_1.StatsService();
 const statsController = new stats_controller_1.StatsController(statsService);
@@ -106,6 +108,7 @@ router.get("/report-cards/preview/:studentId", authenticate_1.authenticate, (0, 
 router.post("/report-cards/finalize", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => report_cards_controller_1.default.finalize(req, res, next));
 router.post("/report-cards/generate-class", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => report_cards_controller_1.default.generateForClass(req, res, next));
 router.get("/report-cards/download/:studentId", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => report_cards_controller_1.default.downloadPdf(req, res, next));
+router.get("/report-cards/export-batch/:classId", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => report_cards_controller_1.default.exportBatch(req, res, next));
 // 9. Notes (Vue admin, lecture seule)
 router.get("/grades", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => adminGradesController.findAll(req, res, next));
 router.get("/grades/stats", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => adminGradesController.getStats(req, res, next));
@@ -122,5 +125,12 @@ router.patch("/notifications/:id/read", authenticate_1.authenticate, (0, authent
 // 12. Site Settings
 router.get("/settings", (req, res, next) => settingsController.getAll(req, res, next));
 router.put("/settings", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => settingsController.updateAll(req, res, next));
+// 13. Paiements
+router.get("/payments", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => paymentsController.getAll(req, res, next));
+router.get("/payments/stats", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => paymentsController.getStats(req, res, next));
+router.patch("/payments/:id", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), (req, res, next) => paymentsController.updatePayment(req, res, next));
+// 14. Cahier de Texte
+const lesson_book_routes_1 = __importDefault(require("./lesson-book/lesson-book.routes"));
+router.use("/lesson-book", authenticate_1.authenticate, (0, authenticate_1.authorize)("ADMIN"), lesson_book_routes_1.default);
 exports.default = router;
 //# sourceMappingURL=admin.routes.js.map
