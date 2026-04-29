@@ -16,56 +16,65 @@ export async function scrapeArticles(): Promise<ScrapedArticle[]> {
     const targetUrl = `${baseUrl}/actualites`;
     const articles: ScrapedArticle[] = [];
     
-    const browser = await chromium.launch({ headless: true });
-    
-    try {
-        const context = await browser.newContext({
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    if (process.env.NODE_ENV !== 'production' && process.env.SKIP_SCRAPE !== 'true') {
+        const browser = await chromium.launch({ headless: true }).catch(e => {
+            console.error("Failed to launch chromium:", e);
+            return null;
         });
-        const page = await context.newPage();
         
-        await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 15000 }).catch(e => console.warn("Timeout on page.goto", e.message));
-        
-        const html = await page.content();
-        const $ = cheerio.load(html);
-        
-        const viewContent = $('.view-content').first();
-        if(!viewContent.length) {
-             console.warn("Sélecteur '.view-content' introuvable. Cloudflare block détecté ? Utilisation des données de secours (Fallback).");
-        } else {
-            const rows = viewContent.find('.views-row, article').toArray();
-            
-            for (const row of rows) {
-                try {
-                    const el = $(row);
-                    const titleText = el.find('h2, h3, .node-title, .titre').first().text().trim();
-                    if (!titleText) continue;
+        if (browser) {
+            try {
+                const context = await browser.newContext({
+                    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                });
+                const page = await context.newPage();
+                
+                await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 15000 }).catch(e => console.warn("Timeout on page.goto", e.message));
+                
+                const html = await page.content();
+                const $ = cheerio.load(html);
+                
+                const viewContent = $('.view-content').first();
+                if(!viewContent.length) {
+                     console.warn("Sélecteur '.view-content' introuvable. Cloudflare block détecté ? Utilisation des données de secours (Fallback).");
+                } else {
+                    const rows = viewContent.find('.views-row, article').toArray();
                     
-                    const relativeImg = el.find('img').first().attr('src');
-                    const imageUrl = resolveUrl(baseUrl, relativeImg);
-                    
-                    const dateText = el.find('.date, time').first().text().trim();
-                    const publishedAt = parseDate(dateText) || new Date();
-                    
-                    const summaryHtml = el.find('.field--name-body, .summary, .description').first().html() || "";
-                    const cleanedContent = cleanHtml(summaryHtml) || `<p>${titleText}</p>`;
-                    
-                    articles.push({
-                        title: titleText,
-                        content: cleanedContent,
-                        imageUrl,
-                        publishedAt,
-                        category: "Actualités"
-                    });
-                } catch(e) {
-                    console.error("Erreur lors de l'extraction d'un article", e);
+                    for (const row of rows) {
+                        try {
+                            const el = $(row);
+                            const titleText = el.find('h2, h3, .node-title, .titre').first().text().trim();
+                            if (!titleText) continue;
+                            
+                            const relativeImg = el.find('img').first().attr('src');
+                            const imageUrl = resolveUrl(baseUrl, relativeImg);
+                            
+                            const dateText = el.find('.date, time').first().text().trim();
+                            const publishedAt = parseDate(dateText) || new Date();
+                            
+                            const summaryHtml = el.find('.field--name-body, .summary, .description').first().html() || "";
+                            const cleanedContent = cleanHtml(summaryHtml) || `<p>${titleText}</p>`;
+                            
+                            articles.push({
+                                title: titleText,
+                                content: cleanedContent,
+                                imageUrl,
+                                publishedAt,
+                                category: "Actualités"
+                            });
+                        } catch(e) {
+                            console.error("Erreur lors de l'extraction d'un article", e);
+                        }
+                    }
                 }
+            } catch(err) {
+                console.error("Erreur scrapeArticles:", err);
+            } finally {
+                await browser.close();
             }
         }
-    } catch(err) {
-        console.error("Erreur scrapeArticles:", err);
-    } finally {
-        await browser.close();
+    } else {
+        console.log("Production environment detected. Skipping Playwright scraping.");
     }
     
     // FALLBACK IF SCRAPING FAILED OR BLOCKED BY CLOUDFLARE
