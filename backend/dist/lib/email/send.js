@@ -2,10 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = sendEmail;
 const client_1 = require("./client");
-/**
- * Wrapper générique pour l'envoi d'emails.
- * Gère le logging et ne throw pas d'erreurs pour ne pas bloquer les transactions si non souhaité.
- */
 async function sendEmail({ to, subject, html, replyTo }) {
     const fromName = (process.env.EMAIL_FROM_NAME || 'Skolara').replace(/^["'](.+)["']$/, '$1').trim();
     const fromEmail = (process.env.EMAIL_FROM || '').replace(/^["'](.+)["']$/, '$1').trim();
@@ -17,12 +13,10 @@ async function sendEmail({ to, subject, html, replyTo }) {
         subject,
         html,
         replyTo,
-        // Forcer l'enveloppe SMTP pour garantir que le "from" correspond au compte authentifié
         envelope: {
             from: fromEmail,
             to: Array.isArray(to) ? to : [to],
         },
-        // Un fallback en texte brut basique aide à réduire drastiquement le score de spam
         text: html.replace(/<style[^>]*>.*<\/style>/gi, '')
             .replace(/<br\s*[\/]?>/gi, '\n')
             .replace(/<\/p>/gi, '\n\n')
@@ -30,8 +24,6 @@ async function sendEmail({ to, subject, html, replyTo }) {
             .replace(/&nbsp;/g, ' ')
             .trim(),
     };
-    // On simule l'envoi seulement si NODE_ENV est 'development' ET qu'aucun mot de passe n'est fourni,
-    // ou si on force explicitement la simulation.
     const isDev = process.env.NODE_ENV === 'development';
     const forceSimulate = process.env.EMAIL_SIMULATE === 'true';
     if (forceSimulate || (isDev && !emailPassword)) {
@@ -45,7 +37,8 @@ async function sendEmail({ to, subject, html, replyTo }) {
         console.log(`[EMAIL] Envoi en cours vers ${recipients}...`);
         console.log(`[EMAIL] From: ${mailOptions.from}`);
         console.log(`[EMAIL] Subject: ${subject}`);
-        const response = await client_1.transporter.sendMail(mailOptions);
+        const transporter = (0, client_1.getTransporter)();
+        const response = await transporter.sendMail(mailOptions);
         console.log(`[EMAIL] ✅ Message envoyé avec succès`);
         console.log(`[EMAIL] MessageId: ${response.messageId}`);
         console.log(`[EMAIL] Response: ${response.response}`);

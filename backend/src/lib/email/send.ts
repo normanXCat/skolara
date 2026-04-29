@@ -1,16 +1,12 @@
-import { transporter } from './client';
+import { getTransporter } from './client';
 
-interface SendEmailOptions {
+export interface SendEmailOptions {
     to: string | string[];
     subject: string;
     html: string;
     replyTo?: string;
 }
 
-/**
- * Wrapper générique pour l'envoi d'emails.
- * Gère le logging et ne throw pas d'erreurs pour ne pas bloquer les transactions si non souhaité.
- */
 export async function sendEmail({
     to,
     subject,
@@ -29,12 +25,10 @@ export async function sendEmail({
         subject,
         html,
         replyTo,
-        // Forcer l'enveloppe SMTP pour garantir que le "from" correspond au compte authentifié
         envelope: {
             from: fromEmail,
             to: Array.isArray(to) ? to : [to],
         },
-        // Un fallback en texte brut basique aide à réduire drastiquement le score de spam
         text: html.replace(/<style[^>]*>.*<\/style>/gi, '')
                   .replace(/<br\s*[\/]?>/gi, '\n')
                   .replace(/<\/p>/gi, '\n\n')
@@ -43,8 +37,6 @@ export async function sendEmail({
                   .trim(),
     };
 
-    // On simule l'envoi seulement si NODE_ENV est 'development' ET qu'aucun mot de passe n'est fourni,
-    // ou si on force explicitement la simulation.
     const isDev = process.env.NODE_ENV === 'development';
     const forceSimulate = process.env.EMAIL_SIMULATE === 'true';
 
@@ -61,6 +53,7 @@ export async function sendEmail({
         console.log(`[EMAIL] From: ${mailOptions.from}`);
         console.log(`[EMAIL] Subject: ${subject}`);
         
+        const transporter = getTransporter();
         const response = await transporter.sendMail(mailOptions);
         
         console.log(`[EMAIL] ✅ Message envoyé avec succès`);
