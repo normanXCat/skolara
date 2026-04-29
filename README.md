@@ -72,9 +72,17 @@ FRONTEND_URL="http://localhost:3000"
 | `bun start` | Lancement de l'application compilée |
 | `bun lint` | Analyse statique du code (ESLint) |
 
+### Backend (Seeding & Scraping)
+La base de données inclut un pipeline de **Scraping** automatisé utilisant **Playwright** pour générer les données (actualités, calendrier) en s'appuyant sur des bases de données réelles (sources gourvernementales) :
+```bash
+cd backend
+npx playwright install chromium
+bun run seed
+```
+
 ## 📚 Documentation API
-La documentation interactive de l'API (Swagger UI) est disponible sur :
-`http://localhost:3000/api-docs`
+La documentation interactive de l'API (Swagger UI) est disponible sur (avec le backend en marche) :  
+👉 **http://localhost:8000/api-docs**
 
 ---
 
