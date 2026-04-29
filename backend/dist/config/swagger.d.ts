@@ -26,6 +26,372 @@ export declare const swaggerDocument: {
         description: string;
     }[];
     paths: {
+        "/public/key-figures": {
+            get: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/news/public": {
+            get: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/news/public/{id}": {
+            get: {
+                tags: string[];
+                summary: string;
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/news/admin": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "201": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/news/admin/{id}": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            put: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            delete: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/news/admin/{id}/status": {
+            patch: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/calendar/public": {
+            get: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/calendar/event-types": {
+            get: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/calendar/admin": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "201": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/calendar/admin/{id}": {
+            put: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            delete: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/contact/public": {
+            post: {
+                tags: string[];
+                summary: string;
+                responses: {
+                    "201": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/contact/admin": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/contact/admin/unread-count": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/contact/admin/{id}": {
+            get: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+            delete: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/contact/admin/{id}/read": {
+            patch: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "200": {
+                        description: string;
+                    };
+                };
+            };
+        };
+        "/contact/admin/{id}/reply": {
+            post: {
+                tags: string[];
+                summary: string;
+                security: {
+                    bearerAuth: never[];
+                }[];
+                parameters: {
+                    name: string;
+                    in: string;
+                    required: boolean;
+                    schema: {
+                        type: string;
+                    };
+                }[];
+                responses: {
+                    "201": {
+                        description: string;
+                    };
+                };
+            };
+        };
         "/auth/login": {
             post: {
                 tags: string[];

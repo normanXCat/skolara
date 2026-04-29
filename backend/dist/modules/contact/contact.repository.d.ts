@@ -2,8 +2,8 @@ import { Prisma } from "../../generated/prisma";
 export declare class ContactRepository {
     create(data: Prisma.ContactMessageCreateInput): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -18,8 +18,8 @@ export declare class ContactRepository {
     }): Promise<{
         data: {
             message: string;
-            status: string;
             id: number;
+            status: string;
             email: string;
             isRead: boolean;
             subject: string;
@@ -31,8 +31,8 @@ export declare class ContactRepository {
     }>;
     findById(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -42,8 +42,8 @@ export declare class ContactRepository {
     } | null>;
     markAsRead(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -53,8 +53,8 @@ export declare class ContactRepository {
     }>;
     delete(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -64,8 +64,8 @@ export declare class ContactRepository {
     }>;
     updateReplied(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;

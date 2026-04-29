@@ -1,8 +1,8 @@
 import { Prisma, ArticleStatus } from "../../generated/prisma";
 export declare class NewsRepository {
     create(data: Prisma.ArticleUncheckedCreateInput): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -25,8 +25,8 @@ export declare class NewsRepository {
                 firstName: string;
             };
         } & {
-            status: import("../../generated/prisma").$Enums.ArticleStatus;
             id: number;
+            status: import("../../generated/prisma").$Enums.ArticleStatus;
             createdAt: Date;
             updatedAt: Date;
             authorId: number;
@@ -45,8 +45,8 @@ export declare class NewsRepository {
             firstName: string;
         };
     } & {
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -57,8 +57,8 @@ export declare class NewsRepository {
         publishedAt: Date | null;
     }) | null>;
     update(id: number, data: Prisma.ArticleUpdateInput): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -69,8 +69,8 @@ export declare class NewsRepository {
         publishedAt: Date | null;
     }>;
     delete(id: number): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -81,8 +81,8 @@ export declare class NewsRepository {
         publishedAt: Date | null;
     }>;
     updateStatus(id: number, status: ArticleStatus): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;

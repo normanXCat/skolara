@@ -29,8 +29,13 @@ npm run prisma:generate
 # Créer la base de données et appliquer les migrations
 npm run prisma:migrate
 
-# Initialiser les données de base (niveaux scolaires & admin par défaut)
-npm run seed
+# Initialiser les données de base et lancer le scraper (récupération réelle du calendrier scolaire et des actualités)
+bun run seed
+```
+
+**Note sur le scraping** : Le script de seed utilise Playwright pour récupérer des données réelles depuis le Ministère de l'Éducation. Assurez-vous d'avoir installé les navigateurs Playwright si ce n'est pas déjà fait :
+```bash
+npx playwright install chromium
 ```
 
 ## ⚙️ Variables d'environnement
@@ -115,4 +120,4 @@ src/
 | `npm start`             | Démarre la version compilée               |
 | `npm test`              | Lance la suite de tests                   |
 | `npm run prisma:studio` | Interface visuelle pour la BDD            |
-| `npm run seed`          | Remplit la BDD avec les données initiales |
+| `bun run seed`            | Remplit la BDD et lance les scrapers Web  |

@@ -27,8 +27,8 @@ export declare class AdminAbsencesRepository {
                     phone: string;
                 }) | null;
             } & {
-                status: import("@prisma/client").$Enums.StudentStatus;
                 id: number;
+                status: import("@prisma/client").$Enums.StudentStatus;
                 classId: number | null;
                 birthDate: Date;
                 address: string | null;
@@ -58,8 +58,8 @@ export declare class AdminAbsencesRepository {
                 speciality: string | null;
             };
         } & {
-            status: import("@prisma/client").$Enums.AbsenceStatus;
             id: number;
+            status: import("@prisma/client").$Enums.AbsenceStatus;
             classId: number;
             isJustified: boolean;
             reason: string | null;
@@ -106,8 +106,8 @@ export declare class AdminAbsencesRepository {
         isJustified: boolean;
         reason: string;
     }): Promise<{
-        status: import("@prisma/client").$Enums.AbsenceStatus;
         id: number;
+        status: import("@prisma/client").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -135,8 +135,8 @@ export declare class AdminAbsencesRepository {
                 updatedAt: Date;
             };
         } & {
-            status: import("@prisma/client").$Enums.StudentStatus;
             id: number;
+            status: import("@prisma/client").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -177,8 +177,8 @@ export declare class AdminAbsencesRepository {
             speciality: string | null;
         };
     } & {
-        status: import("@prisma/client").$Enums.AbsenceStatus;
         id: number;
+        status: import("@prisma/client").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;

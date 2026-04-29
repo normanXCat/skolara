@@ -18,16 +18,29 @@ export async function sendEmail({
     replyTo
 }: SendEmailOptions): Promise<{ success: boolean; error?: string }> {
     const fromName = (process.env.EMAIL_FROM_NAME || 'Skolara').replace(/^["'](.+)["']$/, '$1').trim();
-    // Nettoyer les variables d'env des potentiels guillemets résiduels
     const fromEmail = (process.env.EMAIL_FROM || '').replace(/^["'](.+)["']$/, '$1').trim();
     const emailPassword = (process.env.EMAIL_PASSWORD || '').replace(/^["'](.+)["']$/, '$1').trim();
 
+    const recipients = Array.isArray(to) ? to.join(', ') : to;
+
     const mailOptions = {
         from: `"${fromName}" <${fromEmail}>`,
-        to: Array.isArray(to) ? to.join(', ') : to,
+        to: recipients,
         subject,
         html,
-        replyTo
+        replyTo,
+        // Forcer l'enveloppe SMTP pour garantir que le "from" correspond au compte authentifié
+        envelope: {
+            from: fromEmail,
+            to: Array.isArray(to) ? to : [to],
+        },
+        // Un fallback en texte brut basique aide à réduire drastiquement le score de spam
+        text: html.replace(/<style[^>]*>.*<\/style>/gi, '')
+                  .replace(/<br\s*[\/]?>/gi, '\n')
+                  .replace(/<\/p>/gi, '\n\n')
+                  .replace(/<[^>]+>/g, '')
+                  .replace(/&nbsp;/g, ' ')
+                  .trim(),
     };
 
     // On simule l'envoi seulement si NODE_ENV est 'development' ET qu'aucun mot de passe n'est fourni,
@@ -37,19 +50,38 @@ export async function sendEmail({
 
     if (forceSimulate || (isDev && !emailPassword)) {
         console.log('-------------------------------------------');
-        console.log(`[EMAIL SIMULATED] to: ${mailOptions.to}`);
-        console.log(`[EMAIL SIMULATED] subject: ${mailOptions.subject}`);
+        console.log(`[EMAIL SIMULATED] to: ${recipients}`);
+        console.log(`[EMAIL SIMULATED] subject: ${subject}`);
         console.log('-------------------------------------------');
         return { success: true };
     }
 
     try {
-        console.log(`[EMAIL] Attempting to send email to ${mailOptions.to}...`);
+        console.log(`[EMAIL] Envoi en cours vers ${recipients}...`);
+        console.log(`[EMAIL] From: ${mailOptions.from}`);
+        console.log(`[EMAIL] Subject: ${subject}`);
+        
         const response = await transporter.sendMail(mailOptions);
-        console.log(`[EMAIL SUCCESS] Message sent: ${response.messageId}`);
+        
+        console.log(`[EMAIL] ✅ Message envoyé avec succès`);
+        console.log(`[EMAIL] MessageId: ${response.messageId}`);
+        console.log(`[EMAIL] Response: ${response.response}`);
+        console.log(`[EMAIL] Accepted: ${JSON.stringify(response.accepted)}`);
+        console.log(`[EMAIL] Rejected: ${JSON.stringify(response.rejected)}`);
+        
+        // Vérifier si certains destinataires ont été rejetés
+        if (response.rejected && response.rejected.length > 0) {
+            console.warn(`[EMAIL] ⚠️ Certains destinataires ont été rejetés: ${JSON.stringify(response.rejected)}`);
+        }
+        
         return { success: true };
     } catch (error: any) {
-        console.error(`[EMAIL ERROR] Failed to send email to ${mailOptions.to}:`, error);
+        console.error(`[EMAIL] ❌ Échec de l'envoi vers ${recipients}`);
+        console.error(`[EMAIL] Error code: ${error.code}`);
+        console.error(`[EMAIL] Error message: ${error.message}`);
+        if (error.response) {
+            console.error(`[EMAIL] SMTP Response: ${error.response}`);
+        }
         return { 
             success: false, 
             error: error.message || 'Unknown email sending error' 

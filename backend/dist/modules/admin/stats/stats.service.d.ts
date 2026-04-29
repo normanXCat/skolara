@@ -24,8 +24,8 @@ export declare class StatsService {
             dueDate: Date;
         }[];
         latestPreRegistrations: {
-            status: import("../../../generated/prisma").$Enums.Status;
             id: number;
+            status: import("../../../generated/prisma").$Enums.Status;
             parentEmail: string;
             parentPhone: string;
             childFirstName: string;

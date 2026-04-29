@@ -47,8 +47,8 @@ export declare class GradesRepository {
                 updatedAt: Date;
             };
         } & {
-            status: import("@prisma/client").$Enums.StudentStatus;
             id: number;
+            status: import("@prisma/client").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -130,8 +130,8 @@ export declare class GradesRepository {
             firstName: string;
         };
     } & {
-        status: import("@prisma/client").$Enums.StudentStatus;
         id: number;
+        status: import("@prisma/client").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;

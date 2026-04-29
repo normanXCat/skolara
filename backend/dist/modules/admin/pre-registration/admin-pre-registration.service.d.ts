@@ -8,8 +8,8 @@ export declare class AdminPreRegistrationService {
      */
     findAll(filters: any): Promise<{
         data: {
-            status: import("../../../generated/prisma").$Enums.Status;
             id: number;
+            status: import("../../../generated/prisma").$Enums.Status;
             parentEmail: string;
             parentPhone: string;
             childFirstName: string;
@@ -55,8 +55,8 @@ export declare class AdminPreRegistrationService {
                 updatedAt: Date;
             };
         } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -78,8 +78,8 @@ export declare class AdminPreRegistrationService {
             updatedAt: Date;
         } | null;
     } & {
-        status: import("../../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;
@@ -109,8 +109,8 @@ export declare class AdminPreRegistrationService {
      * Met à jour le statut d'un dossier.
      */
     updateStatus(id: number, status: Status, adminId: number, comment?: string): Promise<{
-        status: import("../../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;
@@ -144,8 +144,8 @@ export declare class AdminPreRegistrationService {
         classId?: number;
         createParentAccount: boolean;
     }): Promise<{
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;

@@ -5,8 +5,8 @@ export declare class ContactService {
     constructor(contactRepository: ContactRepository);
     submitForm(data: ContactFormInput): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -17,8 +17,8 @@ export declare class ContactService {
     findAll(filters: ContactFilters): Promise<{
         data: {
             message: string;
-            status: string;
             id: number;
+            status: string;
             email: string;
             isRead: boolean;
             subject: string;
@@ -30,8 +30,8 @@ export declare class ContactService {
     }>;
     findById(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -41,8 +41,8 @@ export declare class ContactService {
     } | null>;
     markAsRead(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -52,8 +52,8 @@ export declare class ContactService {
     }>;
     delete(id: number): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;
@@ -63,8 +63,8 @@ export declare class ContactService {
     }>;
     reply(id: number, replyMessage: string): Promise<{
         message: string;
-        status: string;
         id: number;
+        status: string;
         email: string;
         isRead: boolean;
         subject: string;

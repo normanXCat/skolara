@@ -10,7 +10,8 @@ interface StudentWelcomeEmailOptions {
  * Template d'email de bienvenue pour les élèves.
  */
 export function StudentWelcomeEmail({ firstName, email, password }: StudentWelcomeEmailOptions): string {
-    const loginUrl = `${process.env.FRONTEND_URL}/login`;
+    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/^["'](.+)["']$/, '$1').trim();
+    const loginUrl = `${frontendUrl}/login`;
     
     const content = `
         <h2 style="margin-top: 0; color: #1e293b; font-size: 20px;">Bienvenue sur Skolara, ${firstName} !</h2>

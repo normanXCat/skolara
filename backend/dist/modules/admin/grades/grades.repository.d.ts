@@ -19,8 +19,8 @@ export declare class AdminGradesRepository {
                     email: string;
                 };
             } & {
-                status: import("@prisma/client").$Enums.StudentStatus;
                 id: number;
+                status: import("@prisma/client").$Enums.StudentStatus;
                 classId: number | null;
                 birthDate: Date;
                 address: string | null;

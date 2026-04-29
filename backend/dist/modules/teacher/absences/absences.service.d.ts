@@ -13,8 +13,8 @@ export declare class AbsencesService {
             firstName: string;
         };
     } & {
-        status: import("@prisma/client").$Enums.StudentStatus;
         id: number;
+        status: import("@prisma/client").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -28,8 +28,8 @@ export declare class AbsencesService {
      * Enregistre l'appel et notifie les parents si nécessaire.
      */
     saveRollCall(teacherId: number, classId: number, data: RollCallInput): Promise<{
-        status: import("@prisma/client").$Enums.AbsenceStatus;
         id: number;
+        status: import("@prisma/client").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -81,8 +81,8 @@ export declare class AbsencesService {
                 phone: string;
             }) | null;
         } & {
-            status: import("@prisma/client").$Enums.StudentStatus;
             id: number;
+            status: import("@prisma/client").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -123,8 +123,8 @@ export declare class AbsencesService {
             speciality: string | null;
         };
     } & {
-        status: import("@prisma/client").$Enums.AbsenceStatus;
         id: number;
+        status: import("@prisma/client").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -172,8 +172,8 @@ export declare class AbsencesService {
                 phone: string;
             }) | null;
         } & {
-            status: import("@prisma/client").$Enums.StudentStatus;
             id: number;
+            status: import("@prisma/client").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -214,8 +214,8 @@ export declare class AbsencesService {
             speciality: string | null;
         };
     } & {
-        status: import("@prisma/client").$Enums.AbsenceStatus;
         id: number;
+        status: import("@prisma/client").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -230,8 +230,8 @@ export declare class AbsencesService {
      * Justifie une absence.
      */
     justifyAbsence(id: number, data: JustifyAbsenceInput): Promise<{
-        status: import("@prisma/client").$Enums.AbsenceStatus;
         id: number;
+        status: import("@prisma/client").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;

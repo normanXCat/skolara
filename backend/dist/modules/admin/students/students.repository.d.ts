@@ -27,8 +27,8 @@ export declare class StudentsRepository {
                 maxCapacity: number;
             } | null;
         } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -86,8 +86,8 @@ export declare class StudentsRepository {
             maxCapacity: number;
         } | null;
         absences: {
-            status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             classId: number;
             isJustified: boolean;
             reason: string | null;
@@ -112,8 +112,8 @@ export declare class StudentsRepository {
             gradedAt: Date;
         }[];
         payments: {
-            status: import("../../../generated/prisma").$Enums.PaymentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.PaymentStatus;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
@@ -127,8 +127,8 @@ export declare class StudentsRepository {
             note: string | null;
         }[];
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -142,8 +142,8 @@ export declare class StudentsRepository {
      * Recherche un étudiant par son email (lié au user).
      */
     findByUserEmail(email: string): Promise<{
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -157,8 +157,8 @@ export declare class StudentsRepository {
      * Crée un étudiant (utilisé dans les transactions).
      */
     create(data: Prisma.StudentCreateInput, tx?: Prisma.TransactionClient): Promise<{
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -194,8 +194,8 @@ export declare class StudentsRepository {
             maxCapacity: number;
         } | null;
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -210,8 +210,8 @@ export declare class StudentsRepository {
      * Ici on suit la consigne : pas de suppression physique des données principales.
      */
     setStatus(id: number, status: StudentStatus): Promise<{
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -267,8 +267,8 @@ export declare class StudentsRepository {
             maxCapacity: number;
         } | null;
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
