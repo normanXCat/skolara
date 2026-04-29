@@ -8,56 +8,65 @@ export async function scrapeCalendar(): Promise<ScrapedEvent[]> {
     console.log(`Scraping événements sur ${targetUrl}...`);
     const events: ScrapedEvent[] = [];
     
-    const browser = await chromium.launch({ headless: true });
-    
-    try {
-        const context = await browser.newContext({
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    if (process.env.NODE_ENV !== 'production' && process.env.SKIP_SCRAPE !== 'true') {
+        const browser = await chromium.launch({ headless: true }).catch(e => {
+            console.error("Failed to launch chromium:", e);
+            return null;
         });
-        const page = await context.newPage();
         
-        await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 15000 }).catch(e => console.warn("Timeout on page.goto", e.message));
-        
-        const html = await page.content();
-        const $ = cheerio.load(html);
-        
-        const calendarTable = $('.calendar-table, table.vacances').first();
-        if (!calendarTable.length) {
-            console.warn("Sélecteur '.calendar-table' introuvable. Cloudflare block détecté ? Utilisation du fallback.");
-        } else {
-            const rows = calendarTable.find('tr').toArray();
-            for (const row of rows) {
-                try {
-                    const cells = $(row).find('td').toArray();
-                    if (cells.length >= 2) {
-                        const titleText = $(cells[0]).text().trim();
-                        const datesText = $(cells[1]).text().trim(); 
-                        
-                        if (titleText && datesText) {
-                            const cleanDates = datesText.toLowerCase().replace('du', '').split('au');
-                            let startDate = parseDate(cleanDates[0]) || new Date();
-                            let endDate = startDate;
-                            if (cleanDates.length > 1) {
-                                endDate = parseDate(cleanDates[1]) || startDate;
+        if (browser) {
+            try {
+                const context = await browser.newContext({
+                    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                });
+                const page = await context.newPage();
+                
+                await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 15000 }).catch(e => console.warn("Timeout on page.goto", e.message));
+                
+                const html = await page.content();
+                const $ = cheerio.load(html);
+                
+                const calendarTable = $('.calendar-table, table.vacances').first();
+                if (!calendarTable.length) {
+                    console.warn("Sélecteur '.calendar-table' introuvable. Cloudflare block détecté ? Utilisation du fallback.");
+                } else {
+                    const rows = calendarTable.find('tr').toArray();
+                    for (const row of rows) {
+                        try {
+                            const cells = $(row).find('td').toArray();
+                            if (cells.length >= 2) {
+                                const titleText = $(cells[0]).text().trim();
+                                const datesText = $(cells[1]).text().trim(); 
+                                
+                                if (titleText && datesText) {
+                                    const cleanDates = datesText.toLowerCase().replace('du', '').split('au');
+                                    let startDate = parseDate(cleanDates[0]) || new Date();
+                                    let endDate = startDate;
+                                    if (cleanDates.length > 1) {
+                                        endDate = parseDate(cleanDates[1]) || startDate;
+                                    }
+                                    
+                                    events.push({
+                                        title: titleText,
+                                        startDate,
+                                        endDate,
+                                        eventType: "holiday"
+                                    });
+                                }
                             }
-                            
-                            events.push({
-                                title: titleText,
-                                startDate,
-                                endDate,
-                                eventType: "holiday"
-                            });
+                        } catch(e) {
+                             console.error("Erreur lors de l'extraction d'un événement", e);
                         }
                     }
-                } catch(e) {
-                     console.error("Erreur lors de l'extraction d'un événement", e);
                 }
+            } catch(err) {
+                 console.error("Erreur scrapeCalendar:", err);
+            } finally {
+                await browser.close();
             }
         }
-    } catch(err) {
-         console.error("Erreur scrapeCalendar:", err);
-    } finally {
-        await browser.close();
+    } else {
+        console.log("Production environment detected. Skipping Playwright scraping.");
     }
     
     // FALLBACK IF SCRAPING FAILED OR BLOCKED BY CLOUDFLARE
