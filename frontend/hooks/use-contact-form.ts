@@ -30,6 +30,7 @@ export function useContactForm() {
       if (response.success) {
         setIsSuccess(true);
         form.reset();
+        toast.success("Votre message a été envoyé avec succès !");
         setTimeout(() => setIsSuccess(false), 5000);
       } else {
         const errorMessage = response.error || "Une erreur est survenue.";
