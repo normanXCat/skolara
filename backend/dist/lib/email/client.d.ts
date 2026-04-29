@@ -1,25 +1,20 @@
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-declare function createTransporterInstance(): any;
-export declare const getTransporter: () => ReturnType<typeof createTransporterInstance>;
-/**
- * Réinitialise le transporteur (utile pour les tests ou un changement de config à chaud).
- */
-export declare const resetTransporter: () => void;
-/**
- * Vérifie la connexion SMTP au démarrage.
- * @returns true si la connexion est établie, false sinon.
- */
-export declare function verifyEmailTransport(): Promise<boolean>;
-/**
- * Envoie un email.
- * @returns L'info du message envoyé.
- */
-export declare function sendEmail(options: {
+export interface SendEmailOptions {
     to: string | string[];
     subject: string;
     html: string;
     text?: string;
     replyTo?: string;
-}): Promise<SMTPTransport.SentMessageInfo>;
+}
+export interface SentInfo {
+    messageId: string;
+    accepted: string[];
+    rejected: string[];
+    response: string;
+}
+declare function buildTransporter(): any;
+export declare function getTransporter(): ReturnType<typeof buildTransporter>;
+export declare function resetTransporter(): void;
+export declare function verifyEmailTransport(): Promise<boolean>;
+export declare function sendEmail(options: SendEmailOptions): Promise<SentInfo>;
 export {};
 //# sourceMappingURL=client.d.ts.map
