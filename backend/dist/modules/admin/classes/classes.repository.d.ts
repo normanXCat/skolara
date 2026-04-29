@@ -74,8 +74,8 @@ export declare class ClassesRepository {
                 updatedAt: Date;
             };
         } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;

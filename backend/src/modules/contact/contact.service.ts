@@ -9,9 +9,10 @@ export class ContactService {
   async submitForm(data: ContactFormInput) {
     const message = await this.contactRepository.create(data);
 
+    const toEmail = (process.env.EMAIL_FROM || 'admin@skolara.pf').replace(/^["'](.+)["']$/, '$1').trim();
     // Send notification to admin
     await sendEmail({
-      to: "normanvonizara@gmail.com",
+      to: toEmail,
       subject: `[Skolara Contact] ${data.subject} — from ${data.fullName}`,
       html: getBaseTemplate({
         title: "Nouveau message de contact",

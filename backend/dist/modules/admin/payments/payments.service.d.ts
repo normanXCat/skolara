@@ -17,8 +17,8 @@ export declare class PaymentsService {
         partialCount: number;
     }>;
     updatePayment(id: number, amountPaid: number, reference: string, paymentMethod: any): Promise<{
-        status: import("../../../generated/prisma").$Enums.PaymentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.PaymentStatus;
         createdAt: Date;
         updatedAt: Date;
         studentId: number;

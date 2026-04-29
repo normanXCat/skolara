@@ -1,6 +1,7 @@
 import http from "http";
 import app from "./app";
 import { env } from "./config/env";
+import { verifyEmailTransport } from "./lib/email/client";
 
 /**
  * Point d'entrée du serveur.
@@ -21,4 +22,7 @@ server.on("error", (error: any) => {
 server.listen(env.PORT, () => {
     console.log(`🚀 Serveur Skolara démarré sur http://localhost:${env.PORT}`);
     console.log(`📚 Swagger UI : http://localhost:${env.PORT}/api-docs`);
+    
+    // Vérifier la connexion SMTP au démarrage (non-bloquant)
+    verifyEmailTransport();
 });

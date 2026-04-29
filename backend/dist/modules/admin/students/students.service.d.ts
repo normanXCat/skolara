@@ -52,8 +52,8 @@ export declare class StudentsService {
             maxCapacity: number;
         } | null;
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -86,8 +86,8 @@ export declare class StudentsService {
                 maxCapacity: number;
             } | null;
         } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -150,8 +150,8 @@ export declare class StudentsService {
             maxCapacity: number;
         } | null;
         absences: {
-            status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.AbsenceStatus;
             classId: number;
             isJustified: boolean;
             reason: string | null;
@@ -176,8 +176,8 @@ export declare class StudentsService {
             gradedAt: Date;
         }[];
         payments: {
-            status: import("../../../generated/prisma").$Enums.PaymentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.PaymentStatus;
             createdAt: Date;
             updatedAt: Date;
             studentId: number;
@@ -191,8 +191,8 @@ export declare class StudentsService {
             note: string | null;
         }[];
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -228,8 +228,8 @@ export declare class StudentsService {
             maxCapacity: number;
         } | null;
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -243,8 +243,8 @@ export declare class StudentsService {
      * Archive un élève (statut ARCHIVED).
      */
     archive(id: number): Promise<{
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;
@@ -258,8 +258,8 @@ export declare class StudentsService {
      * Réactive un élève (statut ACTIVE).
      */
     restore(id: number): Promise<{
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const app_1 = __importDefault(require("./app"));
 const env_1 = require("./config/env");
+const client_1 = require("./lib/email/client");
 /**
  * Point d'entrée du serveur.
  * Crée un serveur HTTP et démarre l'application Express sur le port configuré.
@@ -21,5 +22,7 @@ server.on("error", (error) => {
 server.listen(env_1.env.PORT, () => {
     console.log(`🚀 Serveur Skolara démarré sur http://localhost:${env_1.env.PORT}`);
     console.log(`📚 Swagger UI : http://localhost:${env_1.env.PORT}/api-docs`);
+    // Vérifier la connexion SMTP au démarrage (non-bloquant)
+    (0, client_1.verifyEmailTransport)();
 });
 //# sourceMappingURL=server.js.map

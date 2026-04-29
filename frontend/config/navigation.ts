@@ -121,6 +121,12 @@ export const ADMIN_NAVIGATION_LINKS = [
         disabled: false,
     },
     {
+        label: "Contact Public",
+        href: ROUTES.ADMIN.CONTACT,
+        icon: "IconMessages", // I will use IconMail from tabler icons later or just map IconMessages for now
+        disabled: false,
+    },
+    {
         label: "Actualités",
         href: ROUTES.ADMIN.NEWS,
         icon: "IconNews",

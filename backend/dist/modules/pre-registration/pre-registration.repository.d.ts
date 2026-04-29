@@ -12,8 +12,8 @@ export declare class PreRegistrationRepository {
      * @returns La pré-inscription créée
      */
     create(data: Prisma.PreRegistrationCreateInput): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;
@@ -45,8 +45,8 @@ export declare class PreRegistrationRepository {
      * @param orderBy - Tri optionnel
      */
     findFirst(where: Prisma.PreRegistrationWhereInput, orderBy?: Prisma.PreRegistrationOrderByWithRelationInput): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;
@@ -82,8 +82,8 @@ export declare class PreRegistrationRepository {
      */
     findMany(page: number, limit: number, status?: Status): Promise<{
         data: {
-            status: import("../../generated/prisma").$Enums.Status;
             id: number;
+            status: import("../../generated/prisma").$Enums.Status;
             parentEmail: string;
             parentPhone: string;
             childFirstName: string;
@@ -118,8 +118,8 @@ export declare class PreRegistrationRepository {
      * @returns La pré-inscription trouvée ou null
      */
     findById(id: number): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;
@@ -153,8 +153,8 @@ export declare class PreRegistrationRepository {
      * @returns La pré-inscription mise à jour
      */
     update(id: number, data: UpdatePreRegistrationInput): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;
@@ -187,8 +187,8 @@ export declare class PreRegistrationRepository {
      * @returns La pré-inscription supprimée
      */
     delete(id: number): Promise<{
-        status: import("../../generated/prisma").$Enums.Status;
         id: number;
+        status: import("../../generated/prisma").$Enums.Status;
         parentEmail: string;
         parentPhone: string;
         childFirstName: string;

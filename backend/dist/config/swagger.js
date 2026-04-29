@@ -71,8 +71,82 @@ exports.swaggerDocument = {
             name: "Teacher-Operations",
             description: "Opérations spécialisées pour les enseignants",
         },
+        {
+            name: "News",
+            description: "Actualités scolaires (Public/Admin)",
+        },
+        {
+            name: "Calendar",
+            description: "Calendrier et événements (Public/Admin)",
+        },
+        {
+            name: "Contact",
+            description: "Demandes de contact (Public/Admin)",
+        },
+        {
+            name: "PublicData",
+            description: "Données globales publiques",
+        },
     ],
     paths: {
+        "/public/key-figures": {
+            get: {
+                tags: ["PublicData"],
+                summary: "Récupérer les chiffres clés",
+                responses: { "200": { description: "OK" } }
+            }
+        },
+        "/news/public": {
+            get: { tags: ["News"], summary: "Lister les actualités (Public)", responses: { "200": { description: "OK" } } }
+        },
+        "/news/public/{id}": {
+            get: { tags: ["News"], summary: "Détail d'une actualité (Public)", parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "OK" } } }
+        },
+        "/news/admin": {
+            get: { tags: ["News"], summary: "Lister actus admin", security: [{ bearerAuth: [] }], responses: { "200": { description: "OK" } } },
+            post: { tags: ["News"], summary: "Créer un article", security: [{ bearerAuth: [] }], responses: { "201": { description: "Créé" } } }
+        },
+        "/news/admin/{id}": {
+            get: { tags: ["News"], summary: "Lire un article", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "OK" } } },
+            put: { tags: ["News"], summary: "Modifier un article", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "OK" } } },
+            delete: { tags: ["News"], summary: "Supprimer", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "Del" } } }
+        },
+        "/news/admin/{id}/status": {
+            patch: { tags: ["News"], summary: "Changer statut", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "OK" } } }
+        },
+        "/calendar/public": {
+            get: { tags: ["Calendar"], summary: "Lister calendrier", responses: { "200": { description: "Evénements" } } }
+        },
+        "/calendar/event-types": {
+            get: { tags: ["Calendar"], summary: "Types d'événements", responses: { "200": { description: "Types" } } }
+        },
+        "/calendar/admin": {
+            get: { tags: ["Calendar"], summary: "Calendrier admin", security: [{ bearerAuth: [] }], responses: { "200": { description: "OK" } } },
+            post: { tags: ["Calendar"], summary: "Créer événement", security: [{ bearerAuth: [] }], responses: { "201": { description: "Créé" } } }
+        },
+        "/calendar/admin/{id}": {
+            put: { tags: ["Calendar"], summary: "Modifier evt", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "OK" } } },
+            delete: { tags: ["Calendar"], summary: "Supprimer evt", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "Del" } } }
+        },
+        "/contact/public": {
+            post: { tags: ["Contact"], summary: "Envoyer un message", responses: { "201": { description: "Envoyé" } } }
+        },
+        "/contact/admin": {
+            get: { tags: ["Contact"], summary: "Lister messages", security: [{ bearerAuth: [] }], responses: { "200": { description: "Liste" } } }
+        },
+        "/contact/admin/unread-count": {
+            get: { tags: ["Contact"], summary: "Messages non lus", security: [{ bearerAuth: [] }], responses: { "200": { description: "Count" } } }
+        },
+        "/contact/admin/{id}": {
+            get: { tags: ["Contact"], summary: "Lire message", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "OK" } } },
+            delete: { tags: ["Contact"], summary: "Supprimer message", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "Del" } } }
+        },
+        "/contact/admin/{id}/read": {
+            patch: { tags: ["Contact"], summary: "Marquer comme lu", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "200": { description: "Lu" } } }
+        },
+        "/contact/admin/{id}/reply": {
+            post: { tags: ["Contact"], summary: "Répondre", security: [{ bearerAuth: [] }], parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }], responses: { "201": { description: "Envoyé" } } }
+        },
         "/auth/login": {
             post: {
                 tags: ["Auth"],

@@ -34,6 +34,7 @@ export const ROUTES = {
         CALENDAR: "/admin/calendar",
         SETTINGS: "/admin/settings",
         LESSON_BOOK: "/admin/lesson-book",
+        CONTACT: "/admin/contact",
     },
     TEACHER: {
         DASHBOARD: "/teacher/dashboard",

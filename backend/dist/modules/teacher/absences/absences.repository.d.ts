@@ -14,8 +14,8 @@ export declare class AbsencesRepository {
             reason?: string | null;
         }[];
     }): Promise<{
-        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -63,8 +63,8 @@ export declare class AbsencesRepository {
                 phone: string;
             }) | null;
         } & {
-            status: import("../../../generated/prisma").$Enums.StudentStatus;
             id: number;
+            status: import("../../../generated/prisma").$Enums.StudentStatus;
             classId: number | null;
             birthDate: Date;
             address: string | null;
@@ -105,8 +105,8 @@ export declare class AbsencesRepository {
             speciality: string | null;
         };
     } & {
-        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -124,8 +124,8 @@ export declare class AbsencesRepository {
         isJustified: boolean;
         reason: string;
     }): Promise<{
-        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -140,8 +140,8 @@ export declare class AbsencesRepository {
      * Marque une notification parent comme envoyée.
      */
     markNotified(id: number): Promise<{
-        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.AbsenceStatus;
         classId: number;
         isJustified: boolean;
         reason: string | null;
@@ -162,8 +162,8 @@ export declare class AbsencesRepository {
             firstName: string;
         };
     } & {
-        status: import("../../../generated/prisma").$Enums.StudentStatus;
         id: number;
+        status: import("../../../generated/prisma").$Enums.StudentStatus;
         classId: number | null;
         birthDate: Date;
         address: string | null;

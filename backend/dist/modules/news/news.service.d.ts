@@ -5,8 +5,8 @@ export declare class NewsService {
     private newsRepository;
     constructor(newsRepository: NewsRepository);
     create(authorId: number, data: CreateArticleInput): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -24,8 +24,8 @@ export declare class NewsService {
                 firstName: string;
             };
         } & {
-            status: import("../../generated/prisma").$Enums.ArticleStatus;
             id: number;
+            status: import("../../generated/prisma").$Enums.ArticleStatus;
             createdAt: Date;
             updatedAt: Date;
             authorId: number;
@@ -49,8 +49,8 @@ export declare class NewsService {
                 firstName: string;
             };
         } & {
-            status: import("../../generated/prisma").$Enums.ArticleStatus;
             id: number;
+            status: import("../../generated/prisma").$Enums.ArticleStatus;
             createdAt: Date;
             updatedAt: Date;
             authorId: number;
@@ -69,8 +69,8 @@ export declare class NewsService {
             firstName: string;
         };
     } & {
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -81,8 +81,8 @@ export declare class NewsService {
         publishedAt: Date | null;
     }) | null>;
     update(id: number, data: UpdateArticleInput): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -93,8 +93,8 @@ export declare class NewsService {
         publishedAt: Date | null;
     }>;
     delete(id: number): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;
@@ -105,8 +105,8 @@ export declare class NewsService {
         publishedAt: Date | null;
     }>;
     updateStatus(id: number, status: ArticleStatus): Promise<{
-        status: import("../../generated/prisma").$Enums.ArticleStatus;
         id: number;
+        status: import("../../generated/prisma").$Enums.ArticleStatus;
         createdAt: Date;
         updatedAt: Date;
         authorId: number;

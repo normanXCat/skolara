@@ -54,7 +54,7 @@ export function getBaseTemplate({ title, content, preheader }: BaseTemplateOptio
             <tr>
                 <td align="center" style="padding-bottom: 30px;">
                     <a href="${frontendUrl}" target="_blank" style="text-decoration: none;">
-                        <img src="${frontendUrl}/assets/image/logo/skolara.logo.png" alt="Skolara" width="150" style="display: block; border: 0; outline: none; text-decoration: none;">
+                        <img src="https://42ty66gibc.ucarecd.net/5a406d79-6b24-45a6-a0c6-e5b19c5b7118/skolaralogo.png" alt="Skolara" width="150" style="display: block; border: 0; outline: none; text-decoration: none;">
                     </a>
                 </td>
             </tr>
