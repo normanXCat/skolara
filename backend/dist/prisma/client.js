@@ -17,12 +17,12 @@ function createPrismaClient() {
         ssl: isProduction ? { rejectUnauthorized: false } : false,
     });
     // Diagnostic du pool
-    pool.on('connect', () => {
+    pool.on("connect", () => {
         if (isProduction)
-            console.log('🟢 [Prisma/Pool] Nouvelle connexion établie avec la base de données');
+            console.log("🟢 [Prisma/Pool] Nouvelle connexion établie avec la base de données");
     });
-    pool.on('error', (err) => {
-        console.error('🔴 [Prisma/Pool] Erreur inattendue sur un client inactif', err);
+    pool.on("error", (err) => {
+        console.error("🔴 [Prisma/Pool] Erreur inattendue sur un client inactif", err);
     });
     const adapter = new adapter_pg_1.PrismaPg(pool);
     return new prisma_1.PrismaClient({ adapter });

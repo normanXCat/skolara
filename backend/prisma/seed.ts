@@ -13,12 +13,13 @@ async function main() {
     const DATABASE_URL = process.env.DATABASE_URL;
     if (!DATABASE_URL) throw new Error("DATABASE_URL manquant");
 
-    const isProduction = process.env.NODE_ENV === "production";
+    // Detect if we're connecting to an external DB (not localhost) — always use SSL in that case
+    const isExternalDb = !DATABASE_URL.includes("localhost") && !DATABASE_URL.includes("127.0.0.1");
 
     // Create a Pool with proper SSL config (rejectUnauthorized: false for Render's self-signed certs)
     const pool = new Pool({
         connectionString: DATABASE_URL,
-        ssl: isProduction ? { rejectUnauthorized: false } : false,
+        ssl: isExternalDb ? { rejectUnauthorized: false } : false,
     });
 
     const adapter = new PrismaPg(pool);
