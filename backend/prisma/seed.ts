@@ -10,7 +10,7 @@ async function main() {
     console.log("🚀 Starting seed script...");
 
     const DATABASE_URL = process.env.DATABASE_URL;
-    if (!DATABASE_URL) throw new Error("DATABASE_URL manquant");
+    if (!DATABASE_URL) throw new Error("DATABASE_URL manquant .");
 
     const prisma = new PrismaClient({
         adapter: new PrismaPg({
