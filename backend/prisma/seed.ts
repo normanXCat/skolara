@@ -1,4 +1,5 @@
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 import { PrismaClient } from "../src/generated/prisma/index";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -12,12 +13,16 @@ async function main() {
     const DATABASE_URL = process.env.DATABASE_URL;
     if (!DATABASE_URL) throw new Error("DATABASE_URL manquant");
 
-    const prisma = new PrismaClient({
-        adapter: new PrismaPg({
-            connectionString: DATABASE_URL,
-            ssl: { rejectUnauthorized: false },
-        }),
+    const isProduction = process.env.NODE_ENV === "production";
+
+    // Create a Pool with proper SSL config (rejectUnauthorized: false for Render's self-signed certs)
+    const pool = new Pool({
+        connectionString: DATABASE_URL,
+        ssl: isProduction ? { rejectUnauthorized: false } : false,
     });
+
+    const adapter = new PrismaPg(pool);
+    const prisma = new PrismaClient({ adapter });
 
     try {
         // 1. School Levels (niveaux scolaires)
