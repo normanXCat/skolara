@@ -12,14 +12,12 @@ async function main() {
     const DATABASE_URL = process.env.DATABASE_URL;
     if (!DATABASE_URL) throw new Error("DATABASE_URL manquant");
 
-    const isProduction = process.env.NODE_ENV === "production";
     const prisma = new PrismaClient({
-        adapter: new PrismaPg({ 
+        adapter: new PrismaPg({
             connectionString: DATABASE_URL,
-            ssl: isProduction ? { rejectUnauthorized: false } : false 
+            ssl: { rejectUnauthorized: false },
         }),
     });
-
 
     try {
         // 1. School Levels (niveaux scolaires)
@@ -83,9 +81,17 @@ async function main() {
             { name: "Français", code: "FR", coefficient: 4 },
             { name: "Anglais", code: "ANG", coefficient: 3 },
             { name: "Sciences Physiques", code: "PHYS", coefficient: 3 },
-            { name: "Sciences de la Vie et de la Terre", code: "SVT", coefficient: 2 },
+            {
+                name: "Sciences de la Vie et de la Terre",
+                code: "SVT",
+                coefficient: 2,
+            },
             { name: "Histoire-Géographie", code: "HG", coefficient: 2 },
-            { name: "Éducation Physique et Sportive", code: "EPS", coefficient: 2 },
+            {
+                name: "Éducation Physique et Sportive",
+                code: "EPS",
+                coefficient: 2,
+            },
             { name: "Arts Plastiques", code: "ART", coefficient: 1 },
             { name: "Musique", code: "MUS", coefficient: 1 },
             { name: "Technologie", code: "TECH", coefficient: 2 },
@@ -95,7 +101,10 @@ async function main() {
         for (const subject of subjects) {
             await prisma.subject.upsert({
                 where: { code: subject.code },
-                update: { name: subject.name, coefficient: subject.coefficient },
+                update: {
+                    name: subject.name,
+                    coefficient: subject.coefficient,
+                },
                 create: subject,
             });
         }
@@ -105,7 +114,11 @@ async function main() {
         const sampleClasses = [
             { name: "6ème A", level: "6ème", schoolYear: "2024-2025" },
             { name: "3ème B", level: "3ème", schoolYear: "2024-2025" },
-            { name: "Terminale S1", level: "Terminale", schoolYear: "2024-2025" },
+            {
+                name: "Terminale S1",
+                level: "Terminale",
+                schoolYear: "2024-2025",
+            },
         ];
 
         for (const cls of sampleClasses) {
@@ -165,4 +178,3 @@ main().catch((err) => {
     console.error("❌ Fatal initialization error:", err);
     process.exit(1);
 });
-
