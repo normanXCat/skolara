@@ -53,6 +53,16 @@ export async function seedAllModelsFromCorpus(prisma: PrismaClient) {
                     authorId: admin.id,
                 }
             });
+        } else {
+            await prisma.article.update({
+                where: { id: existing.id },
+                data: {
+                    content: article.content,
+                    imageUrl: article.imageUrl,
+                    publishedAt: article.publishedAt,
+                    category: article.category,
+                }
+            });
         }
     }
     
@@ -214,29 +224,49 @@ export async function seedAllModelsFromCorpus(prisma: PrismaClient) {
 
     // Report Cards & Grades
     for (let st of students) {
-        const rc = await prisma.reportCard.create({
-            data: {
+        const rcExisting = await prisma.reportCard.findFirst({
+            where: {
                 studentId: st.id,
-                classId: st.classId!,
                 semester: 1,
-                schoolYear: "2024-2025",
-                overallAverage: 10 + Math.random() * 8, // Between 10 and 18
-                generalAppreciation: corpus.getParagraph(1)
+                schoolYear: "2024-2025"
             }
         });
 
-        for(let s of dbSubjects) {
-            await prisma.grade.create({
+        if (!rcExisting) {
+            await prisma.reportCard.create({
                 data: {
                     studentId: st.id,
-                    subjectId: s.id,
-                    teacherId: teachers[Math.floor(Math.random() * teachers.length)].id,
                     classId: st.classId!,
-                    value: 10 + Math.random() * 8,
                     semester: 1,
-                    comment: corpus.getSentence()
+                    schoolYear: "2024-2025",
+                    overallAverage: 10 + Math.random() * 8, // Between 10 and 18
+                    generalAppreciation: corpus.getParagraph(1)
                 }
             });
+        }
+
+        for(let s of dbSubjects) {
+            // Check if student already has a grade for this subject/semester to avoid piling up duplicate seeds on re-runs
+            const gradeExisting = await prisma.grade.findFirst({
+                where: {
+                    studentId: st.id,
+                    subjectId: s.id,
+                    semester: 1
+                }
+            });
+            if (!gradeExisting) {
+                await prisma.grade.create({
+                    data: {
+                        studentId: st.id,
+                        subjectId: s.id,
+                        teacherId: teachers[Math.floor(Math.random() * teachers.length)].id,
+                        classId: st.classId!,
+                        value: 10 + Math.random() * 8,
+                        semester: 1,
+                        comment: corpus.getSentence()
+                    }
+                });
+            }
         }
     }
 

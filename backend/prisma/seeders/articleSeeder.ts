@@ -33,8 +33,19 @@ export async function seedArticles(prisma: PrismaClient, adminUserId: number) {
                 }
             });
             addedCount++;
+        } else {
+            await prisma.article.update({
+                where: { id: existing.id },
+                data: {
+                    content: article.content,
+                    imageUrl: article.imageUrl,
+                    publishedAt: article.publishedAt,
+                    category: article.category,
+                }
+            });
+            addedCount++;
         }
     }
     
-    console.log(`✅ Articles mis à jour : ${addedCount} nouveaux articles insérés sur ${articles.length} récupérés.`);
+    console.log(`✅ Articles mis à jour : ${addedCount} articles insérés ou mis à jour sur ${articles.length} récupérés.`);
 }
