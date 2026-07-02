@@ -18,9 +18,14 @@ import { Controller } from "react-hook-form";
 import { LevelSelect } from "@/components/shared/LevelSelect";
 import { TeacherSelect } from "@/components/shared/TeacherSelect";
 
-export function ClassForm() {
+interface ClassFormProps {
+    initialData?: any;
+    isEdit?: boolean;
+}
+
+export function ClassForm({ initialData, isEdit = false }: ClassFormProps) {
     const router = useRouter();
-    const { form, onSubmit, loading, isFromPreReg } = useClassForm();
+    const { form, onSubmit, loading, isFromPreReg } = useClassForm({ initialData, isEdit });
     const {
         register,
         control,
@@ -47,6 +52,7 @@ export function ClassForm() {
                                     error={errors.name?.message}
                                     disabled={loading}
                                     required
+                                    className="rounded-2xl"
                                 />
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -74,6 +80,7 @@ export function ClassForm() {
                                         error={errors.schoolYear?.message}
                                         disabled={true}
                                         required
+                                        className="rounded-2xl"
                                     />
                                 </div>
 
@@ -88,6 +95,7 @@ export function ClassForm() {
                                         error={errors.maxCapacity?.message}
                                         disabled={loading}
                                         required
+                                        className="rounded-2xl"
                                     />
                                     
                                     <Controller
@@ -114,10 +122,12 @@ export function ClassForm() {
                         <Card className="p-6 rounded-3xl border-border/50 bg-muted/20 backdrop-blur-xl">
                             <div className="space-y-4">
                                 <Typography variant="h3" className="font-black mb-2">
-                                    Finalisation
+                                    {isEdit ? "Modification" : "Finalisation"}
                                 </Typography>
                                 <Typography variant="caption" className="text-muted-foreground">
-                                    La classe sera créée et vous pourrez ensuite y ajouter des élèves ou modifier les matières enseignées.
+                                    {isEdit 
+                                        ? "Enregistrez les modifications apportées à la classe."
+                                        : "La classe sera créée et vous pourrez ensuite y ajouter des élèves ou modifier les matières enseignées."}
                                 </Typography>
                                 
                                 <div className="pt-4 space-y-3">
@@ -125,10 +135,10 @@ export function ClassForm() {
                                         type="submit"
                                         className="w-full"
                                         isLoading={loading}
-                                        loadingText="Création en cours..."
+                                        loadingText={isEdit ? "Modification en cours..." : "Création en cours..."}
                                         leftIcon={<IconDeviceFloppy size={20} />}
                                     >
-                                        Créer la classe
+                                        {isEdit ? "Enregistrer les modifications" : "Créer la classe"}
                                     </ButtonReusable>
                                     
                                     <ButtonReusable

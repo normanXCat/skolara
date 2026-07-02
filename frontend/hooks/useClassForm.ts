@@ -13,10 +13,18 @@ import { toast } from "@/lib/toast-store";
 import { ROUTES } from "@/config/routes";
 import { getCurrentSchoolYear } from "@/lib/utils";
 
+interface UseClassFormProps {
+    initialData?: any;
+    isEdit?: boolean;
+}
+
 /**
- * Hook personnalisé pour gérer l'état et la logique du formulaire de classe.
+ * Hook personnalisé pour gérer l'état et la logique du formulaire de classe (création et édition).
  */
-export const useClassForm = () => {
+export const useClassForm = (props?: UseClassFormProps) => {
+    const initialData = props?.initialData;
+    const isEdit = props?.isEdit || false;
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(false);
@@ -28,11 +36,11 @@ export const useClassForm = () => {
         resolver: zodResolver(CreateClassSchema),
         mode: "onChange",
         defaultValues: {
-            name: "",
-            level: levelParam || "",
-            schoolYear: getCurrentSchoolYear(),
-            maxCapacity: 30,
-            headTeacherId: null,
+            name: initialData?.name || "",
+            level: initialData?.level || levelParam || "",
+            schoolYear: initialData?.schoolYear || getCurrentSchoolYear(),
+            maxCapacity: initialData?.maxCapacity || 30,
+            headTeacherId: initialData?.headTeacherId || null,
         },
     });
 
@@ -42,15 +50,18 @@ export const useClassForm = () => {
             // On s'assure que l'année est la bonne même si l'input est désactivé côté UI
             const payload = {
                 ...data,
-                schoolYear: getCurrentSchoolYear()
+                schoolYear: data.schoolYear || getCurrentSchoolYear()
             };
-            const response = await api.post<any>("/admin/classes", payload);
+            
+            const response = isEdit
+                ? await api.put<any>(`/admin/classes/${initialData.id}`, payload)
+                : await api.post<any>("/admin/classes", payload);
 
             if (response.success) {
-                toast.success("Classe créée avec succès !");
+                toast.success(isEdit ? "Classe mise à jour avec succès !" : "Classe créée avec succès !");
 
                 // Si on vient d'un dossier de pré-inscription, on valide l'élève immédiatement avec cette nouvelle classe
-                if (preRegId) {
+                if (preRegId && !isEdit) {
                     const newClassId = response.data.id;
                     setLoading(true); // Garder l'état chargement pour la conversion
                     
