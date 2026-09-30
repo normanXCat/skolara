@@ -12,12 +12,14 @@ function createPrismaClient(): PrismaClient {
 
   const isProduction = process.env.NODE_ENV === "production";
 
-  // Strip sslmode from the connection string so our explicit ssl config takes precedence.
-  // Render's default `sslmode=require` gets treated as `verify-full` by the pg driver,
-  // which rejects self-signed certificates.
-  const cleanConnectionString = isProduction
-    ? connectionString.replace(/[?&]sslmode=[^&]*/gi, "").replace(/\?&/, "?").replace(/\?$/, "")
-    : connectionString;
+  // Strip sslmode so our explicit SSL config takes precedence. Use URLSearchParams
+  // to preserve any remaining parameters (for example, Neon’s channel_binding).
+  const cleanConnectionString = (() => {
+    if (!isProduction) return connectionString;
+    const url = new URL(connectionString);
+    url.searchParams.delete("sslmode");
+    return url.toString();
+  })();
 
   // Configuration du pool avec SSL pour Render/Production
   const pool = new Pool({
