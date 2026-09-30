@@ -18,12 +18,14 @@ async function main() {
     !DATABASE_URL.includes("localhost") && !DATABASE_URL.includes("127.0.0.1");
   const needsSsl = isExternalDb || process.env.NODE_ENV === "production";
 
-  // Strip sslmode from the connection string so our explicit ssl config takes precedence.
-  // Render's default `sslmode=require` gets treated as `verify-full` by the pg driver,
-  // which rejects self-signed certificates.
-  const cleanUrl = needsSsl
-    ? DATABASE_URL.replace(/[?&]sslmode=[^&]*/gi, "").replace(/\?&/, "?").replace(/\?$/, "")
-    : DATABASE_URL;
+  // Strip sslmode so our explicit SSL config takes precedence. Preserve all other
+  // parameters (for example, Neon’s channel_binding) as URL query parameters.
+  const cleanUrl = (() => {
+    if (!needsSsl) return DATABASE_URL;
+    const url = new URL(DATABASE_URL);
+    url.searchParams.delete("sslmode");
+    return url.toString();
+  })();
 
   // Create a Pool with proper SSL config (rejectUnauthorized: false for Render's self-signed certs)
   const pool = new Pool({
